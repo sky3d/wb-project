@@ -1,0 +1,31 @@
+
+
+.baner {
+    color: red;
+    font-size: 30px;
+    border: 2px solid red;
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 3px 4px 2px #cd5c5c7d;
+}
+
+.baner:hover{
+    cursor: pointer;    
+}
+
+.baner:active{    
+    color: #009688;
+    border: 2px solid #009688;
+    box-shadow: none
+}
+
+.unselectable {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                    not supported by any browser */
+  }

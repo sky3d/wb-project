@@ -35,6 +35,9 @@ yarn add clean-webpack-plugin -D
 
 yarn add css-loader sass-loader sass mini-css-extract-plugin -D
 
+# Эт чтоб css модули пахали
+yarn add typescript-plugin-css-modules -D 
+
 # устанавливаем dev server
 
 yarn add -D webpack-dev-server

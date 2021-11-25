@@ -1,0 +1,42 @@
+# инициализируем приложение 
+# -y yes по умолчанию
+
+yarn init -y
+
+# устанавливаем webpack
+# -D запишет в devDependencies
+
+yarn add webpack webpack-cli  -D
+
+# устанавливаем typescript
+# в идеале надо его устанавливать глобально и прописывать путь до него в PATH чтобы в консоли работал tsc
+
+yarn add typescript ts-loader -D
+yarn add babel-loader -D
+
+# создаем если нет tsconfig.json
+
+npx tsc --init
+
+# устанавливаем html-webpack-plugin для генерации index.html
+
+yarn add html-webpack-plugin -D
+
+# устанавливаем copy-webpack-plugin может копировать файлы
+# нужен на случай если во время билдежки чет кудато переложить надо
+
+yarn add copy-webpack-plugin -D
+
+# устанавливаем clean-webpack-plugin для очиски папки с билдом
+yarn add clean-webpack-plugin -D
+
+# устанавливаем CSS и SASS и
+# плагин для сохранения этого дела в отдельные файлы
+
+yarn add css-loader sass-loader sass mini-css-extract-plugin -D
+
+# устанавливаем dev server
+
+yarn add -D webpack-dev-server
+
+

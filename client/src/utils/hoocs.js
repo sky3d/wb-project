@@ -24,7 +24,7 @@ export const useKeyPress = function (targetKeyCode, targetNode, preventDefault =
     
 
     if (defaultPress) {
-        console.log(22)
+        // console.log(22)
         setKeyPressed(defaultPress);
     }
 

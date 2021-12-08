@@ -1,0 +1,9 @@
+.baner {    
+    font-size: 30px;
+    border: 2px solid red;
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 3px 4px 2px #cd5c5c7d;
+}
+

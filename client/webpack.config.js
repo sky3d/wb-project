@@ -14,6 +14,10 @@ const devServer = (isDev) =>
                   port: 4000,
                   // папка для статики если нужна
                   // contentBase: path.join(__dirname, "public"),
+
+                  // без этой настройки маршрутизация работает только через ссылки 
+                  // и по f5 или прямому вводу орет что не может найти страницу
+                  historyApiFallback: true,
               },
           };
 

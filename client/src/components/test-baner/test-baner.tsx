@@ -2,6 +2,8 @@ import React, { FC, useState } from "react";
 import { TTestBaner } from "./types";
 
 import styles from "./test-baner.module.css";
+import { linkSync } from "fs";
+import { Link } from "react-router-dom";
 
 export const TestBaner: FC<TTestBaner> = ({ title }): JSX.Element => {
     const [baterText, setBaterText] = useState(title);
@@ -10,8 +12,10 @@ export const TestBaner: FC<TTestBaner> = ({ title }): JSX.Element => {
     };
 
     return (
-        <span className={styles.baner} onClick={onClick}>
-            <span className={styles.unselectable}>{baterText}</span>
+        <span className={styles.baner}>
+            <Link to="/renga_create" className={styles.unselectable}>
+                {baterText}
+            </Link>
         </span>
     );
 };

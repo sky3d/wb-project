@@ -1,9 +1,43 @@
-.baner {    
+.baner {
     font-size: 30px;
     border: 2px solid red;
-    width: auto;
+    width: 600px;
+    height: 300px;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 5px 3px 4px 2px #cd5c5c7d;
+    display: flex;    
+    flex-direction: column;
+    align-items: center;
 }
 
+.mainBlock {
+    display: flex;    
+}
+
+.mainBlockTitle {
+    text-align: center;   
+    padding-bottom: 10px; 
+}
+
+
+.mainBlockItem{
+    width: 322px;
+    padding: 10px;
+    display: flex;    
+    flex-direction: column;
+    align-items: center;
+}
+
+.mainBlockItem:first-child{
+    border-right: 2px solid red;
+}
+
+.mainBlockItem select{
+    border: none;
+    font-size: 30px;
+}
+
+.nullDiv{
+    height: 30px;
+}

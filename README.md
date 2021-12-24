@@ -1,2 +1,0 @@
-# wb-project
-Project-R

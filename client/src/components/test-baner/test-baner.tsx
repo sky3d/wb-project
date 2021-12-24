@@ -1,16 +1,21 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { TTestBaner } from "./types";
 
-const style = { 
-    color: "red", 
-    fontSize: 30, 
-    border: "2px solid red", 
-    width: "auto", 
-    padding: 20, 
-    borderRadius: 10, 
-    boxShadow: "5px 3px 4px 2px #cd5c5c7d" 
-};
+import styles from "./test-baner.module.css";
+import { linkSync } from "fs";
+import { Link } from "react-router-dom";
 
 export const TestBaner: FC<TTestBaner> = ({ title }): JSX.Element => {
-    return <span style={style}>{title}</span>;
+    const [baterText, setBaterText] = useState(title);
+    const onClick = () => {
+        setBaterText([...baterText].reverse().join(""));
+    };
+
+    return (
+        <span className={styles.baner}>
+            <Link to="/renga_create" className={styles.unselectable}>
+                {baterText}
+            </Link>
+        </span>
+    );
 };

@@ -1,0 +1,42 @@
+// {
+//   "extends": ["eslint-config-blvd"],
+//   "rules": {
+//     "import/no-default-export": 2,
+//     "import/prefer-default-export": 0,
+//     "import/no-cycle": 0,
+//     "comma-dangle": ["error", "always-multiline"],
+//     "no-restricted-modules": 2,
+//     "no-shadow": 0,
+//     "@typescript-eslint/ban-ts-comment": "off",
+//     "@typescript-eslint/explicit-module-boundary-types": "off",
+//     "class-methods-use-this": "off",
+//     "quotes": ["error", "single"],
+//     "sort-imports": [
+//       "error",
+//       {
+//         "ignoreDeclarationSort": true
+//       }
+//     ],
+//     "import/order": ["error", { "newlines-between": "always" }],
+//     "no-nested-ternary": 0,
+//     "no-unused-vars": 1,
+//     "newline-before-return": 2,
+//     "object-curly-newline": [
+//       "error",
+//       {
+//         "multiline": true
+//       }
+//     ],
+//     "max-len": [
+//       "error",
+//       {
+//         "code": 160,
+//         "ignoreTrailingComments": true,
+//         "ignoreComments": true,
+//         "ignoreTemplateLiterals": true
+//       }
+//     ],
+//     "import/no-useless-path-segments": 0,
+//     "object-curly-spacing": ["error", "always"]
+//   }
+// }

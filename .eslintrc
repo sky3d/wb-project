@@ -1,0 +1,16 @@
+{
+    "extends": [
+      "eslint-config-blvd"
+    ],
+    "rules": {
+      "import/no-default-export": 2,
+      "import/prefer-default-export": 0,
+      "import/no-cycle": 0,
+      "comma-dangle": ["error", "always-multiline"],
+      "no-restricted-modules": 2,
+      "no-shadow": 0,
+      "import/no-extraneous-dependencies": 0,
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
+  }

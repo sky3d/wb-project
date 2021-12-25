@@ -1,0 +1,40 @@
+{
+  "name": "wb-project",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules build tmp",
+    "precommit": "lint-staged",
+    "lint": "eslint 'server/src/**/*.ts'",
+    "build:server": "tsc -p server/tsconfig.release.json",
+    "start:server": "node server/lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sky3d/wb-project.git"
+  },
+  "keywords": [],
+  "author": "WhiskeyBar <wbar.soft@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/sky3d/wb-project#readme",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@types/node": "^17.0.4",
+    "eslint": "7.32.0",
+    "eslint-config-blvd": "^1.2.1",
+    "lint-staged": "^12.1.4",
+    "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.4"
+  },
+  "lint-staged": {
+    "server/src/**/*.ts": [
+      "eslint"
+    ]
+  },
+  "dependencies": {
+    "fastify": "^3.25.2"
+  }
+}

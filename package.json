@@ -8,6 +8,7 @@
     "clean": "rimraf node_modules build tmp",
     "precommit": "lint-staged",
     "lint": "eslint 'server/src/**/*.ts'",
+    "compile": "yarn build:server",
     "build:server": "tsc -p server/tsconfig.release.json",
     "start:server": "node server/lib/index.js",
     "prepare": "husky install"
@@ -39,6 +40,10 @@
     ]
   },
   "dependencies": {
-    "fastify": "^3.25.2"
+    "env-schema": "^3.5.1",
+    "fastify": "^3.25.2",
+    "fastify-cors": "^6.0.2",
+    "fastify-plugin": "^3.0.0",
+    "pino": "^7.6.1"
   }
 }

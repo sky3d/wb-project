@@ -4,10 +4,11 @@ import * as shortid from 'shortid'
 import { Renku } from '../interfaces'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
+const handler = async (service: Renga, request: FastifyRequest, reply: FastifyReply) => {
   const payload = request.body as Renku
 
-  request.log.info({ body: request.body }, '!!!!renga.create request')
+  request.log.info({ body: request.body }, 'renga.create request')
+  console.log('ping:', service.ping())
 
   const renga: Renku = {
     id: shortid.generate(),
@@ -17,3 +18,5 @@ export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
 
   return renga
 }
+
+export const createHandler = handler

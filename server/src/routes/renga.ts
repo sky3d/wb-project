@@ -1,14 +1,15 @@
 import { FastifyInstance } from 'fastify'
 
 import { schema } from '../schemas/renga.create'
-import { handler as createHandler } from '../handlers/rengaCreate'
+import { createHandler } from '../handlers/rengaCreate'
+import { wrapHandler } from '../utils/wrapHandler'
 
 async function RengaCreate(fastify: FastifyInstance) {
   fastify.route({
     method: 'POST',
     url: '/renga',
     schema,
-    handler: createHandler,
+    handler: wrapHandler(createHandler),
   })
 }
 

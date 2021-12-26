@@ -8,6 +8,8 @@ export class Renga {
     this.config = config
   }
 
+  public ping = () => 'pong'
+
   start() {
     this.log.info('renga service initialized')
   }

@@ -6,7 +6,7 @@ export const ReangaCustom = (): JSX.Element => {
         <section style={{fontSize:30}}>
             <div>Тут будем хренаxить ручками</div>
             <div>
-                А потом пойдем <Link to="/renga">сюда</Link>{" "}
+                А потом пойдем sd fs <Link to="/renga">сюда</Link>{" "}
             </div>
         </section>
     );

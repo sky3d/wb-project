@@ -1,13 +1,7 @@
-import fastify from 'fastify'
-
-const server = fastify({ logger: true })
-
-server.get('/ping', async (request, reply) => 'pong\n')
-
-server.listen(3000, (err, address) => {
-  if (err) {
-    console.error(err)
+/* eslint @typescript-eslint/no-var-requires: "off" */
+require('./server')
+  .main()
+  .catch((e: Error) => {
+    console.error(`Error during boot ${e.message}\n${e.stack}`)
     process.exit(1)
-  }
-  console.log(`Server listening at ${address}`)
-})
+  })

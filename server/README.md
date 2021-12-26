@@ -1,17 +1,21 @@
 # wb-project
+
 Project-R
 
-
 ### Build server
+
 `npm run build`
 
-
 ### Run server
+
 `npm start`
 
-### 
-PORT: 3000
+###
+
+PORT: default 5000
 
 ### Routes
 
-`localhost:3000/ping` 
+GET `http://localhost:5000/health`
+
+POST `http://localhost:5000/api/renga`

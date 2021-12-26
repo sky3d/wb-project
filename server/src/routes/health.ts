@@ -14,7 +14,7 @@ async function StatusRoute(fastify: FastifyInstance) {
         },
       },
     },
-    handler: (_, reply) => reply.send({ status: 'ok' }),
+    handler: (_, reply) => { reply.send({ status: 'ok' }) },
   })
 }
 

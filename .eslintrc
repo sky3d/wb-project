@@ -8,6 +8,7 @@
     "no-restricted-modules": 2,
     "no-shadow": 0,
     "import/no-extraneous-dependencies": 0,
+    "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/ban-ts-comment": "off"
   }

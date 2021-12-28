@@ -4,7 +4,9 @@
   "license": "",
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve --env develop"
+    "start": "webpack serve --env develop",
+    "precommit": "lint-staged",
+    "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -25,6 +27,7 @@
     "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",
     "html-webpack-plugin": "^5.5.0",
+    "lint-staged": "^12.1.4",
     "mini-css-extract-plugin": "^2.4.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -38,5 +41,15 @@
     "webpack": "^5.64.3",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.6.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "eslint"
+    ]
+  },
+  "dependencies": {
+    "eslint-config-blvd": "^1.2.1",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.3"
   }
 }

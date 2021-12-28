@@ -8,7 +8,7 @@ const handler = async (service: Renga, request: FastifyRequest, reply: FastifyRe
   const payload = request.body as Renku
 
   request.log.info({ body: request.body }, 'renga.create request')
-  console.log('ping:', service.ping())
+  request.log.info('ping:', service.ping())
 
   const renga: Renku = {
     id: shortid.generate(),

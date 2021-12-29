@@ -6,10 +6,12 @@
   },
   "scripts": {
     "clean": "rimraf node_modules build tmp",
-    "precommit": "lint-staged",
-    "lint": "eslint 'server/src/**/*.ts'",
     "compile": "yarn build:server",
     "dev": "yarn start:server",
+    "precommit": "lint-staged",
+    "lint": "yarn lint:server && yarn run lint:client",
+    "lint:server": "eslint server/src/**/*.ts",
+    "lint:client": "eslint client/src/**/*.tsx",
     "build:server": "tsc -p server/tsconfig.release.json",
     "start:server": "node server/lib/index.js",
     "prepare": "husky install"
@@ -38,6 +40,9 @@
   },
   "lint-staged": {
     "server/src/**/*.ts": [
+      "eslint"
+    ],
+    "client/src/**/*.tsx": [
       "eslint"
     ]
   },

@@ -1,0 +1,61 @@
+{
+  "extends": ["eslint-config-blvd"],
+  "rules": {
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false,
+          "Function": false,
+          "object": false
+        }
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 160,
+        "ignoreTrailingComments": true,
+        "ignoreComments": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "import/no-useless-path-segments": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-var-requires": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "import/prefer-default-export": 0,
+    "import/no-default-export": 1,
+    "import/no-cycle": 0,
+    "no-shadow": 0,
+    "no-multi-assign": 0,
+    "implicit-arrow-linebreak": 0,
+    "no-confusing-arrow": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    // enable after full migration
+    "no-return-await": 0,
+    "no-console": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "consistent-return": 0,
+    //
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-non-null-asserted-optional-chain": 0,
+    "no-restricted-properties": 0,
+    "newline-before-return": 2,
+    "object-curly-newline": [
+      "error",
+      {
+        "multiline": true
+      }
+    ],
+    "comma-dangle": ["error", "always-multiline"]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}

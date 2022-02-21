@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
-async function StatusRoute(fastify: FastifyInstance) {
+export async function StatusRoute(fastify: FastifyInstance) {
   fastify.route({
     method: 'GET',
     url: '/health',
@@ -17,5 +17,3 @@ async function StatusRoute(fastify: FastifyInstance) {
     handler: (_, reply) => { reply.send({ status: 'ok' }) },
   })
 }
-
-export = StatusRoute

@@ -1,15 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import * as shortid from 'shortid'
-import { Renku } from '../interfaces'
+import { Domain } from '../../interfaces'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const handler = async (service: Renga, request: FastifyRequest, _: FastifyReply) => {
-  const payload = request.body as Renku
+  const payload = request.body as Domain.Renga
 
-  request.log.info({ body: request.body }, 'renga.create request')
-  request.log.info('ping:', service.ping())
+  request.log.info({ body: request.body }, 'renga.list request')
 
-  const renga: Renku = {
+  const renga: Domain.Renga = {
     id: shortid.generate(),
     name: payload.name || 'New renga',
   }
@@ -18,4 +17,4 @@ const handler = async (service: Renga, request: FastifyRequest, _: FastifyReply)
   return renga
 }
 
-export const createHandler = handler
+export const listHandler = handler

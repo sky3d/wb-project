@@ -5,7 +5,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "clean": "rimraf node_modules build tmp",
+    "clean": "rimraf ./lib",
     "compile": "yarn build:server",
     "dev": "yarn start:server",
     "precommit": "lint-staged",
@@ -14,19 +14,48 @@
     "lint:client": "eslint client/src/**/*.tsx",
     "build:server": "tsc -p server/tsconfig.release.json",
     "start:server": "node server/lib/index.js",
+    "env:up": "docker-compose up",
+    "env:down": "docker-compose down",
+    "migration:exec": "node -r @swc-node/register ./node_modules/typeorm/cli -f ./server/ormconfig.json",
+    "migration:generate": "yarn migration:exec migration:generate",
+    "migration:create": "yarn migration:exec migration:create",
     "prepare": "husky install"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sky3d/wb-project.git"
   },
-  "keywords": [],
+  "keywords": [
+    "renga",
+    "renku",
+    "haiku",
+    "hokku",
+    "japan",
+    "poetry"
+  ],
   "author": "WhiskeyBar <wbar.soft@gmail.com>",
   "license": "UNLICENSED",
   "homepage": "https://github.com/sky3d/wb-project#readme",
+  "dependencies": {
+    "@types/pino": "^7.0.5",
+    "env-schema": "^3.5.1",
+    "fastify": "^3.25.2",
+    "fastify-cors": "^6.0.2",
+    "fastify-favicon": "^3.1.0",
+    "fastify-formbody": "^5.2.0",
+    "fastify-helmet": "^5.3.2",
+    "fastify-plugin": "^3.0.0",
+    "fastify-routes": "^3.1.0",
+    "pg": "^8.7.1",
+    "pino": "^7.6.1",
+    "reflect-metadata": "^0.1.13",
+    "shortid": "^2.2.16",
+    "typeorm": "^0.2.41"
+  },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@swc-node/register": "^1.4.2",
     "@tsconfig/node16": "^1.0.2",
     "@types/node": "^17.0.4",
     "@types/shortid": "^0.0.29",
@@ -45,18 +74,5 @@
     "client/src/**/*.tsx": [
       "eslint"
     ]
-  },
-  "dependencies": {
-    "@types/pino": "^7.0.5",
-    "env-schema": "^3.5.1",
-    "fastify": "^3.25.2",
-    "fastify-cors": "^6.0.2",
-    "fastify-favicon": "^3.1.0",
-    "fastify-formbody": "^5.2.0",
-    "fastify-helmet": "^5.3.2",
-    "fastify-plugin": "^3.0.0",
-    "fastify-routes": "^3.1.0",
-    "pino": "^7.6.1",
-    "shortid": "^2.2.16"
   }
 }

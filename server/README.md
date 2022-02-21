@@ -12,10 +12,10 @@ Project-R
 
 ###
 
-PORT: default 5000
+PORT: default 3000
 
 ### Routes
 
-GET `http://localhost:5000/health`
+GET `http://localhost:3000/health`
 
-POST `http://localhost:5000/api/renga`
+POST `http://localhost:3000/api/renga`

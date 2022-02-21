@@ -8,7 +8,7 @@ import helmet from 'fastify-helmet'
 
 import { envConfig } from './configs/server'
 import { renga } from './services/renga'
-import { routes as apiRoutes } from './routes'
+import { routes as apiRoutes } from './api/routes'
 
 const logger = pino()
 
@@ -37,6 +37,7 @@ export async function main() {
   await app.ready()
 
   app.log.info('successfully booted')
+
 
   app.listen(
     // @ts-ignore

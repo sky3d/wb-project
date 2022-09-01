@@ -2,6 +2,6 @@
 require('./server')
   .main()
   .catch((e: Error) => {
-    console.error(`Error during boot ${e.message}\n${e.stack}`)
+    // console.error(`Error during boot ${e.message}\n${e.stack}`)
     process.exit(1)
   })

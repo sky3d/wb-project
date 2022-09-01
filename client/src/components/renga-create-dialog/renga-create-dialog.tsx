@@ -47,9 +47,7 @@ export const RengaCreateDialog = (): JSX.Element => {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div className={styles.nullDiv}></div>
-                <button style={{
-                  height: 60, width: 60, borderRadius: '50%', fontSize: 30,
-                }} disabled={!nextFg}>
+                <button style={{ height: 60, width: 60, borderRadius: '50%', fontSize: 30 }} disabled={!nextFg}>
                     {nextFg && (
                         <Link to={customFg ? '/renga_custom' : '/renga'} style={{ textDecoration: 'none' }}>
                             {'>'}

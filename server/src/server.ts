@@ -14,7 +14,7 @@ const logger = pino()
 
 export async function main() {
   const app = fastify({
-    logger,
+    logger
   })
 
   app.log.info('=> starting app %s', Date.now().toString())
@@ -38,7 +38,6 @@ export async function main() {
 
   app.log.info('successfully booted')
 
-
   app.listen(
     // @ts-ignore
     app.config.PORT,
@@ -46,7 +45,7 @@ export async function main() {
     app.config.HOST,
     () => {
       app.log.info({ routes: app.routes }, 'registered routes:')
-      console.log(app.routes)
-    },
+      // console.log(app.routes)
+    }
   )
 }

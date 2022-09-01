@@ -9,7 +9,8 @@ export class Renga {
   private readonly log: any
 
   private db: Connection
-  private storage: StorageService
+
+  public storage: StorageService
 
   constructor(log: any, config: any) {
     this.log = log
@@ -30,7 +31,7 @@ export class Renga {
       name: 'new draft renga',
       status: RengaStatus.Draft
     })
-    console.log(item)
+    // console.log(item)
 
     this.log.info('renga service initialized')
   }

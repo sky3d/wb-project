@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { TestBaner } from '../components/test-baner/test-baner'
+import { TestBaner } from '../modules/test-baner/test-baner'
 import { useWindowSize } from '../utils/hoocs'
 import { Reanga } from './renga'
 import { ReangaCreate } from './renga-create'

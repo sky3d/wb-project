@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckBox } from '../checkbox/checkbox'
-import { Radiobox } from '../radiobox/radiobox'
+import { CheckBox } from '../../components/checkbox/checkbox'
+import { Radiobox } from '../../components/radiobox/radiobox'
 
 import styles from './renga-create-dialog.module.css'
 

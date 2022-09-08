@@ -1,0 +1,71 @@
+.aBlock {
+  position: relative;
+  background-color: #27282c !important;
+  color: #27282c !important;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+  transition: 0.5s;
+}
+
+.aBlock:hover {
+  background-color: var(--clr) !important;
+  color: var(--clr) !important;
+  letter-spacing: 0.25em;
+  box-shadow: 0 0 5px var(--clr) !important;
+}
+
+.aBlock::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-color: #fff !important;
+}
+
+.aBlock span {
+  position: relative;
+  z-index: 1;
+}
+
+.aBlock i {
+    position: absolute;
+    inset: 0;
+    display: block;
+}
+
+.aBlock i::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 10px;
+    height: 4px;
+    background-color: #fff;
+    transform: translateX(-50%) skewX(325deg);
+    transition: .5s;
+}
+
+.aBlock:hover i::before{
+    width: 20px;
+    left: 20%;
+}
+
+.aBlock i::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 10px;
+    height: 4px;
+    background-color: #fff;
+    transform: translateX(-50%) skewX(325deg);
+    transition: .5s;
+}
+
+.aBlock:hover i::after{
+    width: 20px;
+    left: 80%;
+}

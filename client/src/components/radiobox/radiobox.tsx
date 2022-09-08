@@ -12,11 +12,11 @@ export const Radiobox: FC<TRadiobox> = ({ name, label, checked, disabled, onChan
   }
 
   return (
-        <div className={styles.radio}>
-            <label className={styles.customRadio}>
-                <input type="radio" id={name} name={name} checked={checked} disabled={disabled} onChange={handleChange} />
-                <span>{label}</span>
-            </label>
-        </div>
+    <div className={styles.radio}>
+      <label className={styles.customRadio}>
+        <input type="radio" id={name} name={name} checked={checked} disabled={disabled} onChange={handleChange} />
+        <span>{label}</span>
+      </label>
+    </div>
   )
 }

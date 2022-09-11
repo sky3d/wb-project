@@ -1,10 +1,10 @@
 /** @module userInfoReducer */
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { notification } from 'antd'
 import { errorResponsString } from '../../utils/vars'
 import { runRequest } from '../api'
 import { RootState } from '../store'
+import { setCurrentPage } from './app-info'
 
 // export const getUserInfo = createAsyncThunk('userInfoReducer/getUserInfo', async (tmp, thunkApi) => {
 //   const dispatch = thunkApi.dispatch
@@ -50,6 +50,19 @@ import { RootState } from '../store'
 //   return data.result
 // })
 
+export const createRenga = createAsyncThunk('rengaStore/createRenga', async (objRenga: {}, thunkApi) => {
+  const response = await runRequest('renga', 'POST', objRenga)
+  const data = await response.json()
+
+  if (data.error) {
+    throw new Error(`${errorResponsString} ${data.error}`)
+  }
+
+  thunkApi.dispatch(setCurrentPage(1))
+
+  return data
+})
+
 export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async () => {
   const response = await runRequest('renga/list', 'GET')
   const data = await response.json()
@@ -85,6 +98,10 @@ export const rengaStore = createSlice({
       state.rawData = action.payload
     })
     builder.addCase(getRengaList.rejected, (state, action) => {
+      console.log(action.error.message)
+    })
+
+    builder.addCase(createRenga.rejected, (state, action) => {
       console.log(action.error.message)
     })
   }

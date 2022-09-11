@@ -4,7 +4,8 @@ import { ButtonV1 } from '../components/buttonV1/buttonV1'
 
 import { PageHeader } from '../components/page-header/page-header'
 import { LoginForm } from '../modules/login-form/login-form'
-import { setLoginVisible, sltAppInfoName, sltLoginVisible } from '../services/slices/app-info'
+import { RengaCreateDialog } from '../modules/renga-create-dialog/renga-create-dialog'
+import { setLoginVisible, sltAppInfoName, sltCurrentPage, sltLoginVisible } from '../services/slices/app-info'
 import { loginUser, selectAuth } from '../services/slices/user-info'
 import { generateUID, getCookie } from '../utils/funcs'
 import { useWindowSize } from '../utils/hoocs'
@@ -17,8 +18,7 @@ export const MainPage = (): JSX.Element => {
   const appName = useSelector(sltAppInfoName)
   const userAuth = useSelector(selectAuth)
   const loginVisible = useSelector(sltLoginVisible)
-
-  const currentPage = 1
+  const currentPage = useSelector(sltCurrentPage)
 
   const headerRef = useRef<HTMLHeadingElement>(null)
   const [pageHeight, setPageHeight] = useState(0)
@@ -35,7 +35,7 @@ export const MainPage = (): JSX.Element => {
 
   return (
     <div style={{ minHeight: h }}>
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl mx-auto p-0">
         {loginVisible && <LoginForm />}
         <section ref={headerRef}>
           <PageHeader
@@ -53,7 +53,9 @@ export const MainPage = (): JSX.Element => {
             ]}
           />
         </section>
-        <div style={{ height: pageHeight, maxHeight: pageHeight }}>{currentPage === 1 && <HomePage height={pageHeight} />}</div>
+        <div style={{ height: pageHeight, maxHeight: pageHeight }}>
+          {currentPage === 1 && <HomePage height={pageHeight} />} {currentPage === 2 && <RengaCreateDialog height={pageHeight} />}
+        </div>
       </div>
     </div>
   )

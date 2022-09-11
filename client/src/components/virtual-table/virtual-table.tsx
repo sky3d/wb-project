@@ -87,11 +87,9 @@ const VirtualTable: FC<TVirtualTable> = ({
   useEffect(() => {
     if (selectData.length !== chekeds.length) {
       setChekeds(selectData)
-    } else {
-      if (selectData.length > 0) {
-        if (selectData[0] !== chekeds[0] || selectData[selectData.length - 1] !== chekeds[chekeds.length - 1]) {
-          setChekeds(selectData)
-        }
+    } else if (selectData.length > 0) {
+      if (selectData[0] !== chekeds[0] || selectData[selectData.length - 1] !== chekeds[chekeds.length - 1]) {
+        setChekeds(selectData)
       }
     }
     // setChekeds(selectData);
@@ -111,13 +109,13 @@ const VirtualTable: FC<TVirtualTable> = ({
       let fSize = 0
       columns.forEach((col) => {
         if (!col.style || !col.style.width) {
-          fCol = fCol + 1
+          fCol += 1
         } else {
-          allw = allw - col.style.width
+          allw -= col.style.width
         }
       })
       if (checked) {
-        allw = allw - 40
+        allw -= 40
       }
 
       fSize = allw / fCol
@@ -203,7 +201,7 @@ const VirtualTable: FC<TVirtualTable> = ({
 
     if (idx > -1) {
       // chekeds.splice(idx, 1);
-      const tmp = chekeds.filter((x) => x != id)
+      const tmp = chekeds.filter((x) => x !== id)
       setChekeds([...tmp])
     } else {
       setChekeds([...chekeds, id])
@@ -218,11 +216,7 @@ const VirtualTable: FC<TVirtualTable> = ({
   const onChangeAllChecked = () => {
     // console.log("onChangeAllChecked:", onChangeAllChecked);
     if (allCheked === false) {
-      setChekeds(
-        rawData.map((item) => {
-          return item[keyField]
-        })
-      )
+      setChekeds(rawData.map((item) => item[keyField]))
     } else {
       setChekeds([])
     }
@@ -234,15 +228,15 @@ const VirtualTable: FC<TVirtualTable> = ({
   const onClickSorted = (col) => {
     const colName = `${col.name}`
     const colDirection = sortInfo[colName] ? !sortInfo[colName] : true // true = ask, false = desk
-    const _sortInfo = multisort ? { ...sortInfo } : {}
+    const tmpSortInfo = multisort ? { ...sortInfo } : {}
 
-    _sortInfo[colName] = colDirection
-    setSortInfo(_sortInfo)
+    tmpSortInfo[colName] = colDirection
+    setSortInfo(tmpSortInfo)
   }
 
   const render = (item, cur) => {
-    let cName = ''
-    const cheked = chekeds.indexOf(item[keyField]) > -1 ? true : false
+    const cName = ''
+    const cheked = chekeds.indexOf(item[keyField]) > -1
 
     return (
       <>
@@ -302,7 +296,7 @@ const VirtualTable: FC<TVirtualTable> = ({
             <input
               className={styles.inputChexkBox}
               type={'checkbox'}
-              checked={data.length === chekeds.length ? true : false}
+              checked={data.length === chekeds.length}
               onChange={onChangeAllChecked}
               onClick={onClickAllChecked}
             />
@@ -311,7 +305,7 @@ const VirtualTable: FC<TVirtualTable> = ({
       )}
       {columns.map((x, index) => {
         const headerStyle = x.header.style ? x.header.style : {}
-        let celProps = {
+        const celProps = {
           key: `hCell${index}`,
           style: { height: rowHeight, ...headerDefaultDefaultStyle, ...x.style, ...headerStyle },
           className: styles.tableCell
@@ -342,33 +336,19 @@ const VirtualTable: FC<TVirtualTable> = ({
     </>
   )
 
-  const getWidthCol = (item) => {
-    return item.style && item.style.width ? item.style.width : fullSpaceWidth
-  }
+  const getWidthCol = (item) => (item.style && item.style.width ? item.style.width : fullSpaceWidth)
 
   const getColgroup = () => (
     <>
-      {checked && (
-        <col
-          key={-1}
-          style={{
-            width: 40
-          }}
-        />
-      )}
+      {checked && <col key={-1} style={{ width: 40 }} />}
       {columns.map((x, index) => (
-        <col
-          key={index}
-          style={{
-            width: getWidthCol(x)
-          }}
-        />
+        <col key={index} style={{ width: getWidthCol(x) }} />
       ))}
     </>
   )
 
   const getTR = (rowIndex, item, cur) => {
-    let obj = {
+    const obj = {
       // className: cur ? `${styles.tableRow} ${styles.selectRow}` : `${styles.tableRow} ${styles.hoverTr}`,
       className: `${styles.tableRow} ${styles.hoverTr}`,
       style: { height: rowHeight },
@@ -377,14 +357,14 @@ const VirtualTable: FC<TVirtualTable> = ({
       onDoubleClick: (e) => onDoubleClickItem(e, start + rowIndex)
     }
 
-    let tmp1 = [<tr {...obj}>{render(item, cur)}</tr>]
+    const tmp1 = [<tr {...obj}>{render(item, cur)}</tr>]
 
     return tmp1
   }
 
   return (
     <>
-      <div style={{ height: height, overflow: 'auto', paddingLeft: 10, paddingRight: 10 }}>
+      <div style={{ height, overflow: 'auto', paddingLeft: 10, paddingRight: 10 }}>
         <table ref={refHeader} className={styles.table}>
           <colgroup>{getColgroup()}</colgroup>
           <thead>
@@ -392,7 +372,7 @@ const VirtualTable: FC<TVirtualTable> = ({
           </thead>
         </table>
         {isLoad && <div className={styles.loadSpinner}>{loadObject}</div>}
-        {!isLoad && data.length == 0 && <div className={styles.loadSpinner}>{empty}</div>}
+        {!isLoad && data.length === 0 && <div className={styles.loadSpinner}>{empty}</div>}
         {!isLoad && data.length > 0 && (
           <div
             style={{ height: finishedHeight - headerHeignt, overflow: 'auto', outline: 'none', overflowX: 'hidden' }}
@@ -406,7 +386,8 @@ const VirtualTable: FC<TVirtualTable> = ({
               <tbody>
                 <tr key={'startTR'} style={{ height: getTopHeight() }} />
                 {data.slice(start, start + visibleRows + 1).map((item, rowIndex) => {
-                  const cur = curIdx === start + rowIndex ? true : false
+                  const cur = curIdx === start + rowIndex
+
                   return getTR(rowIndex, item, cur)
                 })}
                 <tr key={'endTR'} style={{ height: getBottomHeight() }} />

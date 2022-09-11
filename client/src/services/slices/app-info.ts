@@ -1,36 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
-import { notification } from 'antd'
-
-import { errorResponsString } from '../../utils/vars'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
-// export const chekUser = createAsyncThunk('appReducer/chekUser', async (value, thunkApi) => {
-//   // {username: 'q', password: 'q', remember: true}
-//   // @ts-ignore
-//   const response = await postRequest([value.username, value.password], 'api.chekUser')
-//   const data = await response.json()
+type TCurrentPage = 1 | 2 | 3
 
-//   try {
-//     if (data.error) {
-//       throw new Error(`${errorResponsString} ${data.error}`)
-//     }
-//     if (typeof data.result === 'string' && data.result.indexOf('Traceback') > -1) {
-//       throw new Error(`${errorResponsString} ${data.result}`)
-//     }
-//   } catch (e) {
-//     throw new Error(`${errorResponsString} ${e}`)
-//   }
+type TInitAppInfoState = {
+  title: string
+  loginVisible: boolean
+  currentPage: TCurrentPage
+}
 
-//   // @ts-ignore
-//   if (value.remember) {
-//     document.cookie = `manuscriptsnews=${data.result}`
-//   }
-
-//   return data.result
-// })
-
-const initAppInfoState = { title: 'РенгаВиски', loginVisible: false }
+const initAppInfoState: TInitAppInfoState = { title: 'РенгаВиски', loginVisible: false, currentPage: 1 }
 
 export const appReducer = createSlice({
   name: 'appReducer',
@@ -38,12 +17,16 @@ export const appReducer = createSlice({
   reducers: {
     setLoginVisible: (state, action) => {
       state.loginVisible = action.payload
+    },
+    setCurrentPage: (state, action: PayloadAction<TCurrentPage>) => {
+      state.currentPage = action.payload
     }
   },
   extraReducers: (builder) => {}
 })
 
-export const { setLoginVisible } = appReducer.actions
+export const { setLoginVisible, setCurrentPage } = appReducer.actions
 
 export const sltAppInfoName = (state: RootState) => state.appInfo.title
 export const sltLoginVisible = (state: RootState) => state.appInfo.loginVisible
+export const sltCurrentPage = (state: RootState) => state.appInfo.currentPage

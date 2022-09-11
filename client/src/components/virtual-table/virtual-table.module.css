@@ -1,0 +1,80 @@
+.tableRow {
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.hoverTr{
+
+}
+
+.hoverTr:hover {
+    background-color: #f0f0f0
+}
+
+.table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100px;
+}
+
+.table tbody td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /* padding: 5px; */
+  vertical-align: top;
+}
+
+.table tbody td.selectExpand {
+  overflow: visible;
+  white-space: break-spaces;
+  word-break: break-all;
+  vertical-align: top;
+}
+
+.table .inputChexkBox {
+  height: 15px;
+  width: 15px;
+  cursor: pointer;
+}
+
+.checkedCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rotated90 {
+  float: left;
+  transform: rotate(90deg); /* Equal to rotateZ(45deg) */
+  display: block;
+  cursor: pointer;
+}
+
+.rotated270 {
+  float: left;
+  transform: rotate(270deg); /* Equal to rotateZ(45deg) */
+  display: block;
+  cursor: pointer;
+}
+
+.loadSpinner {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+}
+
+.selectRow {
+  border-bottom: 2px solid #a8dba8;
+  background-color: aliceblue;
+}
+
+.colHeader {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 10px;
+}

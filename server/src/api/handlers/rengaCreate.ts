@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { Domain } from '../../interfaces'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const handler = async (service: Renga, request: FastifyRequest, _: FastifyReply) => {
+const handler = async (service: Renga, request: FastifyRequest, reply: FastifyReply) => {
   const payload = request.body as Domain.Renga
   request.log.info({ body: request.body }, 'renga.create request')
 
@@ -15,7 +15,11 @@ const handler = async (service: Renga, request: FastifyRequest, _: FastifyReply)
 
   request.log.info('renga created:', result)
 
-  return renga
+  reply.send({
+    id: result?.id,
+    type: 'renga',
+    attributes: result
+  })
 }
 
 export const createHandler = handler

@@ -9,6 +9,12 @@ const requestSchema = {
         name: {
             type: 'string',
         },
+        description: {
+            type: 'string',
+        },
+        status: {
+            type: 'number',
+        },
     },
 };
 const responseSchema = {

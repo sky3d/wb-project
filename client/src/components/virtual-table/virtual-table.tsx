@@ -3,7 +3,7 @@ import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'lodash'
 
 import styles from './virtual-table.module.css'
-import { useWindowSize } from '../../utils/hoocs'
+import { useWindowSize } from '../../utils/hooks'
 
 export type TVirtualTableColumHeader = {
   title?: JSX.Element | string

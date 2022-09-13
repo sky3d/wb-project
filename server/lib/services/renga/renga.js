@@ -22,7 +22,6 @@ class Renga {
             name: 'new draft renga',
             status: interfaces_1.RengaStatus.Draft
         });
-        console.log(item);
         this.log.info('renga service initialized');
     }
 }

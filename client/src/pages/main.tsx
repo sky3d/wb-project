@@ -8,7 +8,7 @@ import { RengaCreateDialog } from '../modules/renga-create-dialog/renga-create-d
 import { setLoginVisible, sltAppInfoName, sltCurrentPage, sltLoginVisible } from '../services/slices/app-info'
 import { loginUser, selectAuth } from '../services/slices/user-info'
 import { generateUID, getCookie } from '../utils/funcs'
-import { useWindowSize } from '../utils/hoocs'
+import { useWindowSize } from '../utils/hooks'
 
 import { HomePage } from './home'
 

@@ -5,7 +5,7 @@ import { CardTransparent } from '../../components/card-transparent/card-transpar
 import { InputV1 } from '../../components/inputV1/inputV1'
 import { loginUser } from '../../services/slices/user-info'
 import { getCookie } from '../../utils/funcs'
-import { useDebounce } from '../../utils/hoocs'
+import { useDebounce } from '../../utils/hooks'
 
 const btnColorOptions = {
   color1: 'rgb(11, 22, 33, 0.8)',

@@ -17,7 +17,7 @@ const routes_1 = require("./api/routes");
 const logger = (0, pino_1.default)();
 async function main() {
     const app = (0, fastify_1.default)({
-        logger,
+        logger
     });
     app.log.info('=> starting app %s', Date.now().toString());
     app.log.info('config %o', JSON.stringify(server_1.envConfig));
@@ -33,7 +33,6 @@ async function main() {
     app.log.info('successfully booted');
     app.listen(app.config.PORT, app.config.HOST, () => {
         app.log.info({ routes: app.routes }, 'registered routes:');
-        console.log(app.routes);
     });
 }
 exports.main = main;

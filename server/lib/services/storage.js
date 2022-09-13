@@ -13,16 +13,13 @@ class StorageService {
         };
         this.connect = async () => {
             const conn = await (0, typeorm_1.createConnection)({ ...typeorm_2.typeorm });
-            console.log('Migrating...');
             let res;
             try {
                 res = await conn.runMigrations();
             }
             catch (e) {
-                console.error('Migration failed', e);
                 process.exit(1);
             }
-            console.log(`[x] ${res?.length} migrations applied!`);
             return conn;
         };
         this.disconnect = async () => {
@@ -31,7 +28,6 @@ class StorageService {
                 await conn.close();
             }
             catch (e) {
-                console.log('error %j', e);
             }
         };
         this.list = async () => {

@@ -4,13 +4,6 @@ import { typeorm as config } from '../configs/typeorm'
 import { Renga } from '../models/renga'
 
 export class StorageService {
-  public createRenga = (data: Partial<Renga>): Promise<Renga> => {
-    const { manager } = getConnection()
-
-    const entity = manager.create(Renga, data)
-    return manager.save(entity)
-  }
-
   public connect = async () => {
     const conn = await createConnection({ ...config })
 
@@ -34,6 +27,14 @@ export class StorageService {
     } catch (e) {
       // console.log('error %j', e)
     }
+  }
+
+  // renga
+  public createRenga = (data: Partial<Renga>): Promise<Renga> => {
+    const { manager } = getConnection()
+
+    const entity = manager.create(Renga, data)
+    return manager.save(entity)
   }
 
   public list = async (): Promise<Renga[]> => {

@@ -5,15 +5,15 @@ import { Domain } from '../../interfaces'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const handler = async (service: Renga, request: FastifyRequest, _: FastifyReply) => {
   const payload = request.body as Domain.Renga
-
   request.log.info({ body: request.body }, 'renga.create request')
-  request.log.info('ping:', service.ping())
 
   const renga: Domain.Renga = {
     id: shortid(),
-    name: payload.name || 'New renga',
+    name: payload.name || `Новая ренга`,
   }
-  // TODO save to database
+  const result = await service.storage.createRenga(renga)
+
+  request.log.info('renga created:', result)
 
   return renga
 }

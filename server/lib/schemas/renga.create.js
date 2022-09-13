@@ -3,35 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.schema = void 0;
 const common_1 = require("./common");
 const requestSchema = {
-    type: 'object',
-    required: ['name'],
-    properties: {
-        name: {
-            type: 'string',
-        },
-        description: {
-            type: 'string',
-        },
-        status: {
-            type: 'number',
-        },
-    },
+    type: 'object'
 };
 const responseSchema = {
     type: 'object',
     properties: {
         id: {
-            type: 'string',
+            type: 'string'
         },
-        name: {
-            type: 'string',
+        type: {
+            type: 'string'
         },
-    },
+        attributes: {
+            type: 'object'
+        }
+    }
 };
 exports.schema = {
     ...requestSchema,
     response: {
         200: responseSchema,
-        ...common_1.errorSchemas,
-    },
+        ...common_1.errorSchemas
+    }
 };

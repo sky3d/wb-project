@@ -32,7 +32,7 @@ export class StorageService {
   // renga
   public createRenga = (data: Partial<Renga>): Promise<Renga> => {
     const { manager } = getConnection()
-
+    console.log('---------------', data)
     const entity = manager.create(Renga, data)
     return manager.save(entity)
   }

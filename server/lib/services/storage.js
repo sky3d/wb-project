@@ -27,6 +27,7 @@ class StorageService {
         };
         this.createRenga = (data) => {
             const { manager } = (0, typeorm_1.getConnection)();
+            console.log('---------------', data);
             const entity = manager.create(renga_1.Renga, data);
             return manager.save(entity);
         };

@@ -1,6 +1,5 @@
-//import shortid from 'shortid'
 import { Connection } from 'typeorm'
-//import { RengaStatus } from '../../interfaces'
+
 import { StorageService } from '../storage'
 
 export class Renga {

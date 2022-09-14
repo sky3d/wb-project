@@ -1,6 +1,14 @@
 {
   "extends": ["eslint-config-blvd"],
   "rules": {
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ],
+    "linebreak-style": "warn",
     "@typescript-eslint/ban-types": [
       "error",
       {
@@ -51,7 +59,7 @@
         "multiline": true
       }
     ],
-    "comma-dangle": ["error", "always-multiline"]
+    "comma-dangle": "off"
   },
   "settings": {
     "import/resolver": {

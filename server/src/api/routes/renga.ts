@@ -10,7 +10,7 @@ async function RengaCreate(fastify: FastifyInstance) {
     method: 'POST',
     url: '/renga',
     schema,
-    handler: wrapHandler(createHandler),
+    handler: wrapHandler(createHandler)
   })
 }
 
@@ -19,11 +19,8 @@ async function RengaList(fastify: FastifyInstance) {
     method: 'GET',
     url: '/renga/list',
     schema,
-    handler: wrapHandler(listHandler),
+    handler: wrapHandler(listHandler)
   })
 }
 
-export {
-  RengaCreate,
-  RengaList,
-}
+export { RengaCreate, RengaList }

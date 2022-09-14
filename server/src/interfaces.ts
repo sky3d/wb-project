@@ -9,6 +9,5 @@ export enum RengaStatus {
   NotSet = 0,
   Draft = 1,
   Active,
-  Closed,
+  Closed
 }
-

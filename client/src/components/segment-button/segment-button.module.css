@@ -1,0 +1,46 @@
+.form_radio_group {
+	display: inline-block;
+	overflow: hidden;
+}
+.form_radio_group-item {
+	display: inline-block;
+	float: left;
+}
+.form_radio_group input[type=radio] {
+	display: none;
+}
+.form_radio_group label {
+	display: inline-block;
+	cursor: pointer;
+	padding: 2px 15px;
+	line-height: 25px;
+	/* border: 1px solid #999; */
+	border-right: none;
+	user-select: none;
+}
+
+
+/* .form_radio_group .form_radio_group-item:last-child label {
+	border-right: 1px solid #999;
+} */
+
+.form_radio_group .form_radio_group-item label {
+	border: 1px solid rgb(217, 217, 217);
+}
+
+/* Checked */
+.form_radio_group input[type=radio]:checked + label {
+	border: 1px solid rgb(45, 119, 238);
+    color: rgb(45, 119, 238);
+}
+
+/* Hover */
+.form_radio_group label:hover {
+	color: rgb(45, 119, 238);
+}
+
+/* Disabled */
+.form_radio_group input[type=radio]:disabled + label {
+	background: #efefef;
+	color: #666;
+}

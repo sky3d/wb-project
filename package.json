@@ -5,7 +5,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "clean": "rimraf ./lib",
+    "clean": "rimraf ./server/lib",
     "compile": "yarn build:server",
     "dev": "yarn start:server",
     "precommit": "lint-staged",

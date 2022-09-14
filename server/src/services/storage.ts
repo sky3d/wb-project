@@ -7,15 +7,16 @@ export class StorageService {
   public connect = async () => {
     const conn = await createConnection({ ...config })
 
-    // console.log('Migrating...')
+    console.log('Migrating...')
+    let res = []
     try {
-      await conn.runMigrations()
+      res = await conn.runMigrations()
     } catch (e) {
-      // console.error('Migration failed', e)
+      console.error('Migration failed', e)
       process.exit(1)
     }
 
-    // console.log(`[x] ${res?.length} migrations applied!`)
+    console.log(`[x] ${res?.length} migrations applied!`)
     return conn
   }
 

@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk('userInfoReducer/getUserInfo', async (
   return true
 })
 
-const initUerInfoState = { auth: false }
+const initUerInfoState = { auth: true }
 
 export const userInfoReducer = createSlice({
   name: 'userInfo',

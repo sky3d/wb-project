@@ -16,7 +16,7 @@
     "start:server": "node server/lib/index.js",
     "env:up": "docker-compose up",
     "env:down": "docker-compose down",
-    "migration:exec": "node -r @swc-node/register ./node_modules/typeorm/cli -f ./server/ormconfig.json",
+    "migration:exec": "node -r @swc-node/register ./node_modules/typeorm/cli -f ./ormconfig.json",
     "migration:generate": "yarn migration:exec migration:generate",
     "migration:create": "yarn migration:exec migration:create",
     "prepare": "husky install"

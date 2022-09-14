@@ -11,5 +11,5 @@ export const routes = async (fastify: FastifyInstance) => {
   fastify.register(RengaCreate, { prefix: '/api' })
   fastify.register(RengaList, { prefix: '/api' })
 
-  fastify.log.info('routes registered:')
+  fastify.log.info('routes registered')
 }

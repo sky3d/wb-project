@@ -2,7 +2,7 @@ import pino from 'pino'
 import fastify from 'fastify'
 import cors from 'fastify-cors'
 import favicon from 'fastify-favicon'
-import formbody from 'fastify-formbody'
+import formbody from '@fastify/formbody'
 import routesPlugin from 'fastify-routes'
 import helmet from 'fastify-helmet'
 

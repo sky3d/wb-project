@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify'
 
-import { schema } from '../../schemas/renga.create'
-import { createHandler } from '../handlers/rengaCreate'
-import { listHandler } from '../handlers/rengaList'
+import { schema } from '../../schemas/renga/create'
+import { createHandler } from '../handlers/renga/create'
+import { listHandler } from '../handlers/renga/list'
 import { wrapHandler } from '../../utils/wrapHandler'
 
 async function RengaCreate(fastify: FastifyInstance) {

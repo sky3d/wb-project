@@ -217,6 +217,13 @@
   dependencies:
     ajv "^6.12.6"
 
+"@fastify/formbody@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@fastify/formbody/-/formbody-7.2.0.tgz#a05631f199ac324117220534320c990cd78e58be"
+  integrity sha512-87mxTUo3u6xOwfuU2yuQUq//DcLmtvr9WQ1vl1q96zrMfweZYpERcTSJ0nFoWUOcd0NS/jliM7c9RzTJs7A/9Q==
+  dependencies:
+    fastify-plugin "^4.0.0"
+
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz#1407967d4c6eecd7388f83acf1eaf4d0c6e58ef9"
@@ -1491,6 +1498,11 @@ fastify-plugin@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-3.0.0.tgz#cf1b8c8098e3b5a7c8c30e6aeb06903370c054ca"
   integrity sha512-ZdCvKEEd92DNLps5n0v231Bha8bkz1DjnPP/aEz37rz/q42Z5JVLmgnqR4DYuNn3NXAO3IDCPyRvgvxtJ4Ym4w==
+
+fastify-plugin@^4.0.0:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-4.2.1.tgz#4b80020957938dbc44b8ad4a898fd8bcfbab3f65"
+  integrity sha512-dlGKiwLzRBKkEf5J5ho0uAD/Jdv8GQVUbriB3tAX3ehRUXE4gTV3lRd5inEg9li1aLzb0EGj8y2K4/8g1TN06g==
 
 fastify-routes@^3.1.0:
   version "3.1.0"

@@ -5,7 +5,7 @@ import { StorageService } from '../storage'
 export class Renga {
   public readonly config: any
 
-  private readonly log: any
+  public readonly log: any
 
   private db: Connection
 

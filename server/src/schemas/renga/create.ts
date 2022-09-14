@@ -1,4 +1,4 @@
-import { errorSchemas } from './common'
+import { errorSchemas } from '../common'
 
 const requestSchema = {
   type: 'object'

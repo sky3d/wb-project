@@ -1,4 +1,4 @@
-import { Entity, Column, Index } from 'typeorm'
+import { Entity, Column } from 'typeorm'
 import { RengaStatus } from '../interfaces'
 import { AbstractBaseEntity } from './baseEntity'
 

@@ -8,9 +8,8 @@ export class StorageService {
     const conn = await createConnection({ ...config })
 
     // console.log('Migrating...')
-    let res
     try {
-      res = await conn.runMigrations()
+      await conn.runMigrations()
     } catch (e) {
       // console.error('Migration failed', e)
       process.exit(1)
@@ -25,14 +24,13 @@ export class StorageService {
       const conn = await getConnection()
       await conn.close()
     } catch (e) {
-      // console.log('error %j', e)
+      // console.log(e)
     }
   }
 
   // renga
   public createRenga = (data: Partial<Renga>): Promise<Renga> => {
     const { manager } = getConnection()
-    console.log('---------------', data)
     const entity = manager.create(Renga, data)
     return manager.save(entity)
   }

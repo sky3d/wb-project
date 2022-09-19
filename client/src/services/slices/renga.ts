@@ -1,10 +1,12 @@
 /** @module userInfoReducer */
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { log } from 'console'
 
 import { errorResponsString } from '../../utils/vars'
 import { runRequest } from '../api'
 import { RootState } from '../store'
 import { setCurrentPage } from './app-info'
+import { selectOwnerId } from './user-info'
 
 // export const getUserInfo = createAsyncThunk('userInfoReducer/getUserInfo', async (tmp, thunkApi) => {
 //   const dispatch = thunkApi.dispatch
@@ -51,7 +53,10 @@ import { setCurrentPage } from './app-info'
 // })
 
 export const createRenga = createAsyncThunk('rengaStore/createRenga', async (objRenga: {}, thunkApi) => {
-  const response = await runRequest('renga', 'POST', objRenga)
+  const state: RootState = thunkApi.getState()
+  const ownerId = selectOwnerId(state)
+
+  const response = await runRequest('renga', 'POST', { ...objRenga, ownerId })
   const data = await response.json()
 
   if (data.error) {

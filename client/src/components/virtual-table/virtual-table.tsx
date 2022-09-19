@@ -15,6 +15,8 @@ export type TVirtualTableColumn = {
   name: number | string
   style?: React.CSSProperties
   align?: 'start' | 'center' | 'end'
+  render?: Function
+  sorter?: boolean
 }
 
 export type TVirtualTable = {
@@ -67,7 +69,7 @@ const VirtualTable: FC<TVirtualTable> = ({
   const [curIdx, setCurIdx] = useState(-1)
   const [curExpandIdx, setCurExpandIdx] = useState(-1)
   const [start, setStart] = useState(0)
-  const [_isFocus, _] = useState(false)
+  const [_isFocus, setisFocus] = useState(false)
   const [headerHeignt, setHeaderHeignt] = useState(0)
   const [visibleRows, setVisibleRows] = useState(3)
   const [chekeds, setChekeds] = useState(selectData)
@@ -169,7 +171,8 @@ const VirtualTable: FC<TVirtualTable> = ({
           colNames.push(x)
           colDirections.push(sortInfo[x] ? 'asc' : 'desc')
         })
-        setData(_.orderBy(data, colNames, colDirections))
+        const filterData = _.orderBy(data, colNames, colDirections)
+        setData(filterData)
       }
     }
   }, [sortInfo])
@@ -324,9 +327,22 @@ const VirtualTable: FC<TVirtualTable> = ({
             <div style={{ display: 'flex', gap: 5, alignItems: 'center', ...x.style, paddingRight: 5, justifyContent: x.align || 'left' }}>
               <span className="noselect">{x.header.title}</span>
               {x.sorter && (
-                <div style={{ fontSize: 8, display: 'flex', flexDirection: 'column', marginTop: 4 }}>
-                  <CaretUpOutlined style={{ color: colDirection === false ? 'black' : 'silver' }} />
-                  <CaretDownOutlined style={{ color: colDirection ? 'black' : 'silver' }} />
+                <div style={{ fontSize: 8, display: 'flex', marginTop: 4 }}>
+                  <span
+                    style={{
+                      color: colDirection === false ? 'black' : 'silver',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      transform: 'rotate(90deg)'
+                    }}
+                  >
+                    &#10141;
+                  </span>
+                  <span style={{ color: colDirection ? 'black' : 'silver', fontSize: 12, fontWeight: 700, transform: 'rotate(270deg)', marginLeft: -6 }}>
+                    &#10141;
+                  </span>
+                  {/* <CaretUpOutlined style={{ color: colDirection === false ? 'black' : 'silver' }} />
+                  <CaretDownOutlined style={{ color: colDirection ? 'black' : 'silver' }} /> */}
                 </div>
               )}
             </div>

@@ -1,5 +1,4 @@
-import _ from 'lodash'
-import React, { CSSProperties, FC, HTMLInputTypeAttribute, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styles from './selectV1.module.css'
 
 type TSelectV1 = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
@@ -8,6 +7,8 @@ type TSelectV1 = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElem
     title: string
     id: number
   }[]
+  name?: string
+  onChange: Function
 }
 
 export const SelectV1: FC<TSelectV1> = (props): JSX.Element => {
@@ -23,6 +24,12 @@ export const SelectV1: FC<TSelectV1> = (props): JSX.Element => {
     }
   }, [active])
 
+  useEffect(() => {
+    if (props.onChange) {
+      props.onChange(value.id)
+    }
+  }, [value])
+
   return (
     <div
       className={dropCss}
@@ -30,10 +37,17 @@ export const SelectV1: FC<TSelectV1> = (props): JSX.Element => {
         setActive(!active)
       }}
     >
-      <input className={styles.textBox} type={'text'} placeholder={value.title ? value.title : props.placeholder} readOnly />
+      <input
+        className={styles.textBox}
+        type={'text'}
+        placeholder={value.title ? value.title : props.placeholder}
+        name={props.name}
+        readOnly
+      />
       <div className={styles.option}>
         {props.option.map((x) => (
           <div
+            key={x.id}
             onClick={() => {
               setValue(x)
             }}

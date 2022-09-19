@@ -18,3 +18,9 @@ export function getCookie(name: string) {
 
   return matches ? decodeURIComponent(matches[1]) : undefined
 }
+
+export const getDateObj = (dtStr: string): {} => {
+  const dtArr = dtStr.split('T')
+
+  return { dt: dtArr[0].split('-').reverse().join('.'), tm: dtArr[1].split(':').slice(0, 2).join(':') }
+}

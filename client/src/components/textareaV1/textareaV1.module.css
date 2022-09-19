@@ -2,12 +2,12 @@
   position: relative;
 }
 
-.inputBox input {
+.inputBox textarea {
   width: 100%;
-  padding-top: 10px;
+  padding: 10px 0;
   font-size: 16px;
   color: #fff;
-  padding-bottom: 10px;
+  /* margin-bottom: 10px; */
   border: none;
   border-bottom: 1px solid #fff;
   outline: none;
@@ -25,8 +25,8 @@
   transition: 0.5s;
 }
 
-.inputBox input:focus ~ label,
-.inputBox input:valid ~ label {
+.inputBox textarea:focus ~ label,
+.inputBox textarea:valid ~ label {
   top: -18px;
   left: 0;
   color: cadetblue;

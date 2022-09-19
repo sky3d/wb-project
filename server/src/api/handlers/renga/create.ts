@@ -8,9 +8,9 @@ export const handler = async (service: Renga, request: FastifyRequest, reply: Fa
   request.log.info({ payload }, 'create renga request')
 
   const renga: Domain.Renga = {
-    id: shortid(),
     ...payload,
-    name: payload.name || 'Новая ренга'
+    name: payload.name || 'Новая ренга',
+    id: payload.id || shortid(),
   }
   const result = await service.storage.createRenga(renga)
 

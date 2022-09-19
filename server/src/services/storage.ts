@@ -18,6 +18,7 @@ export class StorageService {
     try {
       res = await conn.runMigrations()
     } catch (e) {
+      /* eslint-disable no-console */
       console.error('Migration failed', e)
       process.exit(1)
     }

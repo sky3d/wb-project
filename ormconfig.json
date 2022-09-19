@@ -8,13 +8,13 @@
   "synchronize": false,
   "logging": "all",
   "entities": [
-    "server/src/models/**/*"
+    "server/lib/models/**/*"
   ],
   "migrations": [
     "server/src/migrations/**/*"
   ],
   "cli": {
-    "entitiesDir": "server/src/models",
+    "entitiesDir": "server/lib/models",
     "migrationsDir": "server/src/migrations"
   }
 }

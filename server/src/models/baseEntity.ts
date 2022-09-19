@@ -5,7 +5,7 @@ import {
   PrimaryColumn,
 } from 'typeorm'
 
-export abstract class AbstractBaseEntity extends BaseEntity {
+export class AbstractBaseEntity extends BaseEntity {
   @PrimaryColumn()
   public id: string
 

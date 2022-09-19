@@ -1,12 +1,11 @@
-import shortid from 'shortid'
 import { FastifyReply, FastifyRequest } from 'fastify'
+import shortid from 'shortid'
 import { Domain } from '../../../interfaces'
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const handler = async (service: Renga, request: FastifyRequest, reply: FastifyReply) => {
+export const handler = async (service: Renga, request: FastifyRequest, reply: FastifyReply) => {
   const payload = JSON.parse(request.body as string) as Domain.Renga
 
-  request.log.info({ body: request.body }, 'renga.create request')
+  request.log.info({ payload }, 'create renga request')
 
   const renga: Domain.Renga = {
     id: shortid(),
@@ -14,13 +13,9 @@ const handler = async (service: Renga, request: FastifyRequest, reply: FastifyRe
   }
   const result = await service.storage.createRenga(renga)
 
-  request.log.info('renga created:', result)
-
   reply.send({
     id: result?.id,
     type: 'renga',
     attributes: result
   })
 }
-
-export const createHandler = handler

@@ -25,13 +25,6 @@ export class Renga {
 
     this.log.info('db connected')
 
-    // const item = await this.storage.createRenga({
-    //   id: shortid(),
-    //   name: 'new draft renga',
-    //   status: RengaStatus.Draft
-    // })
-    // console.log(item)
-
     this.log.info('renga service initialized')
   }
 }

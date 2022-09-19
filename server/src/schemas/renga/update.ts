@@ -2,7 +2,7 @@ import { errorSchemas } from '../errors'
 import { responseSchema } from '../jsonApiResponse'
 
 const requestSchema = {
-  type: 'object'
+  type: 'object',
 }
 
 export const schema = {

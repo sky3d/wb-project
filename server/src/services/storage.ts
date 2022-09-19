@@ -1,5 +1,10 @@
-import { createConnection, getConnection, getRepository } from 'typeorm'
-
+import { head } from 'lodash'
+import {
+  createConnection,
+  getConnection,
+  getManager,
+  getRepository
+} from 'typeorm'
 import { typeorm as config } from '../configs/typeorm'
 import { Renga } from '../models/renga'
 
@@ -30,10 +35,34 @@ export class StorageService {
   }
 
   // renga
-  public createRenga = (data: Partial<Renga>): Promise<Renga> => {
-    const { manager } = getConnection()
-    const entity = manager.create(Renga, data)
-    return manager.save(entity)
+
+  public getRenga = (rengaId: Renga['id']) => Renga.findOneOrFail<Renga>(rengaId)
+
+  public createRenga = async (data: Partial<Renga>): Promise<Renga> => {
+    // const { manager } = getConnection()
+    // const entity = manager.create(Renga, data)
+    // return manager.save(entity)
+
+    const res = await getManager()
+      .createQueryBuilder()
+      .insert()
+      .into(Renga)
+      .values(data)
+      .returning('*')
+      .execute()
+
+    return head(res.generatedMaps) as Renga
+  }
+
+  public updateRenga = async (rengaId: Renga['id'], data: Partial<Renga>): Promise<Renga> => {
+    await getManager()
+      .createQueryBuilder()
+      .update(Renga)
+      .set(data)
+      .where({ id: rengaId })
+      .execute()
+
+    return this.getRenga(rengaId)
   }
 
   public list = async (): Promise<Renga[]> => {

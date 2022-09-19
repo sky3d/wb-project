@@ -12,6 +12,7 @@ export class StorageService {
   public connect = async () => {
     const conn = await createConnection({ ...config })
 
+    /* eslint-disable no-console */
     console.log('Migrating...')
     let res = []
     try {
@@ -21,6 +22,7 @@ export class StorageService {
       process.exit(1)
     }
 
+    /* eslint-disable no-console */
     console.log(`[x] ${res?.length} migrations applied!`)
     return conn
   }

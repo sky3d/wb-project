@@ -1,5 +1,6 @@
 /** @module userInfoReducer */
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
+import { log } from 'console'
 
 import { RootState } from '../store'
 import { setLoginVisible } from './app-info'
@@ -12,7 +13,7 @@ export const loginUser = createAsyncThunk('userInfoReducer/getUserInfo', async (
   return true
 })
 
-const initUerInfoState = { auth: false }
+const initUerInfoState = { auth: true, ownerId: 1111 }
 
 export const userInfoReducer = createSlice({
   name: 'userInfo',
@@ -34,3 +35,10 @@ export const userInfoReducer = createSlice({
 
 export const { setAuth } = userInfoReducer.actions
 export const selectAuth = (state: RootState) => state.userInfo.auth
+export const selectOwnerId = (state: RootState) => {
+  console.log('state', state);
+
+  console.log('selectOwnerId', state.userInfo.ownerId)
+
+  return state.userInfo.ownerId
+}

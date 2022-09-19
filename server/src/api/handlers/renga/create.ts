@@ -9,6 +9,7 @@ export const handler = async (service: Renga, request: FastifyRequest, reply: Fa
 
   const renga: Domain.Renga = {
     id: shortid(),
+    ...payload,
     name: payload.name || 'Новая ренга'
   }
   const result = await service.storage.createRenga(renga)

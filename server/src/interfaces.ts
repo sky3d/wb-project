@@ -2,6 +2,10 @@ export declare namespace Domain {
   export interface Renga {
     id: string,
     name: string,
+    description?: string,
+    owner?: string,
+    options?: any,
+    rengaPart?: number,
   }
 }
 

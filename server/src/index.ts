@@ -2,6 +2,7 @@
 require('./server')
   .main()
   .catch((e: Error) => {
-    // console.error(`Error during boot ${e.message}\n${e.stack}`)
+    /* eslint-disable no-console */
+    console.error(`Error during boot ${e.message}\n${e.stack}`)
     process.exit(1)
   })

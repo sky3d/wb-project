@@ -54,9 +54,9 @@ import { selectOwnerId } from './user-info'
 
 export const createRenga = createAsyncThunk('rengaStore/createRenga', async (objRenga: {}, thunkApi) => {
   const state: RootState = thunkApi.getState()
-  const ownerId = selectOwnerId(state)
+  const owner = selectOwnerId(state)
 
-  const response = await runRequest('renga', 'POST', { ...objRenga, ownerId })
+  const response = await runRequest('renga', 'POST', { ...objRenga, owner })
   const data = await response.json()
 
   if (data.error) {
@@ -79,13 +79,14 @@ export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async ()
   return data
 })
 
-type TReangaList = {
+export type TReangaList = {
   createdAt: string | null
   description: string | null
   id: string
   name: string | null
   status: number
   updatedAt: string | null
+  owner: string
 }
 
 export type TInitRengaStore = {
@@ -112,4 +113,4 @@ export const rengaStore = createSlice({
   }
 })
 
-export const slctRengaRawList = (state: RootState) => state.rengaStore.rawData
+export const slctRengaRawList = (state: RootState):[TReangaList] | undefined => state.rengaStore.rawData

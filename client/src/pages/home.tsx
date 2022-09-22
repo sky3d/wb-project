@@ -9,17 +9,22 @@ import { SegmetButton } from '../components/segment-button/segment-button'
 import VirtualTable, { TVirtualTableColumn } from '../components/virtual-table/virtual-table'
 import { setCurrentPage } from '../services/slices/app-info'
 
-import { getRengaList, slctRengaRawList } from '../services/slices/renga'
-import { selectAuth } from '../services/slices/user-info'
+import { getRengaList, slctRengaRawList, TReangaList } from '../services/slices/renga'
+import { selectAuth, selectOwnerId } from '../services/slices/user-info'
 import { TPage } from '../utils/types'
 import { getDateObj } from '../utils/funcs'
 
 export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
   const dispatch = useDispatch()
   const userAuth = useSelector(selectAuth)
+  const ownerId = useSelector(selectOwnerId)
+  const rengaListRaw = useSelector(slctRengaRawList)
+
   const headerRef = useRef<HTMLHeadingElement>(null)
 
+  const [rengaList, setRengaList] = useState([])
   const [pageHeight, setPageHeight] = useState(0)
+  const [filter, setFilter] = useState<string>('1')
 
   useEffect(() => {
     if (headerRef.current && height > 0) {
@@ -27,22 +32,28 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
     }
   }, [height, headerRef, userAuth])
 
-  const rengaList = useSelector(slctRengaRawList)
-
   useEffect(() => {
     dispatch(getRengaList())
   }, [])
 
+  useEffect(() => {
+    if (filter === '2') {
+      setRengaList(rengaListRaw?.filter((x) => x.owner === ownerId))
+    } else {
+      setRengaList(rengaListRaw)
+    }
+  }, [rengaListRaw, filter])
+
   const columns: TVirtualTableColumn[] = [
-    {
-      header: { title: 'id' },
-      style: { width: 120 },
-      name: 'id'
-    },
+    // {
+    //   header: { title: 'id' },
+    //   style: { width: 120 },
+    //   name: 'id'
+    // },
     {
       header: { title: 'название' },
       name: 'name',
-      sorter: true,
+      sorter: true
     },
     {
       header: { title: 'описание' },
@@ -53,7 +64,7 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
       name: 'status',
       style: { width: 70 },
       align: 'center',
-      sorter: true,
+      sorter: true
     },
     {
       header: { title: 'дата' },
@@ -73,14 +84,16 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
       style: { width: 50 },
       align: 'center',
       render: (item: [] | {}) => {
-        const v = 1
+        if (ownerId === item.owner) {
+          return (
+            <FontAwesomeIcon
+              className="hover:text-black cursor-pointer text-slate-500 text-xl"
+              icon={icon({ name: 'pen-to-square', style: 'regular' })}
+            />
+          )
+        }
 
-        return (
-          <FontAwesomeIcon
-            className="hover:text-black cursor-pointer text-slate-500 text-xl"
-            icon={icon({ name: 'pen-to-square', style: 'regular' })}
-          />
-        )
+        return <></>
       }
     }
   ]
@@ -97,7 +110,7 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
   ]
 
   const onChangeSegment = (id: string) => {
-    console.log('onChangeSegment_id:', id)
+    setFilter(id)
   }
 
   return (
@@ -105,7 +118,7 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
       <div ref={headerRef}>
         {userAuth && (
           <section style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0 5px 0' }}>
-            <SegmetButton buttons={buttons} onChangeEvnt={onChangeSegment} defaultValue={'1'} />
+            <SegmetButton buttons={buttons} onChangeEvnt={onChangeSegment} defaultValue={filter} />
 
             <ButtonV2
               onClick={() => {

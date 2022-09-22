@@ -31,14 +31,6 @@ export const RengaCreateDialog: FC<TPage> = ({ height }): JSX.Element => {
       <OptionsPanel>
         {getH1('Настройки ренги')}
         <form ref={formRef} className="flex flex-col gap-4">
-          <SelectV2
-            styleLable={{ color: 'cadetblue' }}
-            styleImput={{ paddingLeft: 5, borderBottom: '2px solid #f0f0f0', color: '#000' }}
-            placeholder="Выберите тип"
-            option={typeList}
-            onChange={(id) => setRengaType(id)}
-          />
-
           <InputV1
             styleLable={{ color: 'cadetblue' }}
             styleImput={{ paddingLeft: 5, borderBottom: '2px solid #f0f0f0', color: '#000' }}
@@ -59,8 +51,7 @@ export const RengaCreateDialog: FC<TPage> = ({ height }): JSX.Element => {
             onClick={() => {
               const data = new FormData(formRef.current)
               const formSendObj = Object.fromEntries(data.entries())
-              console.log('Object.fromEntries(data.entries()):', formSendObj)
-              if (formSendObj.name.length === 0 || !rengaType) {
+              if (formSendObj.name.length === 0) {
                 alert('Не все поля заполнены')
               } else {
                 dispath(createRenga(Object.fromEntries(data.entries())))

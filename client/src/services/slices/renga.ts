@@ -56,7 +56,7 @@ export const createRenga = createAsyncThunk('rengaStore/createRenga', async (obj
   const state: RootState = thunkApi.getState()
   const owner = selectOwnerId(state)
 
-  const response = await runRequest('renga', 'POST', { ...objRenga, owner })
+  const response = await runRequest('renga', 'POST', { ...objRenga, owner, options: { index: 5, sabaki: 'greg.rabota@gmail.com' } })
   const data = await response.json()
 
   if (data.error) {
@@ -79,6 +79,13 @@ export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async ()
   return data
 })
 
+export type TVerse = {
+  number: number
+  tags: string[]
+  sezon: number
+  format: number
+}
+
 export type TReangaList = {
   createdAt: string | null
   description: string | null
@@ -87,6 +94,7 @@ export type TReangaList = {
   status: number
   updatedAt: string | null
   owner: string
+  verses: TVerse[] | []
 }
 
 export type TInitRengaStore = {
@@ -113,4 +121,4 @@ export const rengaStore = createSlice({
   }
 })
 
-export const slctRengaRawList = (state: RootState):[TReangaList] | undefined => state.rengaStore.rawData
+export const slctRengaRawList = (state: RootState): [TReangaList] | undefined => state.rengaStore.rawData

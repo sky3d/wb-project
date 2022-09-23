@@ -1,9 +1,7 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { ButtonV2 } from '../../components/buttonV2/buttonV2'
 import { InputV1 } from '../../components/inputV1/inputV1'
-import { SelectV1 } from '../../components/selectV1/selectV1'
-import { SelectV2 } from '../../components/selectV2/selectV2'
 import { TextareaV1 } from '../../components/textareaV1/textareaV1'
 import { createRenga } from '../../services/slices/renga'
 import { TPage } from '../../utils/types'
@@ -19,12 +17,6 @@ const getH1 = (title: string): JSX.Element => <h1 className="text-xl font-semibo
 export const RengaCreateDialog: FC<TPage> = ({ height }): JSX.Element => {
   const dispath = useDispatch()
   const formRef = useRef(undefined)
-  const [rengaType, setRengaType] = useState(null)
-
-  const typeList = [
-    { id: 1, title: 'Ручные настройки' },
-    { id: 2, title: 'НЕ Ручные настройки' }
-  ]
 
   return (
     <div style={{ height, maxHeight: height }} className="flex gap-3 justify-center pb-2">

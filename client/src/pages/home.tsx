@@ -84,11 +84,15 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
       style: { width: 50 },
       align: 'center',
       render: (item: [] | {}) => {
+        const editClick = () => {
+          dispatch(setCurrentPage(3))
+        }
         if (ownerId === item.owner) {
           return (
             <FontAwesomeIcon
               className="hover:text-black cursor-pointer text-slate-500 text-xl"
               icon={icon({ name: 'pen-to-square', style: 'regular' })}
+              onClick={editClick}
             />
           )
         }

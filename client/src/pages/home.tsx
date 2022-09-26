@@ -9,7 +9,7 @@ import { SegmetButton } from '../components/segment-button/segment-button'
 import VirtualTable, { TVirtualTableColumn } from '../components/virtual-table/virtual-table'
 import { setCurrentPage } from '../services/slices/app-info'
 
-import { getRengaList, slctRengaRawList, TReangaList } from '../services/slices/renga'
+import { getRengaList, getRengaVerses, setCurrentRenga, slctRengaRawList, TReangaList } from '../services/slices/renga'
 import { selectAuth, selectOwnerId } from '../services/slices/user-info'
 import { TPage } from '../utils/types'
 import { getDateObj } from '../utils/funcs'
@@ -84,15 +84,17 @@ export const HomePage: FC<TPage> = ({ height }): JSX.Element => {
       style: { width: 50 },
       align: 'center',
       render: (item: [] | {}) => {
-        const editClick = () => {
+        const editClick = (id: string) => {
           dispatch(setCurrentPage(3))
+          dispatch(setCurrentRenga(id))
+          dispatch(getRengaVerses(id))
         }
         if (ownerId === item.owner) {
           return (
             <FontAwesomeIcon
               className="hover:text-black cursor-pointer text-slate-500 text-xl"
               icon={icon({ name: 'pen-to-square', style: 'regular' })}
-              onClick={editClick}
+              onClick={() => editClick(item.id)}
             />
           )
         }

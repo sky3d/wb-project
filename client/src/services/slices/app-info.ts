@@ -9,7 +9,7 @@ type TInitAppInfoState = {
   currentPage: TCurrentPage
 }
 
-const initAppInfoState: TInitAppInfoState = { title: 'РенгаВиски', loginVisible: false, currentPage: 3 }
+const initAppInfoState: TInitAppInfoState = { title: 'РенгаВиски', loginVisible: false, currentPage: 1 }
 
 export const appReducer = createSlice({
   name: 'appReducer',

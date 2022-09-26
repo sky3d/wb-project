@@ -7,25 +7,17 @@ export type TSelectV1OptionsItem = {
 }
 
 type TSelectV1 = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
-  placeholder?: string
+  placeholder: string
   option: TSelectV1OptionsItem[]
   name?: string
   onChangeValue: Function
   style?: React.CSSProperties
-  styleInput?: React.CSSProperties
-  defaultValue: string
 }
 
 export const SelectV1: FC<TSelectV1> = (props): JSX.Element => {
   const [value, setValue] = useState<TSelectV1OptionsItem>({})
   const [active, setActive] = useState(false)
   const [dropCss, setdropCss] = useState(styles.dropdown)
-
-  useEffect(() => {
-    try {
-      setValue(props.option.filter((x) => x.id * 1 === props.defaultValue * 1)[0])
-    } catch (er) { console.log('er:', er) }
-  }, [props.defaultValue])
 
   useEffect(() => {
     if (active) {
@@ -43,6 +35,7 @@ export const SelectV1: FC<TSelectV1> = (props): JSX.Element => {
 
   return (
     <div
+
       className={dropCss}
       onClick={() => {
         setActive(!active)
@@ -51,9 +44,8 @@ export const SelectV1: FC<TSelectV1> = (props): JSX.Element => {
     >
       <input
         className={styles.textBox}
-        style={{ ...props.styleInput }}
         type={'text'}
-        value={value.title || ''}
+        placeholder={value.title ? value.title : props.placeholder}
         name={props.name}
         readOnly
       />

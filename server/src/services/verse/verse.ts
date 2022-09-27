@@ -32,6 +32,17 @@ export class Verse extends StorageService<Model> {
 
   public byNumber = (rengaId: string, number: number) => Model.findOneOrFail<Model>({ rengaId, number })
 
+  public remove = async (id: Model['id']) => {
+    const res = await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(Model)
+      .where('id = :id', { id })
+      .execute()
+
+    this.log.info({ id }, 'verse removed')
+  }
+
   public create = async (rengaId: string, data: Partial<Model>): Promise<Model> => {
     const res = await getManager()
       .createQueryBuilder()

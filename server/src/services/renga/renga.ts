@@ -1,30 +1,58 @@
-import { Connection } from 'typeorm'
-
+import { head } from 'lodash'
+import { getManager, getRepository } from 'typeorm'
+import { RenkuApp } from '../../module'
 import { StorageService } from '../storage'
+import { Renga as Model } from '../../models/renga'
 
-export class Renga {
+export class Renga extends StorageService {
+  public static kName = 'renga'
+
   public readonly config: any
-
   public readonly log: any
 
-  private db: Connection
+  constructor(parent: RenkuApp) {
+    super()
 
-  public storage: StorageService
-
-  constructor(log: any, config: any) {
-    this.log = log
-    this.config = config
-
-    this.storage = new StorageService()
+    this.log = parent.log.child({ module: '@renga' })
+    //@ts-ignore
+    this.config = parent.config
   }
 
-  public ping = () => 'pong'
+  async connect() {
+    // await super.connect()
+  }
 
-  async start() {
-    await this.storage.connect()
+  async close() {
+    // await super.close()
+  }
 
-    this.log.info('db connected')
+  public getRenga = (rengaId: Model['id']) => Model.findOneOrFail<Model>(rengaId)
 
-    this.log.info('renga service initialized')
+  public createRenga = async (data: Partial<Model>): Promise<Model> => {
+    const res = await getManager()
+      .createQueryBuilder()
+      .insert()
+      .into(Model)
+      .values(data)
+      .returning('*')
+      .execute()
+
+    return head(res.generatedMaps) as Model
+  }
+
+  public updateRenga = async (rengaId: Model['id'], data: Partial<Model>): Promise<Model> => {
+    await getManager()
+      .createQueryBuilder()
+      .update(Model)
+      .set(data)
+      .where({ id: rengaId })
+      .execute()
+
+    return this.getRenga(rengaId)
+  }
+
+  public list = async (): Promise<Model[]> => {
+    const con = getRepository(Model)
+    return con.createQueryBuilder().getMany()
   }
 }

@@ -1,8 +1,8 @@
 import { Entity, Column, Index } from 'typeorm'
 import {
-  VerseMeta,
   VerseFormat,
   VerseSeason,
+  VerseOptions,
   VerseTopics
 } from '../interfaces'
 
@@ -11,17 +11,11 @@ import { RengaBaseEntity } from './rengaBaseEntity'
 @Entity()
 @Index(['rengaId', 'number'], { unique: true })
 export class Verse extends RengaBaseEntity {
-  @Column()
-  public name: string
-
-  @Column({
-    type: 'jsonb',
-    nullable: true,
-  })
-  public meta: VerseMeta
-
   @Column({ type: 'integer' })
   public number: number
+
+  @Column({ nullable: true })
+  public description: string
 
   @Column({
     type: 'enum',
@@ -33,7 +27,7 @@ export class Verse extends RengaBaseEntity {
   @Column({
     type: 'enum',
     enum: VerseFormat,
-    default: VerseFormat.TwoLine
+    default: VerseFormat.ThreeLines
   })
   public format: VerseFormat
 
@@ -43,7 +37,7 @@ export class Verse extends RengaBaseEntity {
   })
   public topics: VerseTopics
 
-  @Column()
+  @Column({ nullable: true })
   public line1: string
 
   @Column({ nullable: true })
@@ -52,6 +46,12 @@ export class Verse extends RengaBaseEntity {
   @Column({ nullable: true })
   public line3: string
 
-  @Column()
-  public active: boolean
+  @Column({ nullable: true })
+  public author: string
+
+  @Column({
+    type: 'jsonb',
+    nullable: true,
+  })
+  public options: VerseOptions
 }

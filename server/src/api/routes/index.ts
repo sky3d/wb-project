@@ -6,7 +6,7 @@ import { RengaCreate } from './renga/create'
 import { RengaUpdate } from './renga/update'
 import { RengaList } from './renga/list'
 
-export const routes = async (fastify: FastifyInstance) => {
+export default async (fastify: FastifyInstance) => {
   fastify.setErrorHandler(errorHandler)
 
   fastify.register(StatusRoute)

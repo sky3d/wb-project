@@ -12,4 +12,3 @@ export async function RengaUpdate(fastify: FastifyInstance) {
     handler: wrapHandler(handler)
   })
 }
-

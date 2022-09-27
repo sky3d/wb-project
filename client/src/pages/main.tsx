@@ -5,6 +5,7 @@ import { ButtonV1 } from '../components/buttonV1/buttonV1'
 import { PageHeader } from '../components/page-header/page-header'
 import { LoginForm } from '../modules/login-form/login-form'
 import { RengaCreateDialog } from '../modules/renga-create-dialog/renga-create-dialog'
+import { RengaEditPanel } from '../modules/renga-edit-panel/renga-edit-panel'
 import { setLoginVisible, sltAppInfoName, sltCurrentPage, sltLoginVisible } from '../services/slices/app-info'
 import { loginUser, selectAuth } from '../services/slices/user-info'
 import { generateUID, getCookie } from '../utils/funcs'
@@ -55,6 +56,7 @@ export const MainPage = (): JSX.Element => {
         </section>
         <div style={{ height: pageHeight, maxHeight: pageHeight }}>
           {currentPage === 1 && <HomePage height={pageHeight} />} {currentPage === 2 && <RengaCreateDialog height={pageHeight} />}
+          {currentPage === 3 && <RengaEditPanel height={pageHeight} />}
         </div>
       </div>
     </div>

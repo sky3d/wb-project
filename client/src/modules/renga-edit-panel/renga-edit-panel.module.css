@@ -1,0 +1,31 @@
+.inp {
+  padding-left: 10px;
+  font-size: 16px;
+  border: none;
+  border: 1px solid silver;
+  outline: none;
+  background: transparent;
+}
+
+.addBtn {
+  background-color: blue;
+}
+
+.bgSummer {
+  background: rgb(212, 217, 146);
+  background: linear-gradient(257deg, rgba(212, 217, 146, 1) 0%, rgba(140, 179, 132, 1) 100%);
+}
+
+.bgWinter {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(343deg, rgba(255, 255, 255, 1) 0%, rgba(153, 209, 255, 1) 100%);
+}
+
+.bgAuthum {
+  background: rgb(232, 157, 79);
+  background: linear-gradient(83deg, rgba(232, 157, 79, 1) 0%, rgba(220, 144, 167, 1) 100%);
+}
+.bgSpring {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(270deg, rgba(255, 255, 255, 1) 0%, rgba(253, 216, 233, 1) 99%);
+}

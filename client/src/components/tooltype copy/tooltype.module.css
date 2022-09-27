@@ -1,0 +1,38 @@
+.li {
+  /* position: relative; */
+  transition: 0.5s;
+  border: 1px solid red;
+}
+
+.li .content {
+  position: absolute;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  visibility: hidden;
+  opacity: 0;
+  transition: .5s;
+  transform: translateX(-20%) translateY(-20px);
+  border: 1px solid silver;
+
+}
+
+.li .content::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  bottom: -5px;
+  transform: rotate(45deg);
+  border-bottom: 1px solid silver;
+  border-right: 1px solid silver;
+  left: var(--wp)
+}
+
+.li:hover .content {
+  /* visibility: visible;
+  opacity: 1; */
+  transform: translateX(-20%) translateY(0);
+}

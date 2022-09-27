@@ -1,6 +1,4 @@
-/** @module userInfoReducer */
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { log } from 'console'
 
 import { errorResponsString } from '../../utils/vars'
 import { runRequest } from '../api'
@@ -8,55 +6,12 @@ import { RootState } from '../store'
 import { setCurrentPage } from './app-info'
 import { selectOwnerId } from './user-info'
 
-// export const getUserInfo = createAsyncThunk('userInfoReducer/getUserInfo', async (tmp, thunkApi) => {
-//   const dispatch = thunkApi.dispatch
-//   var loc = document.location.pathname.split('/', 3)
-//   try {
-//     // @ts-ignore
-//     loc = loc[2]
-
-//     if (loc.indexOf('_') === -1) {
-//       // @ts-ignore
-//       loc = getCookie('manuscriptsid')
-//     } else {
-//       document.cookie = 'manuscriptsid=' + loc
-//     }
-//   } catch (er) {
-//     // @ts-ignore
-//     loc = getCookie('manuscriptsid')
-//   }
-
-//   const response = await postRequest([loc], 'user.getUserInfo')
-//   const data = await response.json()
-
-//   try {
-//     if (data.error) {
-//       throw new Error(`${errorResponsString} ${data.error}`)
-//     }
-//     if (typeof data.result === 'string' && data.result.indexOf('Traceback') > -1) {
-//       throw new Error(`${errorResponsString} ${data.result}`)
-//     }
-//   } catch (e) {
-//     throw new Error(`${errorResponsString} ${e}`)
-//   }
-
-//   // проставляем дополнительные настройки и справочники
-//   dispatch(generalReducer.actions.setReferenceAddress(data.result.extends.referenceAddres))
-//   dispatch(generalReducer.actions.setAddressList(data.result.extends.addressList))
-//   dispatch(generalReducer.actions.setSuppliers(data.result.extends.vndStatList))
-//   dispatch(generalReducer.actions.setUsers(data.result.extends.usersList))
-
-//   // vndStatList
-//   // console.log(data.result.extends.referenceAddres, '-------')
-
-//   return data.result
-// })
 
 export const createRenga = createAsyncThunk('rengaStore/createRenga', async (objRenga: {}, thunkApi) => {
   const state: RootState = thunkApi.getState()
-  const ownerId = selectOwnerId(state)
+  const owner = selectOwnerId(state)
 
-  const response = await runRequest('renga', 'POST', { ...objRenga, ownerId })
+  const response = await runRequest('renga', 'POST', { ...objRenga, owner, options: { index: 5, sabaki: 'greg.rabota@gmail.com' } })
   const data = await response.json()
 
   if (data.error) {
@@ -79,37 +34,111 @@ export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async ()
   return data
 })
 
-type TReangaList = {
+export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (tmp, _thunkApi) => {
+  // const response = await runRequest('renga/list', 'GET')
+  // const data = await response.json()
+
+  // if (data.error) {
+  //   throw new Error(`${errorResponsString} ${data.error}`)
+  // }
+  // console.log(getRengaVerses, tmp)
+  const data: TVerse[] | [] = []
+
+  return []
+})
+
+type TAddVerseInRengaOptions = {
+  id: string
+  verse: TVerse
+}
+export const addVerseInRenga = createAsyncThunk('rengaStore/addVerseInRenga', async (tmp: TAddVerseInRengaOptions, _thunkApi) => tmp.verse)
+
+export const editVerse = createAsyncThunk('rengaStore/editVerse', async (tmp: TAddVerseInRengaOptions, _thunkApi) => tmp.verse)
+
+export type TVerse = {
+  number: number
+  tags: string[]
+  seson: number
+  format: number
+}
+
+export type TReangaList = {
   createdAt: string | null
   description: string | null
   id: string
   name: string | null
   status: number
   updatedAt: string | null
+  owner: string
 }
 
 export type TInitRengaStore = {
-  rawData: [TReangaList] | undefined
+  rawData: TReangaList[] | undefined
+  currentRenga: string | null
+  verses: TVerse[] | []
 }
 
-const initRengaDataState: TInitRengaStore = { rawData: undefined }
+const initRengaDataState: TInitRengaStore = { rawData: undefined, currentRenga: null, verses: [] }
 
 export const rengaStore = createSlice({
   name: 'rengaStore',
   initialState: initRengaDataState,
-  reducers: {},
+  reducers: {
+    setCurrentRenga: (state, action: PayloadAction) => {
+      state.currentRenga = action.payload
+    }
+  },
   extraReducers: (builder) => {
-    builder.addCase(getRengaList.fulfilled, (state, action: PayloadAction<[TReangaList]>): void => {
+    builder.addCase(getRengaList.fulfilled, (state, action: PayloadAction<TReangaList>): void => {
       state.rawData = action.payload
     })
-    builder.addCase(getRengaList.rejected, (state, action) => {
+    builder.addCase(getRengaList.rejected, (_state, action) => {
       console.log(action.error.message)
     })
 
-    builder.addCase(createRenga.rejected, (state, action) => {
+    builder.addCase(createRenga.rejected, (_state, action) => {
+      console.log(action.error.message)
+    })
+
+    builder.addCase(getRengaVerses.fulfilled, (state, action: PayloadAction<TVerse[]>): void => {
+      state.verses = action.payload
+    })
+    builder.addCase(getRengaVerses.rejected, (_state, action) => {
+      console.log(action.error.message)
+    })
+
+    builder.addCase(addVerseInRenga.fulfilled, (state, action: PayloadAction<TVerse>): void => {
+      state.verses.push(action.payload)
+    })
+    builder.addCase(addVerseInRenga.rejected, (_state, action) => {
+      console.log(action.error.message)
+    })
+
+    builder.addCase(editVerse.fulfilled, (state, action: PayloadAction<TVerse>): void => {
+      const tmp = [...state.verses]
+      state.verses = tmp.map((verse) => +action.payload.number === +verse.number ? action.payload : verse)
+    })
+    builder.addCase(editVerse.rejected, (_state, action) => {
       console.log(action.error.message)
     })
   }
 })
 
-export const slctRengaRawList = (state: RootState) => state.rengaStore.rawData
+export const { setCurrentRenga } = rengaStore.actions
+
+export const slctRengaRawList = (state: RootState): TReangaList[] | undefined => state.rengaStore.rawData
+export const slctCurrentRengaId = (state: RootState): string | null => state.rengaStore.currentRenga
+export const slctCurrentRengaVerses = (state: RootState): TVerse[] | [] => state.rengaStore.verses
+
+export const slctCurrentRengaInfo = createSelector([slctRengaRawList, slctCurrentRengaId], (rengaRawList, currentRengaId): TReangaList | null => {
+  let result: TReangaList | null = null
+
+  if (rengaRawList && rengaRawList.length > 0) {
+    const tmp: TReangaList[] = rengaRawList?.filter((x) => x.id === currentRengaId)
+    if (tmp.length > 0) {
+      [result] = tmp
+    }
+  }
+
+  return result
+})

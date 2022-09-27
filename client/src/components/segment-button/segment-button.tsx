@@ -5,13 +5,13 @@ import { TStrJSXNull } from '../../utils/types'
 import styles from './segment-button.module.css'
 
 type TSegmetItem = {
-  id: string
+  id: string | number
   title: TStrJSXNull
 }
 
 type TSegmetButton = {
   buttons: TSegmetItem[]
-  defaultValue?: string
+  defaultValue?: string | number
   onChangeEvnt: Function
   style?: object
 }

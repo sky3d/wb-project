@@ -1,18 +1,17 @@
 export declare namespace Domain {
   export interface Renga {
-    id: string,
-    name: string,
-    description?: string,
-    owner?: string,
-    options?: any,
-    rengaPart?: number,
+    id: string
+    name: string
+    description?: string
+    owner?: string
+    options?: any
+    rengaPart?: number
   }
 }
 
 export interface RengaOptions {
   activeVerseNumber: number
 }
-
 
 export enum RengaStatus {
   NotSet = 0,
@@ -27,10 +26,10 @@ export interface VerseMeta {
 
 export enum VerseCanonicalName {
   None = 1,
-  Hokku,   // STARTING
-  Wakiki,  // SIDE, SECOND
-  Daisan,  // THIRD
-  Ageku  // FINAL
+  Hokku, // STARTING
+  Wakiki, // SIDE, SECOND
+  Daisan, // THIRD
+  Ageku // FINAL
 }
 
 export enum VerseStatus {
@@ -43,13 +42,13 @@ export interface VerseTopics {
 
 export enum VerseTopic {
   None = 1,
-  Moon,   // mm
+  Moon, // mm
   Blossom, // fl
-  Love   // lv
+  Love // lv
 }
 
 export enum VerseFormat {
-  //OneLine = 1,
+  // OneLine = 1,
   TwoLine = 2,
   ThreeLine = 3
 }
@@ -65,5 +64,5 @@ export enum VerseSeason {
 const VERSE_TOPIC_NAMES = {
   [VerseTopic.Moon]: 'луна',
   [VerseTopic.Love]: 'любовь',
-  [VerseTopic.Blossom]: 'цветение',
+  [VerseTopic.Blossom]: 'цветение'
 }

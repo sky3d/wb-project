@@ -43,21 +43,16 @@ export class HttpServer {
   }
 
   private async initialize(server: FastifyInstance) {
-    server.decorate(RENKU_APP_KEY, this.parent)
-
-    console.log('!!!!')
-    console.log(server.app)
-
     server.register(cors)
     server.register(favicon)
     server.register(formbody)
 
     // disables the `contentSecurityPolicy` middleware but keeps the rest.
     server.register(helmet, { contentSecurityPolicy: false })
-
     server.register(routesPlugin)
 
     server.register(apiRoutes)
+    server.decorate(RENKU_APP_KEY, this.parent)
   }
 }
 

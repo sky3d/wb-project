@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RenkuApp } from '../../../module'
+import { getRenga } from '../../../services/renga'
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const handler = async (service: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
-  const list = await service.renga.list()
+export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
+  const list = await getRenga().list()
   return reply.code(200).send(JSON.stringify(list))
 }

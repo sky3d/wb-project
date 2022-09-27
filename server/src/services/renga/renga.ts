@@ -3,6 +3,7 @@ import { getManager, getRepository } from 'typeorm'
 import { RenkuApp } from '../../module'
 import { StorageService } from '../storage'
 import { Renga as Model } from '../../models/renga'
+import { runInThisContext } from 'vm'
 
 export class Renga extends StorageService {
   public static kName = 'renga'
@@ -16,6 +17,7 @@ export class Renga extends StorageService {
     this.log = parent.log.child({ module: '@renga' })
     //@ts-ignore
     this.config = parent.config
+    this.log.info('renga service created')
   }
 
   async connect() {
@@ -52,6 +54,7 @@ export class Renga extends StorageService {
   }
 
   public list = async (): Promise<Model[]> => {
+    this.log.info('renga list')
     const con = getRepository(Model)
     return con.createQueryBuilder().getMany()
   }

@@ -17,4 +17,5 @@ export const typeorm: TypeormConfig = {
   entities: [`${models}/**/*`],
   migrations: [`${migrations}/**/*`],
   synchronize: false,
+  // logging: 'all'
 }

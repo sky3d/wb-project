@@ -13,7 +13,7 @@
     "lint:server": "eslint server/src/**/*.ts",
     "lint:client": "eslint client/src/**/*.tsx",
     "build:server": "tsc -p server/tsconfig.release.json",
-    "start:server": "node server/lib/index.js",
+    "start:server": "node server/lib/server.js",
     "env:up": "docker-compose up",
     "env:down": "docker-compose down",
     "migration:exec": "node -r @swc-node/register ./node_modules/typeorm/cli -f ./ormconfig.json",

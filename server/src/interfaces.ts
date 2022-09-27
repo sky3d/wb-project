@@ -1,14 +1,11 @@
-export declare namespace Domain {
-  export interface Renga {
-    id: string
-    name: string
-    description?: string
-    owner?: string
-    options?: any
-    rengaPart?: number
-  }
+export interface Renga {
+  id: string,
+  name: string,
+  description?: string,
+  owner?: string,
+  options?: any,
+  rengaPart?: number,
 }
-
 export interface RengaOptions {
   activeVerseNumber: number
 }
@@ -20,7 +17,9 @@ export enum RengaStatus {
   Closed
 }
 
-export interface VerseMeta {
+// Verse
+
+export interface VerseOptions {
   canonicalName?: VerseCanonicalName
 }
 
@@ -48,9 +47,9 @@ export enum VerseTopic {
 }
 
 export enum VerseFormat {
-  // OneLine = 1,
-  TwoLine = 2,
-  ThreeLine = 3
+  //OneLine = 1,
+  TwoLines = 2,
+  ThreeLines = 3
 }
 
 export enum VerseSeason {
@@ -61,7 +60,25 @@ export enum VerseSeason {
   Authum
 }
 
-const VERSE_TOPIC_NAMES = {
+interface RengaEntity {
+  rengaId: string
+  rengaPart: number
+}
+
+export interface Verse extends RengaEntity {
+  number: number
+  description: string
+  season: VerseSeason
+  topics: VerseTopics
+  format: VerseFormat
+  line1: string
+  line2: string
+  line3: string
+  author: string
+  options: VerseOptions
+}
+
+export const VERSE_TOPIC_NAMES = {
   [VerseTopic.Moon]: 'луна',
   [VerseTopic.Love]: 'любовь',
   [VerseTopic.Blossom]: 'цветение'

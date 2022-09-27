@@ -18,7 +18,7 @@ export interface RenkuApp {
   typeorm: any
   server: HttpServer
   renga: Renga
-  //verse: Verse
+  verse: Verse
 
   // /**
   //  * Allow Extensions

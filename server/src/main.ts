@@ -5,13 +5,14 @@ import { typeorm } from './utils/typeorm'
 
 import { server } from './services/httpServer'
 import { renga } from './services/renga'
-import { TypeormConfig } from './configs/typeorm'
+import { verse } from './services/verse'
 
 import { HttpServer } from './services/httpServer/httpServer'
 import { Renga } from './services/renga/renga'
-import { throws } from 'assert'
+import { Verse } from './services/verse/verse'
+
 import { logger } from './utils/logger'
-//import { Verse } from './services/verse/verse'
+
 
 
 export type RenkuConfig = {
@@ -44,15 +45,17 @@ export class Renku {
   public typeorm: any
   public server: HttpServer
   public renga: Renga
+  public verse: Verse
 
   constructor(options: Partial<BaseOptions> = {}) {
     this.config = merge({}, Renku.defaultOpts, options)
     this.log = logger
 
-    // this.on('error', this.onError)
+    // TODO this.on('error', this.onError)
 
     typeorm(this)
     renga(this)
+    verse(this)
 
     server(this)
   }

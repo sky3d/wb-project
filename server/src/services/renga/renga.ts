@@ -5,7 +5,7 @@ import { StorageService } from '../storage'
 import { Renga as Model } from '../../models/renga'
 import { runInThisContext } from 'vm'
 
-export class Renga extends StorageService {
+export class Renga extends StorageService<Model> {
   public static kName = 'renga'
 
   public readonly config: any
@@ -30,7 +30,7 @@ export class Renga extends StorageService {
 
   public getRenga = (rengaId: Model['id']) => Model.findOneOrFail<Model>(rengaId)
 
-  public createRenga = async (data: Partial<Model>): Promise<Model> => {
+  public create = async (data: Partial<Model>): Promise<Model> => {
     const res = await getManager()
       .createQueryBuilder()
       .insert()
@@ -42,7 +42,7 @@ export class Renga extends StorageService {
     return head(res.generatedMaps) as Model
   }
 
-  public updateRenga = async (rengaId: Model['id'], data: Partial<Model>): Promise<Model> => {
+  public update = async (rengaId: Model['id'], data: Partial<Model>): Promise<Model> => {
     await getManager()
       .createQueryBuilder()
       .update(Model)
@@ -55,7 +55,15 @@ export class Renga extends StorageService {
 
   public list = async (): Promise<Model[]> => {
     this.log.info('renga list')
-    const con = getRepository(Model)
-    return con.createQueryBuilder().getMany()
+
+    const qb = getRepository(Model)
+      .createQueryBuilder('r')
+
+    // qb.
+    //   .take(pageSize)
+    //   .skip(page * pageSize)
+    //   .orderBy({ [`f.${criteria}`]: order as any })
+
+    return qb.getMany()
   }
 }

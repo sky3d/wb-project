@@ -1,16 +1,11 @@
-export declare namespace Domain {
-
-  export interface Renga {
-    id: string,
-    name: string,
-    description?: string,
-    owner?: string,
-    options?: any,
-    rengaPart?: number,
-
-  }
+export interface Renga {
+  id: string,
+  name: string,
+  description?: string,
+  owner?: string,
+  options?: any,
+  rengaPart?: number,
 }
-
 export interface RengaOptions {
   activeVerseNumber: number
 }
@@ -70,7 +65,7 @@ interface RengaEntity {
   rengaPart: number
 }
 
-interface Verse extends RengaEntity {
+export interface Verse extends RengaEntity {
   number: number
   description: string
   season: VerseSeason
@@ -83,7 +78,7 @@ interface Verse extends RengaEntity {
   options: VerseOptions
 }
 
-const VERSE_TOPIC_NAMES = {
+export const VERSE_TOPIC_NAMES = {
   [VerseTopic.Moon]: 'луна',
   [VerseTopic.Love]: 'любовь',
   [VerseTopic.Blossom]: 'цветение'

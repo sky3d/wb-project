@@ -4,7 +4,7 @@ import { responseSchema } from '../jsonApiResponse'
 const requestSchema = {
   type: 'object',
   properties: {
-    id: { type: 'string' }
+    rengaId: { type: 'string' }
   }
 }
 

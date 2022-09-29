@@ -9,6 +9,11 @@ const requestSchema = {
 }
 
 export const schema = {
+  params: {
+    id: {
+      type: 'string',
+    },
+  },
   ...requestSchema,
 
   response: {

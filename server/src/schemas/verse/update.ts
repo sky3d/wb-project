@@ -3,12 +3,15 @@ import { responseSchema } from '../jsonApiResponse'
 
 const requestSchema = {
   type: 'object',
-  properties: {
-    id: { type: 'string' }
-  }
 }
 
 export const schema = {
+  params: {
+    id: {
+      type: 'string',
+    },
+  },
+
   ...requestSchema,
 
   response: {

@@ -1,3 +1,4 @@
+const querystring = require('node:querystring')
 import pino from 'pino'
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from 'fastify-cors'
@@ -46,6 +47,15 @@ export class HttpServer {
     server.register(cors)
     server.register(favicon)
     server.register(formbody)
+    //server.register(qs)
+
+    server.addHook('onRequest', (request, reply, done) => {
+      const url = request.url.replace(/\?{2,}/, '?')
+      const querySymbolIndex = url.indexOf('?')
+      const query = querySymbolIndex !== -1 ? url.slice(querySymbolIndex + 1) : ''
+      request.params = querystring.parse(query)
+      done()
+    })
 
     // disables the `contentSecurityPolicy` middleware but keeps the rest.
     server.register(helmet, { contentSecurityPolicy: false })

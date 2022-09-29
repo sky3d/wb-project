@@ -44,17 +44,17 @@ export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async ()
   return data
 })
 
-export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (tmp, _thunkApi) => {
-  // const response = await runRequest('renga/list', 'GET')
-  // const data = await response.json()
+export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (rengaId:string, _thunkApi) => {
+  const response = await runRequest(`verse/${rengaId}`, 'GET')
+  const data = await response.json()
 
-  // if (data.error) {
-  //   throw new Error(`${errorResponsString} ${data.error}`)
-  // }
-  // console.log(getRengaVerses, tmp)
-  const data: TVerse[] | [] = []
+  if (data.error) {
+    throw new Error(`${errorResponsString} ${data.error}`)
+  }
+  console.log('data', data)
+  // const data: TVerse[] | [] = []
 
-  return []
+  return data
 })
 
 type TAddVerseInRengaOptions = {
@@ -62,23 +62,32 @@ type TAddVerseInRengaOptions = {
   verse: TVerse
 }
 export const addVerseInRenga = createAsyncThunk('rengaStore/addVerseInRenga', async (tmp: TAddVerseInRengaOptions, _thunkApi) => {
-  // const response = await runRequest(`verse?rengaId=${tmp.id}`, 'POST', {})
-  // const data = await response.json()
+  const response = await runRequest(`verse?rengaId=${tmp.id}`, 'POST', tmp.verse)
+  const data = await response.json()
 
-  // if (data.error) {
-  //   throw new Error(`${errorResponsString} ${data.error}`)
-  // }
-  const tmp1 = 1
+  if (data.error) {
+    throw new Error(`${errorResponsString} ${data.error}`)
+  }
+
+  return { ...tmp.verse, id: data.id }
+})
+
+export const editVerse = createAsyncThunk('rengaStore/editVerse', async (tmp: TAddVerseInRengaOptions, _thunkApi) => {
+  const response = await runRequest(`verse/${tmp.id}`, 'POST', tmp.verse)
+  const data = await response.json()
+
+  if (data.error) {
+    throw new Error(`${errorResponsString} ${data.error}`)
+  }
 
   return tmp.verse
 })
 
-export const editVerse = createAsyncThunk('rengaStore/editVerse', async (tmp: TAddVerseInRengaOptions, _thunkApi) => tmp.verse)
-
 export type TVerse = {
-  number: number
-  tags: string[]
-  seson: number
+  id?: string
+  number?: number
+  topics: string[]
+  season: number
   format: number
 }
 

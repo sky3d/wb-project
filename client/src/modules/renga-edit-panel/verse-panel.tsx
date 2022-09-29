@@ -60,7 +60,7 @@ export const VersePanel: FC<TVersePanel> = ({ height }): JSX.Element => {
                   const emptyVerse: TVerse = {
                     number: start + i,
                     tags: [],
-                    seson: 0,
+                    season: 0,
                     format: (start + i) % 2 === 0 ? 2 : 3
                   }
                   dispatch(addVerseInRenga({ verse: emptyVerse, id: currentRengaId }))

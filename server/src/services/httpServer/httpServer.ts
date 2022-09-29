@@ -49,13 +49,13 @@ export class HttpServer {
     server.register(formbody)
     //server.register(qs)
 
-    server.addHook('onRequest', (request, reply, done) => {
-      const url = request.url.replace(/\?{2,}/, '?')
-      const querySymbolIndex = url.indexOf('?')
-      const query = querySymbolIndex !== -1 ? url.slice(querySymbolIndex + 1) : ''
-      request.params = querystring.parse(query)
-      done()
-    })
+    // server.addHook('onRequest', (request, reply, done) => {
+    //   const url = request.url.replace(/\?{2,}/, '?')
+    //   const querySymbolIndex = url.indexOf('?')
+    //   const query = querySymbolIndex !== -1 ? url.slice(querySymbolIndex + 1) : ''
+    //   request.params = querystring.parse(query)
+    //   done()
+    // })
 
     // disables the `contentSecurityPolicy` middleware but keeps the rest.
     server.register(helmet, { contentSecurityPolicy: false })

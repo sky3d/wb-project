@@ -1,12 +1,4 @@
 export const schema = {
-  params: {
-    id: {
-      type: 'number',
-    },
-    foo: {
-      type: 'string'
-    }
-  },
   response: {
     200: {
       type: 'object',

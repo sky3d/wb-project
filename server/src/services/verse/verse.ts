@@ -62,9 +62,7 @@ export class Verse extends StorageService<Model> {
     const res = await getManager()
       .createQueryBuilder()
       .update(Model)
-      .set({
-        ...data
-      })
+      .set(data)
       .where({ id: verseId })
       .execute()
 

@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 
 export const handler = (request: FastifyRequest, reply: FastifyReply) => {
   const pckg = require('../../../../package.json')
+
   const data = {
     name: pckg.name,
     version: pckg.version,

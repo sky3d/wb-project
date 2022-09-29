@@ -1,6 +1,7 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyPluginCallback } from 'fastify'
 import { errorHandler } from '../handlers/errorHandler'
-import { StatusRoute } from './health'
+import { HealthRoute } from './health'
+import { StatsRoute } from './stats'
 
 import { RengaCreate } from './renga/create'
 import { RengaUpdate } from './renga/update'
@@ -9,19 +10,27 @@ import { RengaList } from './renga/list'
 import { VerseCreate } from './verse/create'
 import { VerseUpdate } from './verse/update'
 import { VerseList } from './verse/list'
+import { VerseDelete } from './verse/delete'
+
+const API_PREFIX = { prefix: '/api' }
+
+const registerApiRoute = (fastify: FastifyInstance, route: FastifyPluginCallback) =>
+  fastify.register(route, API_PREFIX)
 
 export default async (fastify: FastifyInstance) => {
   fastify.setErrorHandler(errorHandler)
 
-  fastify.register(StatusRoute)
+  fastify.register(HealthRoute)
+  fastify.register(StatsRoute)
 
-  fastify.register(RengaCreate, { prefix: '/api' })
-  fastify.register(RengaUpdate, { prefix: '/api' })
-  fastify.register(RengaList, { prefix: '/api' })
-  // verse
-  fastify.register(VerseCreate, { prefix: '/api' })
-  fastify.register(VerseUpdate, { prefix: '/api' })
-  fastify.register(VerseList, { prefix: '/api' })
+  registerApiRoute(fastify, RengaCreate)
+  registerApiRoute(fastify, RengaUpdate)
+  registerApiRoute(fastify, RengaList)
+
+  registerApiRoute(fastify, VerseCreate)
+  registerApiRoute(fastify, VerseUpdate)
+  registerApiRoute(fastify, VerseList)
+  registerApiRoute(fastify, VerseDelete)
 
   fastify.log.info('routes registered')
 }

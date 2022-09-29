@@ -2,13 +2,16 @@ import { errorSchemas } from '../errors'
 import { responseSchema } from '../jsonApiResponse'
 
 const requestSchema = {
-  type: 'object',
-  properties: {
-    rengaId: { type: 'string' }
-  }
+  type: 'object'
 }
 
 export const schema = {
+  params: {
+    rengaId: {
+      type: 'string',
+    },
+  },
+
   ...requestSchema,
 
   response: {

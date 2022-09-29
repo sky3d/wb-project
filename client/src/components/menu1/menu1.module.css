@@ -1,0 +1,59 @@
+.wraper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu {
+  position: absolute;
+  display: flex;
+}
+
+.menu li {
+  position: absolute;
+  left: 0;
+  top: 0;
+  list-style: none;
+  transition: .5s;
+}
+
+.menu.active li {
+  left: calc(40px + 155px / 5 * var(--i));
+  width: 21px;
+  height: 21px;
+  color: var(--clr);
+
+}
+
+.menu li a {
+  font-size: large;
+  color: var(--clr);
+  cursor: pointer;
+}
+
+.menu li:hover {
+  margin-top: -5px
+}
+
+.menu .toggle {
+  position: absolute;
+  font-size: x-large;
+  margin-left: -2px;
+  margin-top: -5px;
+  padding: 3px;
+  background: #fff;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  color: var(--clr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10000;
+  transition: transform 1.25s;
+}
+
+.menu.active .toggle {
+  transform: rotate(360deg);
+}

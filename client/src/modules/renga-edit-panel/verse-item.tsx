@@ -1,12 +1,25 @@
 import React, { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { SelectV1, TSelectV1OptionsItem } from '../../components/selectV1/selectV1'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSeedling, faFan, faSun, faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { faSnowflake } from '@fortawesome/free-regular-svg-icons'
+import { Menu1, TMenu1Item } from '../../components/menu1/menu1'
+
 import { editVerse, slctCurrentRengaId, TVerse } from '../../services/slices/renga'
-import { VerseSeason, VerseSeasonRu } from '../../utils/vars'
+import { seasonColor, verseSeason, VerseSeasonRu } from '../../utils/vars'
+
 import styles from './renga-edit-panel.module.css'
 
-// eslint-disable-next-line no-restricted-globals
-const listSeson = (): TSelectV1OptionsItem[] => Object.keys(VerseSeasonRu).filter((x) => isNaN(Number(x))).map((item) => ({ id: `${VerseSeasonRu[item]}`, title: item }))
+const getMenuOptionFromFAI = (): TMenu1Item[] => {
+  const sesonIcon = [faSeedling, faSnowflake, faFan, faSun, faLeaf]
+
+  return VerseSeasonRu.map((x, i) => ({
+    id: `${i}`,
+    title: x,
+    icon: <FontAwesomeIcon icon={sesonIcon[i]} />,
+    color: seasonColor[i]
+  }))
+}
 
 type TVerseItem = {
   item: TVerse
@@ -24,19 +37,12 @@ export const VerseItem: FC<TVerseItem> = ({ item }): JSX.Element => {
 
   return <div
     key={`strofa${item.number}`}
-    className={`px-5 py-2 border mt-1 flex justify-between gap-1 ${styles[`bg${VerseSeason[item.seson]}`]}`}
+    className={`px-5 py-2 border mt-1 flex justify-between gap-1 ${styles[`bg${verseSeason[item.seson]}`]}`}
   >
     <div className="flex justify-start gap-1">
       <div className="font-bold">{item.number}</div>
-      <div>
-        сезон: <SelectV1
-          onChangeValue={onChangeSeson}
-          option={listSeson()}
-          defaultValue={item.seson}
-          styleInput={{ textTransform: 'uppercase', fontStyle: 'italic', paddingLeft: 5 }}
-          style={{ float: 'right' }}
-        />
-
+      <div className="flex gap-2">
+        <div>сезон: </div><div style={{ marginTop: 3 }}><Menu1 onChangeCB={onChangeSeson} data={getMenuOptionFromFAI()} /></div>
       </div>
 
     </div>

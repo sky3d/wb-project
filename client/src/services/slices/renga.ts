@@ -6,12 +6,11 @@ import { RootState } from '../store'
 import { setCurrentPage } from './app-info'
 import { selectOwnerId } from './user-info'
 
-
 export const createRenga = createAsyncThunk('rengaStore/createRenga', async (objRenga: {}, thunkApi) => {
   const state: RootState = thunkApi.getState()
   const owner = selectOwnerId(state)
-
-  const response = await runRequest('renga', 'POST', { ...objRenga, owner, options: { index: 5, sabaki: 'greg.rabota@gmail.com' } })
+  // const response = await runRequest('renga', 'POST', { ...objRenga, owner, options: { index: 5, sabaki: 'greg.rabota@gmail.com' } })
+  const response = await runRequest('renga', 'POST', { ...objRenga, owner })
   const data = await response.json()
 
   if (data.error) {
@@ -19,6 +18,17 @@ export const createRenga = createAsyncThunk('rengaStore/createRenga', async (obj
   }
 
   thunkApi.dispatch(setCurrentPage(1))
+
+  return data
+})
+
+export const updateRenga = createAsyncThunk('rengaStore/updateRenga', async (objRenga: {}, thunkApi) => {
+  const response = await runRequest(`renga/?id=${objRenga.id}`, 'POST', objRenga)
+  const data = await response.json()
+
+  if (data.error) {
+    throw new Error(`${errorResponsString} ${data.error}`)
+  }
 
   return data
 })
@@ -51,7 +61,17 @@ type TAddVerseInRengaOptions = {
   id: string
   verse: TVerse
 }
-export const addVerseInRenga = createAsyncThunk('rengaStore/addVerseInRenga', async (tmp: TAddVerseInRengaOptions, _thunkApi) => tmp.verse)
+export const addVerseInRenga = createAsyncThunk('rengaStore/addVerseInRenga', async (tmp: TAddVerseInRengaOptions, _thunkApi) => {
+  // const response = await runRequest(`verse?rengaId=${tmp.id}`, 'POST', {})
+  // const data = await response.json()
+
+  // if (data.error) {
+  //   throw new Error(`${errorResponsString} ${data.error}`)
+  // }
+  const tmp1 = 1
+
+  return tmp.verse
+})
 
 export const editVerse = createAsyncThunk('rengaStore/editVerse', async (tmp: TAddVerseInRengaOptions, _thunkApi) => tmp.verse)
 
@@ -130,8 +150,8 @@ export const slctRengaRawList = (state: RootState): TReangaList[] | undefined =>
 export const slctCurrentRengaId = (state: RootState): string | null => state.rengaStore.currentRenga
 export const slctCurrentRengaVerses = (state: RootState): TVerse[] | [] => state.rengaStore.verses
 
-export const slctCurrentRengaInfo = createSelector([slctRengaRawList, slctCurrentRengaId], (rengaRawList, currentRengaId): TReangaList | null => {
-  let result: TReangaList | null = null
+export const slctCurrentRengaInfo = createSelector([slctRengaRawList, slctCurrentRengaId], (rengaRawList, currentRengaId): TReangaList | undefined => {
+  let result: TReangaList | undefined
 
   if (rengaRawList && rengaRawList.length > 0) {
     const tmp: TReangaList[] = rengaRawList?.filter((x) => x.id === currentRengaId)

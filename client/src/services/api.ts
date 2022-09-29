@@ -10,7 +10,7 @@ export const runRequest = async (apiRequest: string, method: 'GET' | 'POST', opt
 
   const response = await fetch(mainUrl + apiRequest, {
     method,
-    body
+    body,
   })
 
   if (response.status >= 400 && response.status < 600) {

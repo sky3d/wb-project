@@ -24,7 +24,7 @@ export const createRenga = createAsyncThunk('rengaStore/createRenga', async (obj
 })
 
 export const updateRenga = createAsyncThunk('rengaStore/updateRenga', async (objRenga: {}, thunkApi) => {
-  const response = await runRequest(`renga/?id=${objRenga.id}`, 'POST', objRenga)
+  const response = await runRequest(`renga/${objRenga.id}`, 'POST', objRenga)
   const data = await response.json()
 
   if (data.error) {
@@ -46,13 +46,13 @@ export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async ()
 })
 
 export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (rengaId: string, _thunkApi) => {
-  const response = await runRequest(`verse/${rengaId}`, 'GET')
+  const response = await runRequest(`renga/${rengaId}/verses`, 'GET')
   const data = await response.json()
 
   if (data.error) {
     throw new Error(`${errorResponsString} ${data.error}`)
   }
-  console.log('data', data)
+  // console.log('data', data)
   // const data: TVerse[] | [] = []
 
   return data
@@ -63,7 +63,7 @@ type TAddVerseInRengaOptions = {
   verse: TVerse
 }
 export const addVerseInRenga = createAsyncThunk('rengaStore/addVerseInRenga', async (tmp: TAddVerseInRengaOptions, _thunkApi) => {
-  const response = await runRequest(`verse?rengaId=${tmp.id}`, 'POST', tmp.verse)
+  const response = await runRequest('verse', 'POST', { ...tmp.verse, rengaId: tmp.id })
   const data = await response.json()
 
   if (data.error) {
@@ -82,6 +82,17 @@ export const editVerse = createAsyncThunk('rengaStore/editVerse', async (tmp: TA
   }
 
   return tmp.verse
+})
+
+export const deletVerse = createAsyncThunk('rengaStore/deletVerse', async (verseId: string, _thunkApi) => {
+  const response = await runRequest(`verse/${verseId}`, 'DELETE')
+  const data = await response.json()
+
+  if (data.error) {
+    throw new Error(`${errorResponsString} ${data.error}`)
+  }
+
+  return verseId
 })
 
 export type TVerse = {
@@ -149,6 +160,13 @@ export const rengaStore = createSlice({
       state.verses = tmp.map((verse) => +action.payload.number === +verse.number ? action.payload : verse)
     })
     builder.addCase(editVerse.rejected, (_state, action) => {
+      console.log(action.error.message)
+    })
+
+    builder.addCase(deletVerse.fulfilled, (state, action: PayloadAction<string>): void => {
+      state.verses = state.verses.filter((x) => x.id !== action.payload)
+    })
+    builder.addCase(deletVerse.rejected, (_state, action) => {
       console.log(action.error.message)
     })
   }

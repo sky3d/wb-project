@@ -2,7 +2,7 @@ import { errorResponsString } from '../utils/vars'
 
 const mainUrl = 'http://127.0.0.1:3000/api/'
 
-export const runRequest = async (apiRequest: string, method: 'GET' | 'POST' | 'PUT', options?: {}) => {
+export const runRequest = async (apiRequest: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE', options?: {}) => {
   let body = null
   // const headers = []
   if (['POST', 'PUT'].indexOf(method) > -1) {

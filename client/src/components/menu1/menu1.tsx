@@ -9,12 +9,13 @@ export type TMenu1Item = {
 }
 
 type TMenu1 = {
+  defaultValue?: string | null
   data: TMenu1Item[]
   onChangeCB: Function
 }
 
 export const Menu1: FC<TMenu1> = (props): JSX.Element => {
-  const [activeItem, setActiveItem] = useState('0')
+  const [activeItem, setActiveItem] = useState(props.defaultValue || '0')
   const [active, setActive] = useState(false)
 
   const onChange = (id: string) => {

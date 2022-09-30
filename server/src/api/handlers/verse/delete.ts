@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { getVerse } from '../../../services/verse'
+import { convertToResponse } from '../../../utils/jsonResponse'
 
 export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
@@ -7,7 +8,7 @@ export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
 
   request.log.info({ id }, 'delete verse request')
 
-  await getVerse().remove(id)
+  const result = await getVerse().remove(id)
 
-  reply.code(200)
+  reply.send(convertToResponse(id, 'verse', result))
 }

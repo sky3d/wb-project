@@ -41,6 +41,7 @@ export class Verse extends StorageService<Model> {
       .execute()
 
     this.log.info({ id }, 'verse removed')
+    return { affected: res.affected }
   }
 
   public create = async (data: Partial<Model>): Promise<Model> => {

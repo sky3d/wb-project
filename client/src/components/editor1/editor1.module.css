@@ -1,0 +1,8 @@
+.editor {}
+
+.editor input {
+  border: none;
+  outline: none;
+  border: 1px solid silver;
+  padding: 0px 10px;
+}

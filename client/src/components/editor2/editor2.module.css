@@ -1,0 +1,46 @@
+.editor {}
+
+.editor input {
+  border: none;
+  outline: none;
+  border: 1px solid silver;
+  padding: 0px 10px;
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+datalist {
+  position: absolute;
+  background-color: white;
+  border: 1px solid blue;
+  border-radius: 0 0 5px 5px;
+  border-top: none;
+  font-family: sans-serif;
+  width: 350px;
+  padding: 5px;
+
+}
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: blue;
+  margin-bottom: 1px;
+   font-size: 18px;
+  cursor: pointer;
+}
+
+/* option active styles */
+datalist option:hover,
+datalist option:focus {
+  color: #fff;
+  background-color: #036;
+  outline: 0 none;
+}
+
+.browserdata option {
+  font-size: 1.8em;
+  padding: 0.3em 1em;
+  background-color: #ccc;
+  cursor: pointer;
+}

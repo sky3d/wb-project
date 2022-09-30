@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import _ from 'lodash'
 
 import { errorResponsString } from '../../utils/vars'
 import { runRequest } from '../api'
@@ -44,7 +45,7 @@ export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async ()
   return data
 })
 
-export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (rengaId:string, _thunkApi) => {
+export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (rengaId: string, _thunkApi) => {
   const response = await runRequest(`verse/${rengaId}`, 'GET')
   const data = await response.json()
 
@@ -158,6 +159,18 @@ export const { setCurrentRenga } = rengaStore.actions
 export const slctRengaRawList = (state: RootState): TReangaList[] | undefined => state.rengaStore.rawData
 export const slctCurrentRengaId = (state: RootState): string | null => state.rengaStore.currentRenga
 export const slctCurrentRengaVerses = (state: RootState): TVerse[] | [] => state.rengaStore.verses
+
+export const slctVersesTopics = createSelector([slctCurrentRengaVerses], (rengaVerses): string[] => {
+  let result: string[] = ['луна', 'любовь', 'цветение']
+
+  _.mapValues(rengaVerses, (v: TVerse) => {
+    if (v.topics) {
+      result = [...result, ...v.topics]
+    }
+  })
+
+  return _.uniq(result)
+})
 
 export const slctCurrentRengaInfo = createSelector([slctRengaRawList, slctCurrentRengaId], (rengaRawList, currentRengaId): TReangaList | undefined => {
   let result: TReangaList | undefined

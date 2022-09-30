@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addVerseInRenga, slctCurrentRengaId, slctCurrentRengaVerses, TVerse } from '../../services/slices/renga'
+import { addVerseInRenga, slctCurrentRengaId, slctCurrentRengaVerses, slctVersesTopics, TVerse } from '../../services/slices/renga'
 import { TPage } from '../../utils/types'
 
 import { getH1, OptionsPanel } from '../other/options-panel/option-panel'
@@ -18,8 +18,10 @@ export const VersePanel: FC<TVersePanel> = ({ height }): JSX.Element => {
   // const [verses, setVerses] = useState<[TVerse] | []>([])
   const currentRengaId = useSelector(slctCurrentRengaId)
   const verses = useSelector(slctCurrentRengaVerses)
+
   const [strofPanelHeight, setStrofPanelHeight] = useState(0)
   const [addCount, setAddCount] = useState(1)
+  const [tagsIdx, setEditIdx] = useState('')
 
   useEffect(() => {
     if (toolRef.current) {
@@ -34,7 +36,9 @@ export const VersePanel: FC<TVersePanel> = ({ height }): JSX.Element => {
 
         <div className="overflow-auto" style={{ height: strofPanelHeight }}>
           {verses.map((x, idx) => (
-            <div key={`strof${idx}`}><VerseItem item={x} /></div>
+            <div key={`strof${idx}`}>
+              <VerseItem item={x} topiksIdx={tagsIdx} topiksCb={(id) => { setEditIdx(id) }} />
+            </div>
           ))}
         </div>
 
@@ -59,7 +63,7 @@ export const VersePanel: FC<TVersePanel> = ({ height }): JSX.Element => {
                 for (let i = 1; i <= addCount; i++) {
                   const emptyVerse: TVerse = {
                     number: start + i,
-                    tags: [],
+                    topics: [],
                     season: 0,
                     format: (start + i) % 2 === 0 ? 2 : 3
                   }

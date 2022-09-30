@@ -7,7 +7,7 @@ const requestSchema = {
 
 export const schema = {
   params: {
-    rengaId: {
+    id: {
       type: 'string',
     },
   },

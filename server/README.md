@@ -16,6 +16,26 @@ PORT: default 3000
 
 ### Routes
 
-GET `http://localhost:3000/health`
+Prefix `http://localhost:3000`
 
-POST `http://localhost:3000/api/renga`
+| action | method | route     |
+| ------ | ------ | --------- |
+| health | GET    | `/health` |
+| stats  | GET    | `/stats`  |
+
+#### Renga
+
+| action | method | route                   |
+| ------ | ------ | ----------------------- |
+| create | POST   | `/api/renga`            |
+| update | POST   | `/api/renga/:id`        |
+| list   | GET    | `/api/renga/list`       |
+| verses | GET    | `/api/renga/:id/verses` |
+
+#### Verse
+
+| action | method | route            |
+| ------ | ------ | ---------------- |
+| create | POST   | `/api/verse`     |
+| update | POST   | `/api/verse/:id` |
+| delete | DELETE | `/api/verse/:id` |

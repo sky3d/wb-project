@@ -4,7 +4,8 @@ import { getVerse } from '../../../services/verse'
 
 export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
-  const { rengaId } = request.params
+  const { id: rengaId } = request.params
+  request.log.info({ rengaId }, 'renga verses request')
 
   const list = await getVerse().list(rengaId)
   // TODO map response to json:api

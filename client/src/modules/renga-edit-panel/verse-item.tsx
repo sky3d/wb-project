@@ -1,14 +1,17 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSeedling, faFan, faSun, faLeaf } from '@fortawesome/free-solid-svg-icons'
+import { faSeedling, faFan, faSun, faLeaf, faDeleteLeft } from '@fortawesome/free-solid-svg-icons'
 import { faSnowflake } from '@fortawesome/free-regular-svg-icons'
 import { Menu1, TMenu1Item } from '../../components/menu1/menu1'
 
-import { editVerse, slctCurrentRengaId, TVerse } from '../../services/slices/renga'
+import { editVerse, slctCurrentRengaId, slctVersesTopics, TVerse } from '../../services/slices/renga'
 import { seasonColor, verseSeason, VerseSeasonRu } from '../../utils/vars'
 
 import styles from './renga-edit-panel.module.css'
+import { Editor1 } from '../../components/editor1/editor1'
+import { Editor2 } from '../../components/editor2/editor2'
+import _ from 'lodash'
 
 const getMenuOptionFromFAI = (): TMenu1Item[] => {
   const seasonIcon = [faSeedling, faSnowflake, faFan, faSun, faLeaf]
@@ -23,11 +26,13 @@ const getMenuOptionFromFAI = (): TMenu1Item[] => {
 
 type TVerseItem = {
   item: TVerse
+  topiksIdx: string
+  topiksCb: Function
 }
 
-export const VerseItem: FC<TVerseItem> = ({ item }): JSX.Element => {
+export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb }): JSX.Element => {
   const dispatch = useDispatch()
-  const currentRengaId = useSelector(slctCurrentRengaId) || ''
+  const versesTopics = useSelector(slctVersesTopics)
 
   const onChangeseason = (seasonId: string) => {
     if (seasonId) {
@@ -36,6 +41,20 @@ export const VerseItem: FC<TVerseItem> = ({ item }): JSX.Element => {
   }
 
   const colorType = `bg${verseSeason[item.season]}`
+
+  const onChangeTopiksValue = (value: string) => {
+    topiksCb('')
+    if (value.length > 0) {
+      dispatch(editVerse({ verse: { ...item, topics: [...item.topics ? item.topics : [], value] }, id: item.id }))
+    }
+  }
+
+  const onDelTopiksValue = (e, value: string) => {
+    e.stopPropagation()
+    if (value.length > 0) {
+      dispatch(editVerse({ verse: { ...item, topics: item.topics ? item.topics.filter((x) => x !== value) : [] }, id: item.id }))
+    }
+  }
 
   return <div
     key={`strofa${item.number}`}
@@ -51,11 +70,23 @@ export const VerseItem: FC<TVerseItem> = ({ item }): JSX.Element => {
       </div>
 
     </div>
-    <div>
+    <div className="cursor-pointer flex gap-1 max-w-md" onClick={() => topiksCb(item.id)}>
       Топик:
-      {item.topics && item.topics.map((x, tidx) => (
-        <span key={`tag${item.number}${tidx}`}> {x},</span>
-      ))}
+      {topiksIdx === item.id && <Editor2 onChangeValue={onChangeTopiksValue}
+        optionsData={_.pullAllWith(versesTopics, item.topics ? item.topics : [], _.isEqual)} />}
+
+      {topiksIdx !== item.id && item.topics && <ul className="flex gap-1 align-baseline flex-wrap">{item.topics.map((x, tidx) => (
+        <li className="flex border gap-1  h-6 pl-1 overflow-hidden" style={{
+          background: '#fff',
+          borderRadius: 5, boxShadow: '2px 2px 2px 0px #666'
+        }} key={`tag${item.number}${tidx}`} >
+          <span>{x}</span>
+          <FontAwesomeIcon className="hover:text-slate-800" style={{
+            fontSize: 'x-large', color: '#66666645'
+          }}
+            icon={faDeleteLeft} onClick={(e) => { onDelTopiksValue(e, x) }} />
+        </li>
+      ))}</ul>}
     </div>
   </div>
 }

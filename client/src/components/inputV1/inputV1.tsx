@@ -5,6 +5,7 @@ type TInputV1 = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputEleme
   label?: string
   styleImput?: CSSProperties | undefined
   styleLable?: CSSProperties | undefined
+  onChangeValue?: React.ChangeEventHandler<HTMLInputElement> | undefined
 }
 
 export const InputV1: FC<TInputV1> = (props): JSX.Element => (
@@ -18,6 +19,7 @@ export const InputV1: FC<TInputV1> = (props): JSX.Element => (
       defaultValue={props.defaultValue}
       autoComplete="off"
       required
+      onChange={props.onChangeValue}
     />
     <label style={{ ...props.styleLable }}>{props.label}</label>
   </div>

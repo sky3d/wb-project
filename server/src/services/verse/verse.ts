@@ -43,15 +43,12 @@ export class Verse extends StorageService<Model> {
     this.log.info({ id }, 'verse removed')
   }
 
-  public create = async (rengaId: string, data: Partial<Model>): Promise<Model> => {
+  public create = async (data: Partial<Model>): Promise<Model> => {
     const res = await getManager()
       .createQueryBuilder()
       .insert()
       .into(Model)
-      .values({
-        ...data,
-        rengaId,
-      })
+      .values(data)
       .returning('*')
       .execute()
 

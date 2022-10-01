@@ -1,18 +1,19 @@
 import { merge, reverse } from 'lodash'
-import { RenkuApp, BaseOptions, PluginConnector } from './module'
+import { BaseOptions, PluginConnector } from './module'
 import { envConfig } from './configs/server'
 import { typeorm } from './utils/typeorm'
 
 import { server } from './services/httpServer'
 import { renga } from './services/renga'
 import { verse } from './services/verse'
+import { variant } from './services/variant'
 
 import { HttpServer } from './services/httpServer/httpServer'
 import { Renga } from './services/renga/renga'
 import { Verse } from './services/verse/verse'
+import { Variant } from './services/variant/variant'
 
 import { logger } from './utils/logger'
-
 
 
 export type RenkuConfig = {
@@ -46,6 +47,7 @@ export class Renku {
   public server: HttpServer
   public renga: Renga
   public verse: Verse
+  public variant: Variant
 
   constructor(options: Partial<BaseOptions> = {}) {
     this.config = merge({}, Renku.defaultOpts, options)
@@ -56,6 +58,7 @@ export class Renku {
     typeorm(this)
     renga(this)
     verse(this)
+    variant(this)
 
     server(this)
   }

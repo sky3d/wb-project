@@ -2,10 +2,10 @@ import { head } from 'lodash'
 import { getManager, getRepository } from 'typeorm'
 import { RenkuApp } from '../../module'
 import { StorageService } from '../storage'
-import { Verse as Model } from '../../models/verse'
+import { Variant as Model } from '../../models/variant'
 
-export class Verse extends StorageService<Model> {
-  public static kName = 'verse'
+export class Variant extends StorageService<Model> {
+  public static kName = 'variant'
 
   public readonly config: any
   public readonly log: any
@@ -13,10 +13,10 @@ export class Verse extends StorageService<Model> {
   constructor(parent: RenkuApp) {
     super()
 
-    this.log = parent.log.child({ module: '@verse' })
+    this.log = parent.log.child({ module: '@variant' })
     //@ts-ignore
     this.config = parent.config
-    this.log.info('verse service created')
+    this.log.info('variant service created')
   }
 
   async connect() {
@@ -31,18 +31,7 @@ export class Verse extends StorageService<Model> {
 
   public byNumber = (rengaId: string, number: number) => Model.findOneOrFail<Model>({ rengaId, number })
 
-  public remove = async (id: Model['id']) => {
-    const res = await getManager()
-      .createQueryBuilder()
-      .delete()
-      .from(Model)
-      .where('id = :id', { id })
-      .execute()
-
-    this.log.info({ id }, 'verse removed')
-    return { affected: res.affected }
-  }
-
+  // TODO to base storage
   public create = async (data: Partial<Model>): Promise<Model> => {
     const res = await getManager()
       .createQueryBuilder()
@@ -55,24 +44,14 @@ export class Verse extends StorageService<Model> {
     return head(res.generatedMaps) as Model
   }
 
-  public update = async (verseId: string, data: Partial<Model>): Promise<Model> => {
-    const res = await getManager()
-      .createQueryBuilder()
-      .update(Model)
-      .set(data)
-      .where({ id: verseId })
-      .execute()
-
-    return this.byId(verseId)
-  }
-
-  public list = async (rengaId: string): Promise<Model[]> => {
-    this.log.info('verse list by renga')
+  public list = async (rengaId: string, number: number): Promise<Model[]> => {
+    this.log.info('verse variants')
 
     const qb = getRepository(Model)
       .createQueryBuilder('v')
       .where('v.renga_id = :rengaId', { rengaId })
-      .orderBy('v.number')
+      .andWhere('v.number = :number', { number })
+      .orderBy('v.created_at')
 
     return qb.getMany()
 

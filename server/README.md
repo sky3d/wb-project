@@ -38,4 +38,10 @@ Prefix `http://localhost:3000`
 | ------ | ------ | ---------------- |
 | create | POST   | `/api/verse`     |
 | update | POST   | `/api/verse/:id` |
-| delete | DELETE | `/api/verse/:id` |
+| remove | DELETE | `/api/verse/:id` |
+
+#### Variant
+
+| action | method | route          |
+| ------ | ------ | -------------- |
+| create | POST   | `/api/variant` |

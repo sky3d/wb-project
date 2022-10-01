@@ -62,11 +62,14 @@ export enum VerseSeason {
 
 interface RengaEntity {
   rengaId: string
-  rengaPart: number
 }
 
-export interface Verse extends RengaEntity {
+interface VerseNumberedEntity extends RengaEntity {
   number: number
+}
+
+export interface Verse extends RengaEntity, VerseNumberedEntity {
+  rengaPart: number
   description: string
   season: VerseSeason
   topics: VerseTopics
@@ -78,8 +81,9 @@ export interface Verse extends RengaEntity {
   options: VerseOptions
 }
 
-export const VERSE_TOPIC_NAMES = {
-  [VerseTopic.Moon]: 'луна',
-  [VerseTopic.Love]: 'любовь',
-  [VerseTopic.Blossom]: 'цветение'
+export interface Variant extends VerseNumberedEntity {
+  text: string,
+  author: string,
 }
+
+// TODO comment  varintLike

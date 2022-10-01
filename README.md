@@ -2,21 +2,24 @@
 
 ![Develop Build Status](https://github.com/sky3d/wb-project/actions/workflows/push-pr-develop.yml/badge.svg?branch=develop)
 
+
+[Server API](https://github.com/sky3d/wb-project/blob/develop/server/README.md)
+
 ## How to run
 
 first lunch envioroment
 
 `yarn env:up`
 
-then compile server and run 
+then compile server and run
 `yarn compile`
 `yarn dev`
 
 ### Server
 
-build `yarn compile`
+build `yarn build:server` or `yarn:compile`
 
-start `yarn start:server`
+start `yarn start:server` or `yarn dev`
 
 ## Migrations
 

@@ -1,9 +1,9 @@
 import Fastify, { FastifyInstance } from 'fastify'
-import cors from 'fastify-cors'
+import cors from '@fastify/cors'
 import favicon from 'fastify-favicon'
 import formbody from '@fastify/formbody'
-import routesPlugin from 'fastify-routes'
-import helmet from 'fastify-helmet'
+import routesPlugin from '@fastify/routes'
+import helmet from '@fastify/helmet'
 
 import { Renku, RenkuServerConfig } from '../../main'
 import apiRoutes from '../../api/routes'

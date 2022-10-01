@@ -19,6 +19,7 @@ export interface RenkuApp {
   server: HttpServer
   renga: Renga
   verse: Verse
+  variant: Variant
 
   // /**
   //  * Allow Extensions

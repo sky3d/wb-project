@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
+import { FastifyRequest, FastifyReply } from 'fastify'
 // eslint-disable-next-line
 import { RenkuApp } from '../module'
 

@@ -39,9 +39,8 @@ export class HttpServer {
   }
 
   private async initialize(server: FastifyInstance) {
+    // Inject app to have all services in handlers
     server.decorate(RENKU_APP_KEY, this.parent)
-
-    console.log('APP+===', server.app)
 
     server.register(cors)
     server.register(favicon)

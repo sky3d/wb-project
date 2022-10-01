@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { RenkuApp } from '../../../module'
 import { getVerse } from '../../../services/verse'
 
 export const handler = async (request: FastifyRequest, reply: FastifyReply) => {

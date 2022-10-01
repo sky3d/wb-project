@@ -2,9 +2,7 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
-  PrimaryColumn,
-  Column,
-  Index,
+  PrimaryColumn
 } from 'typeorm'
 
 export class AbstractBaseEntity extends BaseEntity {

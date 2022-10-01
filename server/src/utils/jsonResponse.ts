@@ -1,4 +1,4 @@
-type RenkuResponseTypes = 'renga' | 'verse'
+type RenkuResponseTypes = 'renga' | 'verse' | 'variant'
 
 export type ConvertedResponse = {
   id: string,

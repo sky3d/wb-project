@@ -12,6 +12,8 @@ import { VerseCreate } from './verse/create'
 import { VerseUpdate } from './verse/update'
 import { VerseDelete } from './verse/delete'
 
+import { VariantCreate } from './variant/create'
+
 const API_PREFIX = { prefix: '/api' }
 
 const registerApiRoute = (fastify: FastifyInstance, route: FastifyPluginCallback) =>
@@ -31,6 +33,8 @@ export default async (fastify: FastifyInstance) => {
   registerApiRoute(fastify, VerseCreate)
   registerApiRoute(fastify, VerseUpdate)
   registerApiRoute(fastify, VerseDelete)
+
+  registerApiRoute(fastify, VariantCreate)
 
   fastify.log.info('routes registered')
 }

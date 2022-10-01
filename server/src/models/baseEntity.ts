@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   BaseEntity,
   PrimaryColumn,
+  Column,
+  Index,
 } from 'typeorm'
 
 export class AbstractBaseEntity extends BaseEntity {

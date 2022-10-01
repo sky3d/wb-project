@@ -6,16 +6,16 @@ import {
   VerseTopics
 } from '../interfaces'
 
-import { RengaBaseEntity } from './rengaBaseEntity'
+import { VerseNumberedEntity } from './verseBase'
 
 @Entity()
-@Index(['rengaId', 'number'], { unique: true })
-export class Verse extends RengaBaseEntity {
-  @Column({ type: 'integer' })
-  public number: number
-
+@Index(['rengaId', 'number'])
+export class Verse extends VerseNumberedEntity {
   @Column({ nullable: true })
   public description: string
+
+  @Column({ name: 'renga_part', type: 'int', default: 0 })
+  public rengaPart: number
 
   @Column({
     type: 'enum',

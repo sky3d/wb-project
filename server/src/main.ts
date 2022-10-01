@@ -1,5 +1,5 @@
-import { merge, reverse } from 'lodash'
-import { BaseOptions, PluginConnector } from './module'
+import { merge } from 'lodash'
+import { BaseOptions, PluginConnector, PluginContainer, RenkuApp } from './module'
 import { envConfig } from './configs/server'
 import { typeorm } from './utils/typeorm'
 
@@ -8,10 +8,10 @@ import { renga } from './services/renga'
 import { verse } from './services/verse'
 import { variant } from './services/variant'
 
-import { HttpServer } from './services/httpServer/httpServer'
-import { Renga } from './services/renga/renga'
-import { Verse } from './services/verse/verse'
-import { Variant } from './services/variant/variant'
+// import { HttpServer } from './services/httpServer/httpServer'
+// import { Renga } from './services/renga/renga'
+// import { Verse } from './services/verse/verse'
+// import { Variant } from './services/variant/variant'
 
 import { logger } from './utils/logger'
 
@@ -26,7 +26,7 @@ export type RenkuServerConfig = {
   port: number
 }
 
-export class Renku {
+export class Renku implements RenkuApp {
   static defaultOpts = {
     server: {
       host: envConfig.HOST, port: envConfig.PORT
@@ -43,11 +43,11 @@ export class Renku {
   public config: RenkuConfig
 
   // TODO re-write & hide to plugins
-  public typeorm: any
-  public server: HttpServer
-  public renga: Renga
-  public verse: Verse
-  public variant: Variant
+  // public typeorm: any
+  // public server: HttpServer
+  // public renga: Renga
+  // public verse: Verse
+  // public variant: Variant
 
   constructor(options: Partial<BaseOptions> = {}) {
     this.config = merge({}, Renku.defaultOpts, options)
@@ -62,6 +62,8 @@ export class Renku {
 
     server(this)
   }
+
+  [property: string]: unknown
 
   public addConnector(serviceName: string, handler: PluginConnector) {
     this.log.debug(`add ${serviceName} connector`)

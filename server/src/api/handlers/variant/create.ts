@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import shortid from 'shortid'
+import { RenkuApp } from '../../../module'
 import { Variant } from '../../../models/variant'
-import { getVariant } from '../../../services/variant'
 import { convertToResponse } from '../../../utils/jsonResponse'
 
-export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
+export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
   const payload = JSON.parse(request.body as string) as Variant
 
@@ -27,6 +27,6 @@ export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
 
   }
 
-  const result = await getVariant().create(variant)
+  const result = await app.variant.create(variant)
   reply.send(convertToResponse(result?.id, 'variant', result))
 }

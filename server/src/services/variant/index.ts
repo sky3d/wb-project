@@ -1,9 +1,9 @@
-import { RenkuApp } from '../../module'
+import { Renku } from '../../main'
 import { Variant } from './variant'
 
 let instance: Variant | null = null
 
-export function variant(parent: RenkuApp) {
+export function variant(parent: Renku) {
   async function connect() {
     // eslint-disable-next-line no-param-reassign, no-multi-assign
     instance = parent.variant = new Variant(parent)

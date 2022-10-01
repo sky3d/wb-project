@@ -2,38 +2,21 @@ type Renku = import('./main').Renku
 
 export type PluginConnector = () => PromiseLike<any>
 
-// export interface PluginContainer {
-//   name: string
-//   [property: string]: unknown
-// }
+export interface PluginContainer {
+  [property: string]: any
+}
 
-export interface RenkuApp {
+export interface RenkuApp extends PluginContainer {
   addConnector: any
   addDestructor: any
   addMigrator: any
-
-  log: any
-
-  // plugins
-  typeorm: any
-  server: HttpServer
-  renga: Renga
-  verse: Verse
-  variant: Variant
-
-  // /**
-  //  * Allow Extensions
-  //  */
-  // [property: string]: any
+  log: Renku['log']
 }
-
 
 export interface PluginInterface {
   connect?: PluginConnector
   close?: PluginConnector
 }
-
-//export type ConnectorsTypes = 'service' | 'migration'
 
 export type BaseOptions = Record<string, unknown>
 

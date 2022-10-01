@@ -1,6 +1,6 @@
 import { head } from 'lodash'
 import { getManager, getRepository } from 'typeorm'
-import { RenkuApp } from '../../module'
+import { Renku } from '../../main'
 import { StorageService } from '../storage'
 import { Variant as Model } from '../../models/variant'
 
@@ -10,7 +10,7 @@ export class Variant extends StorageService<Model> {
   public readonly config: any
   public readonly log: any
 
-  constructor(parent: RenkuApp) {
+  constructor(parent: Renku) {
     super()
 
     this.log = parent.log.child({ module: '@variant' })

@@ -1,9 +1,9 @@
-import { RenkuApp } from '../../module'
+import { Renku } from '../../main'
 import { Renga } from './renga'
 
 let instance: Renga | null = null
 
-export function renga(parent: RenkuApp) {
+export function renga(parent: Renku) {
   async function connect() {
     // eslint-disable-next-line no-param-reassign, no-multi-assign
     instance = parent.renga = new Renga(parent)

@@ -8,11 +8,6 @@ import { renga } from './services/renga'
 import { verse } from './services/verse'
 import { variant } from './services/variant'
 
-// import { HttpServer } from './services/httpServer/httpServer'
-// import { Renga } from './services/renga/renga'
-// import { Verse } from './services/verse/verse'
-// import { Variant } from './services/variant/variant'
-
 import { logger } from './utils/logger'
 
 
@@ -33,7 +28,6 @@ export class Renku implements RenkuApp {
     }
   }
 
-  //readonly plugins: any[]
   public readonly log: any
 
   private connectors: Map<string, PluginConnector> = new Map<string, PluginConnector>()
@@ -42,19 +36,11 @@ export class Renku implements RenkuApp {
 
   public config: RenkuConfig
 
-  // TODO re-write & hide to plugins
-  // public typeorm: any
-  // public server: HttpServer
-  // public renga: Renga
-  // public verse: Verse
-  // public variant: Variant
-
   constructor(options: Partial<BaseOptions> = {}) {
     this.config = merge({}, Renku.defaultOpts, options)
     this.log = logger
 
     // TODO this.on('error', this.onError)
-
     typeorm(this)
     renga(this)
     verse(this)
@@ -63,6 +49,9 @@ export class Renku implements RenkuApp {
     server(this)
   }
 
+  /*
+      Plugin container
+  */
   [property: string]: unknown
 
   public addConnector(serviceName: string, handler: PluginConnector) {

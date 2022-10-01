@@ -1,9 +1,10 @@
-import { PluginConnector, RenkuApp } from '../../module'
+import { PluginConnector } from '../../module'
+import { Renku } from '../../main'
 import { HttpServer } from './httpServer'
 
 let instance: HttpServer | null = null
 
-export function server(parent: RenkuApp): { connect: PluginConnector, close: PluginConnector } {
+export function server(parent: Renku): { connect: PluginConnector, close: PluginConnector } {
   async function connect() {
     // eslint-disable-next-line no-param-reassign, no-multi-assign
     instance = parent.server = new HttpServer(parent)

@@ -1,9 +1,8 @@
 import { head } from 'lodash'
 import { getManager, getRepository } from 'typeorm'
-import { RenkuApp } from '../../module'
+import { Renku } from '../../main'
 import { StorageService } from '../storage'
 import { Renga as Model } from '../../models/renga'
-import { runInThisContext } from 'vm'
 
 export class Renga extends StorageService<Model> {
   public static kName = 'renga'
@@ -11,7 +10,7 @@ export class Renga extends StorageService<Model> {
   public readonly config: any
   public readonly log: any
 
-  constructor(parent: RenkuApp) {
+  constructor(parent: Renku) {
     super()
 
     this.log = parent.log.child({ module: '@renga' })

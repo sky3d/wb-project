@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-
+import { wrapHandler } from '../../../utils/wrapHandler'
 import { schema } from '../../../schemas/verse/delete'
 import { handler } from '../../handlers/verse/delete'
 
@@ -8,6 +8,6 @@ export async function VerseDelete(fastify: FastifyInstance) {
     method: 'DELETE',
     url: '/verse/:id',
     schema,
-    handler
+    handler: wrapHandler(fastify.app, handler)
   })
 }

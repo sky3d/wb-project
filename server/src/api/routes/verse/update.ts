@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-
+import { wrapHandler } from '../../../utils/wrapHandler'
 import { schema } from '../../../schemas/verse/update'
 import { handler } from '../../handlers/verse/update'
 
@@ -8,6 +8,6 @@ export async function VerseUpdate(fastify: FastifyInstance) {
     method: 'POST',
     url: '/verse/:id',
     schema,
-    handler
+    handler: wrapHandler(fastify.app, handler)
   })
 }

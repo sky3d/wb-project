@@ -1,11 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import shortid from 'shortid'
+import { RenkuApp } from '../../../module'
 import { RENGA_NEW_NAME } from '../../../constants'
 import { Renga } from '../../../models/renga'
-import { getRenga } from '../../../services/renga'
+
 import { convertToResponse } from '../../../utils/jsonResponse'
 
-export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
+export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   const payload = JSON.parse(request.body as string) as Renga
 
   request.log.info({ payload }, 'create renga request')
@@ -16,7 +17,7 @@ export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
     id: payload.id || shortid(),
   }
 
-  const result = await getRenga().create(renga)
+  const result = await app.renga.create(renga)
 
   reply.send(convertToResponse(result?.id, 'renga', result))
 }

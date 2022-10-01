@@ -1,5 +1,3 @@
-const querystring = require('node:querystring')
-import pino from 'pino'
 import Fastify, { FastifyInstance } from 'fastify'
 import cors from 'fastify-cors'
 import favicon from 'fastify-favicon'
@@ -7,13 +5,9 @@ import formbody from '@fastify/formbody'
 import routesPlugin from 'fastify-routes'
 import helmet from 'fastify-helmet'
 
-import { RenkuApp } from '../../module'
 import { Renku, RenkuServerConfig } from '../../main'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
-
-
-const logger = pino()
 
 export class HttpServer {
   public static kName = 'http-server'
@@ -21,12 +15,13 @@ export class HttpServer {
   public readonly log: Renku['log']
   private server: FastifyInstance
   private config: RenkuServerConfig
-  private parent: RenkuApp
+  private parent: Renku
 
-  constructor(parent: RenkuApp) {
+  constructor(parent: Renku) {
     //@ts-ignore
     this.config = parent.config.server
     this.log = parent.log
+    this.parent = parent
   }
 
   connect = async () => {
@@ -44,25 +39,18 @@ export class HttpServer {
   }
 
   private async initialize(server: FastifyInstance) {
+    // Inject app to have all services in handlers
+    server.decorate(RENKU_APP_KEY, this.parent)
+
     server.register(cors)
     server.register(favicon)
     server.register(formbody)
-    //server.register(qs)
-
-    // server.addHook('onRequest', (request, reply, done) => {
-    //   const url = request.url.replace(/\?{2,}/, '?')
-    //   const querySymbolIndex = url.indexOf('?')
-    //   const query = querySymbolIndex !== -1 ? url.slice(querySymbolIndex + 1) : ''
-    //   request.params = querystring.parse(query)
-    //   done()
-    // })
 
     // disables the `contentSecurityPolicy` middleware but keeps the rest.
     server.register(helmet, { contentSecurityPolicy: false })
     server.register(routesPlugin)
 
     server.register(apiRoutes)
-    server.decorate(RENKU_APP_KEY, this.parent)
   }
 }
 

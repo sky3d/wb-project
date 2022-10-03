@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { FC, useEffect, useRef } from 'react'
 
 import styles from './editor1.module.css'
 

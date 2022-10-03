@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { InputV1 } from '../../components/inputV1/inputV1'
 import { TextareaV1 } from '../../components/textareaV1/textareaV1'
 import { slctCurrentRengaInfo } from '../../services/slices/renga'
@@ -7,7 +7,6 @@ import { slctCurrentRengaInfo } from '../../services/slices/renga'
 import { getH1, OptionsPanel } from '../other/options-panel/option-panel'
 
 export const RengaPanel = (): JSX.Element => {
-  const dispatch = useDispatch()
   const formRef = useRef(undefined)
   const currentRengaInfo = useSelector(slctCurrentRengaInfo)
 

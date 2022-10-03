@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSeedling, faFan, faSun, faLeaf, faDeleteLeft } from '@fortawesome/free-solid-svg-icons'
@@ -27,9 +27,10 @@ type TVerseItem = {
   item: TVerse
   topiksIdx: string
   topiksCb: Function
+  vnumber: number | null
 }
 
-export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb }): JSX.Element => {
+export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb, vnumber }): JSX.Element => {
   const dispatch = useDispatch()
   const versesTopics = useSelector(slctVersesTopics)
 
@@ -56,7 +57,7 @@ export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb }): JSX.El
   }
 
   return <div
-    key={`strofa${item.number}`}
+    key={`strofa${item.id}`}
     className={`px-5 py-2 border mt-1 flex justify-between gap-1 ${styles[colorType]}`}
   >
     <div className="flex justify-start gap-1">
@@ -64,7 +65,7 @@ export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb }): JSX.El
         title={'удалить строфу'} onClick={() => { dispatch(deletVerse(item.id)) }}>
         <FontAwesomeIcon className="rotate-180" icon={faDeleteLeft} />
       </div>
-      <div className="font-bold">{item.number}</div>
+      <div className="font-bold">{vnumber || item.number}</div>
       <div className="flex gap-2">
         <div>сезон: </div>
         <div className="relative" style={{ marginTop: 3 }}>
@@ -83,7 +84,7 @@ export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb }): JSX.El
           background: '#fff',
           borderRadius: 5,
           boxShadow: '2px 2px 2px 0px #666'
-        }} key={`tag${item.number}${tidx}`} >
+        }} key={`tag${item.id}${tidx}`} >
           <span>{x}</span>
           <FontAwesomeIcon className="hover:text-slate-800" style={{ fontSize: 'x-large', color: '#66666645' }}
             icon={faDeleteLeft} onClick={(e) => { onDelTopiksValue(e, x) }} title={'удалить топик'} />

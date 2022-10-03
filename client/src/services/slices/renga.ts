@@ -11,7 +11,7 @@ export const createRenga = createAsyncThunk('rengaStore/createRenga', async (obj
   const state: RootState = thunkApi.getState()
   const owner = selectOwnerId(state)
   // const response = await runRequest('renga', 'POST', { ...objRenga, owner, options: { index: 5, sabaki: 'greg.rabota@gmail.com' } })
-  const response = await runRequest('renga', 'POST', { ...objRenga, owner })
+  const response = await runRequest('renga', 'POST', { ...objRenga, owner, status: 1, options: {} })
   const data = await response.json()
 
   if (data.error) {
@@ -121,6 +121,10 @@ export type TInitRengaStore = {
 
 const initRengaDataState: TInitRengaStore = { rawData: undefined, currentRenga: null, verses: [] }
 
+export const rejectedAsyncThunk = (_state: any, action: any) => {
+  console.log(action.error.message)
+}
+
 export const rengaStore = createSlice({
   name: 'rengaStore',
   initialState: initRengaDataState,
@@ -133,42 +137,31 @@ export const rengaStore = createSlice({
     builder.addCase(getRengaList.fulfilled, (state, action: PayloadAction<TReangaList>): void => {
       state.rawData = action.payload
     })
-    builder.addCase(getRengaList.rejected, (_state, action) => {
-      console.log(action.error.message)
-    })
+    builder.addCase(getRengaList.rejected, rejectedAsyncThunk)
 
-    builder.addCase(createRenga.rejected, (_state, action) => {
-      console.log(action.error.message)
-    })
+    builder.addCase(createRenga.rejected, rejectedAsyncThunk)
 
     builder.addCase(getRengaVerses.fulfilled, (state, action: PayloadAction<TVerse[]>): void => {
       state.verses = action.payload
     })
-    builder.addCase(getRengaVerses.rejected, (_state, action) => {
-      console.log(action.error.message)
-    })
+    builder.addCase(getRengaVerses.rejected, rejectedAsyncThunk)
 
     builder.addCase(addVerseInRenga.fulfilled, (state, action: PayloadAction<TVerse>): void => {
       state.verses.push(action.payload)
     })
-    builder.addCase(addVerseInRenga.rejected, (_state, action) => {
-      console.log(action.error.message)
-    })
+    builder.addCase(addVerseInRenga.rejected, rejectedAsyncThunk)
 
     builder.addCase(editVerse.fulfilled, (state, action: PayloadAction<TVerse>): void => {
-      const tmp = [...state.verses]
-      state.verses = tmp.map((verse) => +action.payload.number === +verse.number ? action.payload : verse)
+      state.verses = state.verses.map((verse) => action.payload.id === verse.id ? action.payload : verse)
     })
-    builder.addCase(editVerse.rejected, (_state, action) => {
-      console.log(action.error.message)
-    })
+    builder.addCase(editVerse.rejected, rejectedAsyncThunk)
 
     builder.addCase(deletVerse.fulfilled, (state, action: PayloadAction<string>): void => {
       state.verses = state.verses.filter((x) => x.id !== action.payload)
     })
-    builder.addCase(deletVerse.rejected, (_state, action) => {
-      console.log(action.error.message)
-    })
+    builder.addCase(deletVerse.rejected, rejectedAsyncThunk)
+
+    builder.addCase(updateRenga.rejected, rejectedAsyncThunk)
   }
 })
 

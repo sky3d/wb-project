@@ -10,7 +10,8 @@ type TPageHeader = {
 export const PageHeader: FC<TPageHeader> = ({ title, subTitle, extra }): JSX.Element => (
   <header className="py-4 flex justify-between">
     <div>
-      <span className="text-xl font-semibold pr-3 cursor-pointer" onClick={() => window.open(document.location.href, '_self')}>{title}</span>
+      <span className="text-xl font-semibold pr-3 cursor-pointer"
+        onClick={() => window.open(document.location.href.split('/').slice(0, 3).join('/'), '_self')}>{title}</span>
       <span className="text-sm text-gray-400">{subTitle}</span>
     </div>
     <div className='flex gap-1'>

@@ -53,7 +53,8 @@ export class Verse extends StorageService<Model> {
       .returning('*')
       .execute()
 
-    return head(res.generatedMaps) as Model
+    const { id } = head(res.generatedMaps) as Model
+    return this.byId(id)
   }
 
   public update = async (verseId: string, data: Partial<Model>): Promise<Model> => {

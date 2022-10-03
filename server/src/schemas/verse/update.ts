@@ -1,18 +1,9 @@
 import { errorSchemas } from '../errors'
 import { responseSchema } from '../jsonApiResponse'
-
-const requestSchema = {
-  type: 'object',
-}
+import { stringIdSchema } from '../stringId'
 
 export const schema = {
-  params: {
-    id: {
-      type: 'string',
-    },
-  },
-
-  ...requestSchema,
+  params: stringIdSchema,
 
   response: {
     200: responseSchema,

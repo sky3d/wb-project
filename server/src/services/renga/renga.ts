@@ -19,6 +19,8 @@ export class Renga extends StorageService<Model> {
     this.log.info('renga service created')
   }
 
+  dbSize = () => getRepository(Model).count()
+
   async connect() {
     // await super.connect()
   }
@@ -38,7 +40,8 @@ export class Renga extends StorageService<Model> {
       .returning('*')
       .execute()
 
-    return head(res.generatedMaps) as Model
+    const { id } = head(res.generatedMaps) as Model
+    return this.getRenga(id)
   }
 
   public update = async (rengaId: Model['id'], data: Partial<Model>): Promise<Model> => {

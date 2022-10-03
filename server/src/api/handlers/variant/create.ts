@@ -6,20 +6,9 @@ import { convertToResponse } from '../../../utils/jsonResponse'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
-  const payload = JSON.parse(request.body as string) as Variant
+  const payload = request.body as Variant
 
   request.log.info({ payload }, 'create variant request')
-
-  const { rengaId, number = 0 } = payload
-
-  if (!rengaId) {
-    // TODO use HttpError
-    throw new Error('renga is not specified')
-  }
-  if (number === 0) {
-    // TODO use HttpError
-    throw new Error('incorrect verse number')
-  }
 
   const variant: Partial<Variant> = {
     ...payload,

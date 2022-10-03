@@ -1,12 +1,29 @@
 import { errorSchemas } from '../errors'
 import { responseSchema } from '../jsonApiResponse'
 
-const requestSchema = {
-  type: 'object'
+const rengaSchema = {
+  type: 'object',
+  required: [
+    'name',
+    'owner'
+  ],
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1,
+    },
+    description: {
+      type: 'string',
+    },
+    owner: {
+      type: 'string',
+      minLength: 1,
+    },
+  }
 }
 
 export const schema = {
-  ...requestSchema,
+  body: rengaSchema,
 
   response: {
     200: responseSchema,

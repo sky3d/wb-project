@@ -3,6 +3,7 @@ import cors from '@fastify/cors'
 import favicon from 'fastify-favicon'
 import formbody from '@fastify/formbody'
 import routesPlugin from '@fastify/routes'
+import sensible from '@fastify/sensible'
 import helmet from '@fastify/helmet'
 
 import { Renku, RenkuServerConfig } from '../../main'
@@ -30,8 +31,9 @@ export class HttpServer {
 
     this.initialize(this.server)
 
-    const address = await this.server.listen(this.config.port, this.config.host)
-    this.log.debug('server is now listening on [%s]', address)
+    const { port, host } = this.config
+    const address = await this.server.listen({ port, host })
+    //this.log.debug('server is now listening on [%s]', address)
   }
 
   close = async () => {
@@ -45,8 +47,20 @@ export class HttpServer {
     server.register(cors)
     server.register(favicon)
     server.register(formbody)
+    server.register(sensible)
 
-    // disables the `contentSecurityPolicy` middleware but keeps the rest.
+    if (process.env.DEBUG) {
+      server.addHook('preValidation', function (request, _, done) {
+        const { params, query, body } = request
+        request.log.info({ params, query, body }, `!REQ ${request.method} ${request.url}`)
+        done()
+      })
+      server.addHook('onError', (request, reply, error, done) => {
+        request.log.info({ error }, `!ERROR on ${request.method} ${request.url}`)
+        done()
+      })
+    }
+
     server.register(helmet, { contentSecurityPolicy: false })
     server.register(routesPlugin)
 

@@ -41,7 +41,8 @@ export class Variant extends StorageService<Model> {
       .returning('*')
       .execute()
 
-    return head(res.generatedMaps) as Model
+    const { id } = head(res.generatedMaps) as Model
+    return this.byId(id)
   }
 
   public list = async (rengaId: string, number: number): Promise<Model[]> => {

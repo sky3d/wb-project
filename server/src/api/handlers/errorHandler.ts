@@ -4,5 +4,5 @@ export const errorHandler = (error: FastifyError, _: FastifyRequest, reply: Fast
   reply
     .type('application/json')
     .code(400)
-    .send({ error: error.message })
+    .send({ error })
 }

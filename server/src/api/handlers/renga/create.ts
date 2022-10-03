@@ -7,8 +7,7 @@ import { Renga } from '../../../models/renga'
 import { convertToResponse } from '../../../utils/jsonResponse'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
-  const payload = JSON.parse(request.body as string) as Renga
-
+  const payload = request.body as Renga
   request.log.info({ payload }, 'create renga request')
 
   const renga: Partial<Renga> = {
@@ -18,6 +17,8 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
   }
 
   const result = await app.renga.create(renga)
+
+  request.log.info({ result }, 'renga created')
 
   reply.send(convertToResponse(result?.id, 'renga', result))
 }

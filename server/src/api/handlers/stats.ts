@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RenkuApp } from '../../module'
 
-export const handler = (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
+export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   const pckg = require('../../../../package.json')
 
   const data = {
@@ -14,15 +14,9 @@ export const handler = (app: RenkuApp, request: FastifyRequest, reply: FastifyRe
     uptime: process.uptime().toFixed(2),
     status: 'RUNNING',
     user: 'un-authorized',
-    // db: {
-    //   renga: 0,
-    //   verse: 0,
-    // },
-    // request: {
-    //   body: JSON.stringify(request?.body),
-    //   params: JSON.stringify(request?.params),
-    //   query: JSON.stringify(request?.query),
-    // }
+    db: {
+      renga: await app.renga.dbSize(),
+    }
   }
 
   reply

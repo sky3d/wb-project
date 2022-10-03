@@ -15,18 +15,12 @@ export const headers = {
 const validationErrorSchema = {
   type: 'object',
   properties: {
-    errors: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          property: { type: 'string' },
-          message: { type: 'string' },
-          code: { type: 'string' },
-        },
-      },
-    },
-  },
+    error: {
+      code: { type: 'integer' },
+      name: { type: 'string' },
+      message: { type: 'string' },
+    }
+  }
 }
 
 const commonErrorSchema = {

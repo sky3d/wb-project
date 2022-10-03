@@ -13,7 +13,7 @@ export interface RengaOptions {
 export enum RengaStatus {
   NotSet = 0,
   Draft = 1,
-  InPlay,
+  Published,
   Closed
 }
 

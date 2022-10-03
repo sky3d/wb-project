@@ -3,7 +3,7 @@ import { responseSchema } from '../jsonApiResponse'
 
 const bodySchema = {
   type: 'object',
-  additionalProperty: true,
+  additionalProperties: true,
   required: [
     'rengaId'
   ],

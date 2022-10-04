@@ -16,7 +16,7 @@ type TSegmetButton = {
   style?: object
 }
 
-export const SegmetButton: FC<TSegmetButton> = ({ buttons, defaultValue, onChangeEvnt, style = {} }): JSX.Element => {
+export const SegmetButton: FC<TSegmetButton> = ({ buttons, defaultValue, onChangeEvnt }): JSX.Element => {
   const [curValue, setCurValue] = useState(defaultValue)
 
   useEffect(() => {}, [])

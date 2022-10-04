@@ -2,14 +2,14 @@ import React, { useEffect, FC, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import { ButtonV2 } from '../components/buttonV2/buttonV2'
 import { SegmetButton } from '../components/segment-button/segment-button'
 import VirtualTable, { TVirtualTableColumn } from '../components/virtual-table/virtual-table'
 import { setCurrentPage } from '../services/slices/app-info'
 
-import { getRengaList, getRengaVerses, setCurrentRenga, slctRengaRawList, TReangaList } from '../services/slices/renga'
+import { getRengaList, getRengaVerses, setCurrentRenga, slctRengaRawList } from '../services/slices/renga'
 import { selectAuth, selectOwnerId } from '../services/slices/user-info'
 import { TPage } from '../utils/types'
 import { getDateObj } from '../utils/funcs'

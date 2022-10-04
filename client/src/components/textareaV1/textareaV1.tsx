@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, HTMLInputTypeAttribute } from 'react'
+import React, { CSSProperties, FC } from 'react'
 import styles from './textareaV1.module.css'
 
 type TTextareaV1 = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {

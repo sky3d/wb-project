@@ -10,7 +10,7 @@ type TButton = {
   onClick: React.MouseEventHandler<HTMLAnchorElement>
 }
 
-export const ButtonV1: FC<TButton> = ({ children, onClick, color = 'silver', size = 'medium' }): JSX.Element => (
+export const ButtonV1: FC<TButton> = ({ children, onClick, color = 'silver' }): JSX.Element => (
   <a href="#" style={{ '--clr': color }} className={styles.aBlock} onClick={onClick}>
     <span>{children}</span>
     <i></i>

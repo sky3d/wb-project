@@ -1,11 +1,10 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ButtonV2 } from '../../components/buttonV2/buttonV2'
 import { CardTransparent } from '../../components/card-transparent/card-transparent'
 import { InputV1 } from '../../components/inputV1/inputV1'
 import { loginUser } from '../../services/slices/user-info'
 import { getCookie } from '../../utils/funcs'
-import { useDebounce } from '../../utils/hooks'
 
 const btnColorOptions = {
   color1: 'rgb(11, 22, 33, 0.8)',

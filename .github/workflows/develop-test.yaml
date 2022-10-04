@@ -1,4 +1,4 @@
-name: build_server
+name: test on enviroment
 
 on:
   push:

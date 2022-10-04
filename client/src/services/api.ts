@@ -1,20 +1,29 @@
+
+import { isEmpty } from 'lodash'
 import { errorResponsString } from '../utils/vars'
 
-const mainUrl = 'http://127.0.0.1:3000/api/'
+type RequestMethod = 'GET' | 'POST' | 'DELETE'
 
-export const runRequest = async (apiRequest: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE', options?: {}) => {
-  let body:{} | undefined
-  let headers = {}
-  if (['POST', 'PUT'].indexOf(method) > -1) {
-    body = options && Object.keys(options).length > 0 ? JSON.stringify(options) : ''
-    headers = { 'Content-Type': 'application/json;charset=utf-8', }
+const API_PREFIX = 'http://127.0.0.1:3000/api/'
+
+
+const postParams = (body = {}, headers = {}) => ({
+  body: !isEmpty(body) ? JSON.stringify(body) : '',
+  headers: {
+    'Content-type': 'application/json',
+    ...headers
+  }
+})
+
+export const runRequest = async (url: string, method: RequestMethod, options?: {}) => {
+  const params = method === 'POST' ? postParams(options, {}) : {}
+
+  const init = {
+    method,
+    ...params
   }
 
-  const response = await fetch(mainUrl + apiRequest, {
-    method,
-    body,
-    headers,
-  })
+  const response = await fetch(API_PREFIX + url, init)
 
   if (response.status >= 400 && response.status < 600) {
     throw new Error(`${errorResponsString} ${response.status}`)

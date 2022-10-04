@@ -1,9 +1,11 @@
-/* eslint @typescript-eslint/no-var-requires: "off" */
+import { Renku, RenkuConfig } from './main'
 
-require('./index')
-  .start()
-  .catch((e: Error) => {
-    /* eslint-disable no-console */
-    console.error(`Error during boot ${e.message}\n${e.stack}`)
-    process.exit(1)
-  })
+let instance: Renku | null = null
+
+function buildServer(config: RenkuConfig) {
+  instance = new Renku(config)
+
+  return instance
+}
+
+export default buildServer

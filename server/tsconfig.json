@@ -4,9 +4,11 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
     "rootDir": "src",
     "outDir": "lib",
     "removeComments": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/node_modules/**", "src/lib/**"]
 }

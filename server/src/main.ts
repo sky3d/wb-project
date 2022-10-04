@@ -84,7 +84,7 @@ export class Renku implements RenkuApp {
     this.log.info('successfully booted')
   }
 
-  public async finish() {
+  public async close() {
     // TODO reverse
     for (const [_, close] of this.destructors) {
       await close()

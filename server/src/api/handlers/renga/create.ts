@@ -1,10 +1,11 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 import shortid from 'shortid'
 import { RenkuApp } from '../../../module'
 import { RENGA_NEW_NAME } from '../../../constants'
 import { Renga } from '../../../models/renga'
 
 import { convertToResponse } from '../../../utils/jsonResponse'
+import { CREATED } from '../../../utils/http'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   const payload = request.body as Renga
@@ -20,5 +21,7 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
 
   request.log.info({ result }, 'renga created')
 
-  reply.send(convertToResponse(result?.id, 'renga', result))
+  reply
+    .code(CREATED)
+    .send(convertToResponse(result?.id, 'renga', result))
 }

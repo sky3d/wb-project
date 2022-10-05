@@ -3,6 +3,7 @@ import shortid from 'shortid'
 import { RenkuApp } from '../../../module'
 import { Variant } from '../../../models/variant'
 import { convertToResponse } from '../../../utils/jsonResponse'
+import { CREATED } from '../../../utils/http'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
@@ -17,5 +18,8 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
   }
 
   const result = await app.variant.create(variant)
-  reply.send(convertToResponse(result?.id, 'variant', result))
+
+  reply
+    .code(CREATED)
+    .send(convertToResponse(result?.id, 'variant', result))
 }

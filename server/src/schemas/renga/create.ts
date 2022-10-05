@@ -26,7 +26,7 @@ export const schema = {
   body: rengaSchema,
 
   response: {
-    200: responseSchema,
+    201: responseSchema,
     ...errorSchemas
   }
 }

@@ -25,7 +25,7 @@ export const schema = {
   body: bodySchema,
 
   response: {
-    200: responseSchema,
+    201: responseSchema,
     ...errorSchemas
   }
 }

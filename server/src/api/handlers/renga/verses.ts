@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RenkuApp } from '../../../module'
+import { OK } from '../../../utils/http'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
@@ -8,5 +9,7 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
 
   const list = await app.verse.list(rengaId)
   // TODO map response to json:api
-  return reply.code(200).send(JSON.stringify(list))
+  reply
+    .code(OK)
+    .send(JSON.stringify(list))
 }

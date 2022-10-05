@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { RenkuApp } from '../../../module'
 import { Renga } from '../../../models/renga'
 import { convertToResponse } from '../../../utils/jsonResponse'
+import { OK } from '../../../utils/http'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   // @ts-ignore
@@ -12,5 +13,7 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
 
   const result = await app.renga.update(id, data)
 
-  reply.send(convertToResponse(result?.id, 'renga', result))
+  reply
+    .code(OK)
+    .send(convertToResponse(result?.id, 'renga', result))
 }

@@ -6,7 +6,7 @@ export const schema = {
   params: stringIdSchema,
 
   response: {
-    200: responseSchema,
+    201: responseSchema,
     ...errorSchemas
   }
 }

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RenkuApp } from '../../../module'
+import { OK } from '../../../utils/http'
 import { convertToResponse } from '../../../utils/jsonResponse'
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
@@ -10,5 +11,7 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
 
   const result = await app.verse.remove(id)
 
-  reply.send(convertToResponse(id, 'verse', result))
+  reply
+    .code(OK)
+    .send(convertToResponse(id, 'verse', result))
 }

@@ -21,8 +21,7 @@ export const appReducer = createSlice({
     setCurrentPage: (state, action: PayloadAction<TCurrentPage>) => {
       state.currentPage = action.payload
     }
-  },
-  extraReducers: (builder) => { }
+  }
 })
 
 export const { setLoginVisible, setCurrentPage } = appReducer.actions

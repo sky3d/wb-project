@@ -1,11 +1,9 @@
-
 import { isEmpty } from 'lodash'
 import { errorResponsString } from '../utils/vars'
 
 type RequestMethod = 'GET' | 'POST' | 'DELETE'
 
 const API_PREFIX = 'http://127.0.0.1:3000/api/'
-
 
 const postParams = (body = {}, headers = {}) => ({
   body: !isEmpty(body) ? JSON.stringify(body) : '',
@@ -15,7 +13,7 @@ const postParams = (body = {}, headers = {}) => ({
   }
 })
 
-export const runRequest = async (url: string, method: RequestMethod, options?: {}) => {
+export const runRequest = async (url: string, method: RequestMethod, options?: {}, errorString: string = errorResponsString) => {
   const params = method === 'POST' ? postParams(options, {}) : {}
 
   const init = {
@@ -23,10 +21,10 @@ export const runRequest = async (url: string, method: RequestMethod, options?: {
     ...params
   }
 
-  const response = await fetch(API_PREFIX + url, init)
+  const response = await fetch(API_PREFIX + url, init).then((res) => res.json())
 
-  if (response.status >= 400 && response.status < 600) {
-    throw new Error(`${errorResponsString} ${response.status}`)
+  if (response.error) {
+    throw new Error(`${errorString} ${JSON.stringify(response.error)}`)
   }
 
   return response

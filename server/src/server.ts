@@ -2,7 +2,7 @@ import { Renku, RenkuConfig } from './main'
 
 let instance: Renku | null = null
 
-function buildServer(config: RenkuConfig) {
+function buildServer(config?: RenkuConfig) {
   instance = new Renku(config)
 
   return instance

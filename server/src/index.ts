@@ -1,4 +1,6 @@
-require('./server')
+import buildServer from './server'
+
+buildServer()
   .start()
   .catch((e: Error) => {
     /* eslint-disable no-console */

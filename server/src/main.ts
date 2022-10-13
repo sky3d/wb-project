@@ -1,31 +1,23 @@
 import { merge } from 'lodash'
-import { BaseOptions, PluginConnector, PluginContainer, RenkuApp } from './module'
+import dotenv from 'dotenv'
+import { BaseOptions, PluginConnector, RenkuApp } from './module'
 import { envConfig } from './configs/server'
 import { typeorm } from './utils/typeorm'
+
+import { RenkuConfig } from './types'
 
 import { server } from './services/httpServer'
 import { renga } from './services/renga'
 import { verse } from './services/verse'
 import { variant } from './services/variant'
-
 import { logger } from './utils/logger'
-
-
-export type RenkuConfig = {
-  server: RenkuServerConfig
-  //typeorm: TypeormConfig
-}
-
-export type RenkuServerConfig = {
-  host: string
-  port: number
-}
 
 export class Renku implements RenkuApp {
   static defaultOpts = {
     server: {
       host: envConfig.HOST, port: envConfig.PORT
-    }
+    },
+    auth: {}
   }
 
   public readonly log: any

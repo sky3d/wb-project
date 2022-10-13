@@ -27,6 +27,6 @@ export type ConnectorContainer = {
 
 declare module "fastify" {
   interface FastifyInstance {
-    app: RenkuApp
+    app: RenkuApp,
   }
 }

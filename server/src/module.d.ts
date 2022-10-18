@@ -29,4 +29,7 @@ declare module "fastify" {
   interface FastifyInstance {
     app: RenkuApp,
   }
+  interface PassportUser {
+    displayName: string
+  }
 }

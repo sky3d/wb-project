@@ -13,7 +13,7 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
     ip: request.ip,
     uptime: process.uptime().toFixed(2),
     status: 'RUNNING',
-    user: 'un-authorized',
+    user: request?.user?.displayName || 'Странник',
     db: {
       renga: await app.renga.dbSize(),
     }

@@ -4,16 +4,14 @@ export type RenkuConfig = {
   //typeorm: TypeormConfig
 }
 
-export type PassportOptions = {
-  clientId: string
+export interface PassportOptions {
+  clientID: string
   clientSecret: string
-  callback: string
+  callbackURL: string
 }
 
 export type RenkuAuthConfig = {
-  passport?: {
-    [provider: string]: PassportOptions
-  }
+  passport: Record<string, PassportOptions>,
   cookieKey?: string
 }
 

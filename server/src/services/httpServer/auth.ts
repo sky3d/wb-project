@@ -1,79 +1,91 @@
-import path from 'node:path'
 import fpass from '@fastify/passport'
 import fss from '@fastify/secure-session'
 import { FastifyInstance } from 'fastify'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as VKStrategy } from 'passport-vkontakte'
+import { User } from '../../models/user'
 import { PassportOptions, RenkuAuthConfig } from '../../types'
+import { getUser } from '../user'
 
-const VK_NAME = 'vkontakte'
-
-const passportOptions = (hostUrl: string) => (config: PassportOptions) => ({
-  clientID: config.clientId,
+const passportOptions = (hostUrl: string, config: PassportOptions) => ({
+  clientID: config.clientID,
   clientSecret: config.clientSecret,
-  callbackURL: hostUrl + config.callback
+  callbackURL: hostUrl + config.callbackURL
 })
 
+const verify = async (accessToken: string, refreshToken: string, profile: any, done: any) => {
+  const [err, user] = await getUser().authenticateOnCreate(profile)
+  if (err) {
+    return done(err)
+  }
 
-export function initAuth(server: FastifyInstance, config: RenkuAuthConfig, hostUrl: string) {
-  server.register(fss, {
-    key: Buffer.from(process.env.COOKIE_KEY as string, 'hex'),
+  if (user) {
+    return done(undefined, user)
+  }
+  return done(undefined, false) // TODO check
+}
+
+
+export function passportAuth(server: FastifyInstance, log: any, config: RenkuAuthConfig, hostUrl: string) {
+  const session = {
+    key: Buffer.from(config.cookieKey as string, 'hex'),
     cookie: {
-      path: '/'
+      path: '/',
+      httpOnly: true,
     }
-  })
+  }
+  server.register(fss, session)
+
+  log.info('INIT secure session %j', session)
 
   server.register(fpass.initialize())
   server.register(fpass.secureSession())
 
+  log.info('secure session initialized')
 
-  const verify = (accessToken: string, refreshToken: string, profile: any, done: any) => {
-    console.log('VK_accesstoken' + JSON.stringify(accessToken))
-    console.log('refreshToken' + JSON.stringify(refreshToken))
-    //console.log('VK_params' + JSON.stringify(params))
-    console.log('VK_profile' + JSON.stringify(profile))
+  const { google, vkontakte } = config.passport
 
-    done(undefined, profile)
-  }
+  const options = passportOptions(hostUrl, google)
+  log.info('INIT google callback %j', options)
 
-  let provider: 'google' | 'vk'
+  fpass.use('google', new GoogleStrategy(options, verify))
+  // fpass.use('vk', new VKStrategy(passportOptions(hostUrl, vkontakte), verify))
 
-  // provider = 'google'
-  provider = 'vk'
-
-
-  const { google, vkontakte } = config.passport || {}
-
-  const buildOptions = passportOptions(hostUrl)
-
-  fpass.use('google', new GoogleStrategy(buildOptions(google), verify))
-  fpass.use('vk', new VKStrategy(buildOptions(vkontakte), verify))
-
-  fpass.registerUserDeserializer(async (user, req) => {
-    return user
+  fpass.registerUserSerializer(async (user: User, req) => {
+    log.info('serializer CALLED %j', user)
+    return user?.id
   })
 
-  fpass.registerUserSerializer(async (user, req) => {
-    return user
-  })
+  fpass.registerUserDeserializer(async (userId: string, req) => {
+    log.info('DEserializer CALLED %j', userId)
 
-  server.get('/',
-    async (req, res) => {
-      // @ts-ignore
-      return `👋 Hello ${req?.user?.displayName || 'Странник'} 👋`
+    const user = await getUser().byId(userId)
+    log.info('user=  %j', user)
+
+    return {
+      id: user?.id,
+      provider: user?.provider,
+      displayName: user?.displayName
     }
-  )
+  })
 
-  server.post('/auth/google', fpass.authenticate('google', { scope: ['profile'] }))
-  server.post('/auth/vk', fpass.authenticate('vk', { authInfo: false }))
+  // OAuth Google
+  server.get('/auth/google', fpass.authenticate('google', { scope: ['profile'] }))
 
   server.get('/auth/google/callback',
     { preValidation: fpass.authenticate('google', { scope: ['profile'] }) },
 
     async (req, res) => {
+      log.info('/auth/google/callback CALLED')
+
       res.redirect('/')
     }
   )
+
+  // OAuth vKontakte
+
+  server.get('/auth/vk', fpass.authenticate('vk', { authInfo: false }))
+
 
   server.get('/auth/vk/callback',
     { preValidation: fpass.authenticate('vk', { authInfo: false }) },
@@ -84,14 +96,21 @@ export function initAuth(server: FastifyInstance, config: RenkuAuthConfig, hostU
     }
   )
 
-  server.get('/login', async () => {
 
-  })
+  // server.post('/login', async (req, res) => {
+  //   if (req.user) {
+  //     res.send(req.user)
+  //     return
+  //   }
 
-  server.get('/logout',
-    async (req, res) => {
-      req.logout()
-      return { success: true }
-    }
+  //   res.redirect('/')
+  // })
+
+  server.get('/logout', async (req, res) => {
+    req.logout()
+
+    req.session.delete()
+    return res.send({ good: 'bye' })
+  }
   )
 }

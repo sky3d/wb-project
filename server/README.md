@@ -45,3 +45,11 @@ Prefix `http://localhost:3000`
 | action | method | route          |
 | ------ | ------ | -------------- |
 | create | POST   | `/api/variant` |
+
+#### Sign In
+
+| action    | method | route          |
+| --------- | ------ | -------------- |
+| google    | GET    | `/auth/google` |
+| vkontakte | GET    | `/auth/vk`     |
+| logout    | GET    | `/logout`      |

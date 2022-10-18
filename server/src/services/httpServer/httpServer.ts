@@ -6,9 +6,11 @@ import routesPlugin from '@fastify/routes'
 import sensible from '@fastify/sensible'
 import helmet from '@fastify/helmet'
 
-import { Renku, RenkuServerConfig } from '../../main'
+import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
+import { passportAuth } from './auth'
+import { RenkuServerConfig } from '../../types'
 
 export class HttpServer {
   public static kName = 'http-server'
@@ -21,8 +23,11 @@ export class HttpServer {
   constructor(parent: Renku) {
     //@ts-ignore
     this.config = parent.config.server
+
     this.log = parent.log
     this.parent = parent
+    this.log.info('== httpServer service config: %j', this.config)
+    this.log.info('== auth config: %j', this.parent.config.auth)
   }
 
   connect = async () => {
@@ -33,6 +38,7 @@ export class HttpServer {
 
     const { port, host } = this.config
     const address = await this.server.listen({ port, host })
+
     //this.log.debug('server is now listening on [%s]', address)
   }
 
@@ -48,6 +54,10 @@ export class HttpServer {
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)
+
+    const hostUrl = `http://${this.config.host}:${this.config.port}`
+
+    passportAuth(server, this.log, this.parent.config.auth, hostUrl)
 
     if (process.env.DEBUG) {
       server.addHook('preValidation', function (request, _, done) {

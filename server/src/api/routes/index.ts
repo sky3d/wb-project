@@ -22,6 +22,11 @@ const registerApiRoute = (fastify: FastifyInstance, route: FastifyPluginCallback
 export default async (fastify: FastifyInstance) => {
   fastify.setErrorHandler(errorHandler)
 
+  fastify.get('/', async (req, res) => {
+    // @ts-ignore
+    return `👋 Hello ${req?.user?.displayName || 'Странник'} 👋`
+  })
+
   fastify.register(HealthRoute)
   fastify.register(StatsRoute)
 

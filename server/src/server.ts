@@ -1,4 +1,5 @@
-import { Renku, RenkuConfig } from './main'
+import { Renku } from './main'
+import { RenkuConfig } from './types'
 
 let instance: Renku | null = null
 

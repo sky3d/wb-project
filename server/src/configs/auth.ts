@@ -15,4 +15,5 @@ export const auth = {
     }
   },
   cookieKey: process.env.COOKIE_KEY,
+  jwtSecret: 'very-long-super-mega-secret',
 }

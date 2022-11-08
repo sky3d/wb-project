@@ -8,7 +8,7 @@ const SEPARATOR = '!'
 
 export class User extends StorageService<Model> {
   public static kName = 'user'
-  static makeInnerId = (provider: string, id: string) => `${provider}${SEPARATOR}${id}`  // vkontakte!746268548 sky3ddd
+  //static makeInnerId = (provider: string, id: string) => `${provider}${SEPARATOR}${id}`  // vkontakte!746268548 sky3ddd
 
   public readonly config: any
   public readonly log: any
@@ -32,7 +32,7 @@ export class User extends StorageService<Model> {
 
   public byId = (id: Model['id']) => Model.findOne<Model>(id)
 
-  public byProvider = (providerId: Model['providerId'], provider: Model['provider']) => {
+  public byProviderId = (providerId: Model['providerId'], provider: Model['provider']) => {
     const qb = getRepository(Model)
       .createQueryBuilder('u')
       .where('u.providerId = :providerId', { providerId })
@@ -42,15 +42,17 @@ export class User extends StorageService<Model> {
   }
 
   public async authenticateOnCreate(profile: any): Promise<[Error | undefined, Model | undefined]> {
-    this.log.info('registering new user %j', profile)
     const { provider, id: providerId, displayName } = profile
 
     try {
-      const candidate = await this.byProvider(providerId, provider)
+      const candidate = await this.byProviderId(providerId, provider)
+      this.log.info({ provider, providerId }, 'user found')
 
       if (candidate) {
         return [undefined, candidate]
       }
+
+      this.log.info('registering new user %j', profile)
 
       const data: Partial<Model> = {
         providerId,
@@ -60,7 +62,7 @@ export class User extends StorageService<Model> {
       }
       const user = await this.create(data)
 
-      this.log.info('user created %s', user.id)
+      this.log.info({ user }, 'user created %s', user.id)
 
       return [undefined, user]
 

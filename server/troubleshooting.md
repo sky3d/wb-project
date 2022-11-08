@@ -9,3 +9,9 @@ Use nrok
 ### Postgress {name} relation already exits
 
 `yarn clean`
+
+
+
+### /@fastify/passport/dist/CreateInitializePlugin
+
+FastifyError: The decorator 'user' has already been added!

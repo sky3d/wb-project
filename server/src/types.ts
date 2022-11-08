@@ -1,6 +1,7 @@
 export type RenkuConfig = {
   server: RenkuServerConfig
   auth: RenkuAuthConfig
+  app: RenkuAppConfig
   //typeorm: TypeormConfig
 }
 
@@ -10,9 +11,14 @@ export interface PassportOptions {
   callbackURL: string
 }
 
+export type RenkuAppConfig = {
+  clientHost: string
+}
+
 export type RenkuAuthConfig = {
   passport: Record<string, PassportOptions>,
-  cookieKey?: string
+  cookieKey?: string,
+  jwtSecret: string,
 }
 
 export type RenkuServerConfig = {

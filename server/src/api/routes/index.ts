@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginCallback } from 'fastify'
 import { errorHandler } from '../handlers/errorHandler'
 import { HealthRoute } from './health'
 import { StatsRoute } from './stats'
+import { MeRoute } from './me'
 
 import { RengaCreate } from './renga/create'
 import { RengaUpdate } from './renga/update'
@@ -29,6 +30,7 @@ export default async (fastify: FastifyInstance) => {
 
   fastify.register(HealthRoute)
   fastify.register(StatsRoute)
+  fastify.register(MeRoute)
 
   registerApiRoute(fastify, RengaCreate)
   registerApiRoute(fastify, RengaUpdate)

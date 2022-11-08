@@ -32,10 +32,10 @@ export class User extends StorageService<Model> {
 
   public byId = (id: Model['id']) => Model.findOne<Model>(id)
 
-  public byProvider = (socialId: Model['socialId'], provider: Model['provider']) => {
+  public byProvider = (providerId: Model['providerId'], provider: Model['provider']) => {
     const qb = getRepository(Model)
       .createQueryBuilder('u')
-      .where('u.socialId = :socialId', { socialId })
+      .where('u.providerId = :providerId', { providerId })
       .andWhere('u.provider = :provider', { provider })
 
     return qb.getOne()
@@ -43,17 +43,17 @@ export class User extends StorageService<Model> {
 
   public async authenticateOnCreate(profile: any): Promise<[Error | undefined, Model | undefined]> {
     this.log.info('registering new user %j', profile)
-    const { provider, id, displayName } = profile
+    const { provider, id: providerId, displayName } = profile
 
     try {
-      const candidate = await this.byProvider(id, provider)
+      const candidate = await this.byProvider(providerId, provider)
 
       if (candidate) {
         return [undefined, candidate]
       }
 
       const data: Partial<Model> = {
-        socialId: id,
+        providerId,
         provider,
         displayName,
         profile: omit(profile, ['_raw', '_json'])

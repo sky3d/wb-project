@@ -14,13 +14,16 @@ export class User extends BaseEntity {
   public provider: string
 
   @Column({ nullable: true })
-  public socialId: string
+  public providerId: string
 
   @Column({
     name: 'display_name',
     nullable: true,
   })
   public displayName: string
+
+  @Column({ nullable: true })
+  public token: string
 
   @Column({
     name: 'profile',

@@ -9,7 +9,7 @@ import helmet from '@fastify/helmet'
 import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
-import { passportAuth } from './auth'
+import { registerPassport } from './passport'
 import { RenkuServerConfig } from '../../types'
 
 export class HttpServer {
@@ -55,9 +55,7 @@ export class HttpServer {
     server.register(formbody)
     server.register(sensible)
 
-    const hostUrl = `http://${this.config.host}:${this.config.port}`
-
-    passportAuth(server, this.log, this.parent.config.auth, hostUrl)
+    registerPassport(server, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
       server.addHook('preValidation', function (request, _, done) {

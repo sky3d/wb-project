@@ -19,6 +19,7 @@ export type RenkuAuthConfig = {
   passport: Record<string, PassportOptions>,
   cookieKey?: string,
   jwtSecret: string,
+  jwtRefreshSecret: string
 }
 
 export type RenkuServerConfig = {

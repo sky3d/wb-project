@@ -1,10 +1,10 @@
-import { head, omit } from 'lodash'
+import { head, isEmpty, omit } from 'lodash'
 import { getManager, getRepository } from 'typeorm'
 import { Renku } from '../../main'
 import { StorageService } from '../storage'
 import { User as Model } from '../../models/user'
 
-const SEPARATOR = '!'
+// const SEPARATOR = '!'
 
 export class User extends StorageService<Model> {
   public static kName = 'user'
@@ -41,7 +41,13 @@ export class User extends StorageService<Model> {
     return qb.getOne()
   }
 
-  public async authenticateOnCreate(profile: any): Promise<[Error | undefined, Model | undefined]> {
+  public async authOrStore(profile: any): Promise<[Error | undefined, Model | undefined]> {
+    this.log.info({ profile }, '-----> PASSPORT_USER')
+
+    if (isEmpty(profile)) {
+      this.log.warn('Bad user profile')
+      return [new Error('Bad profile'), undefined]
+    }
     const { provider, id: providerId, displayName } = profile
 
     try {
@@ -84,5 +90,15 @@ export class User extends StorageService<Model> {
     const result = head(res.generatedMaps) as Model
 
     return result
+  }
+  public update = async (userId: Model['id'], data: Partial<Model>): Promise<Model | undefined> => {
+    await getManager()
+      .createQueryBuilder()
+      .update(Model)
+      .set(data)
+      .where({ id: userId })
+      .execute()
+
+    return this.byId(userId)
   }
 }

@@ -30,6 +30,6 @@ declare module "fastify" {
     app: RenkuApp,
   }
   interface PassportUser {
-    displayName: string
+    id: string
   }
 }

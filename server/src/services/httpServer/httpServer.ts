@@ -5,8 +5,10 @@ import formbody from '@fastify/formbody'
 import routesPlugin from '@fastify/routes'
 import sensible from '@fastify/sensible'
 import helmet from '@fastify/helmet'
+import cookie, { FastifyCookieOptions } from '@fastify/cookie'
 
 import { Renku } from '../../main'
+import { TokenService } from './token'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
 import { registerPassport } from './passport'
@@ -19,6 +21,7 @@ export class HttpServer {
   private server: FastifyInstance
   private config: RenkuServerConfig
   private parent: Renku
+  private tokens: TokenService
 
   constructor(parent: Renku) {
     //@ts-ignore
@@ -26,6 +29,9 @@ export class HttpServer {
 
     this.log = parent.log
     this.parent = parent
+
+    this.tokens = new TokenService(parent.config.auth)
+
     this.log.info('== httpServer service config: %j', this.config)
     this.log.info('== auth config: %j', this.parent.config.auth)
   }
@@ -47,6 +53,11 @@ export class HttpServer {
   }
 
   private async initialize(server: FastifyInstance) {
+    // server.register(require('@fastify/jwt'), {
+    //   secret: this.parent.config.auth.jwtSecret,
+    // })
+
+    //registerPassport(server, this.parent.config, this.log)
     // Inject app to have all services in handlers
     server.decorate(RENKU_APP_KEY, this.parent)
 
@@ -54,8 +65,13 @@ export class HttpServer {
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)
+    server.register(cookie, {
+      secret: "my-secret", // for cookies signature
+      //hook: 'onRequest', // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
+      parseOptions: {}  // options for parsing cookies
+    } as FastifyCookieOptions)
 
-    registerPassport(server, this.parent.config, this.log)
+    registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
       server.addHook('preValidation', function (request, _, done) {

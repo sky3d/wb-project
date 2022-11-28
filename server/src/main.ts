@@ -33,6 +33,7 @@ export class Renku implements RenkuApp {
   public config: RenkuConfig
 
   constructor(options: Partial<BaseOptions> = {}) {
+    // @ts-ignore
     this.config = merge({}, Renku.defaultOpts, options)
     this.log = logger
 

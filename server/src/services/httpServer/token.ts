@@ -10,7 +10,7 @@ export class TokenService {
     this.config = config
   }
 
-  generateToken = (payload: Record<string, any>) => {
+  public generateToken = (payload: Record<string, any>) => {
     const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '30min' })
     const refreshToken = jwt.sign(payload, this.config.jwtRefreshSecret, { expiresIn: '30d' })
 
@@ -20,7 +20,7 @@ export class TokenService {
     }
   }
 
-  async saveToken(userId: string, refreshToken: string) {
+  public async saveToken(userId: string, refreshToken: string) {
     const userService = getUser()
     const user = await userService.byId(userId)
 

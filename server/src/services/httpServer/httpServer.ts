@@ -11,8 +11,8 @@ import { Renku } from '../../main'
 import { TokenService } from './token'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
-import { registerPassport } from './passport'
 import { RenkuServerConfig } from '../../types'
+import { registerOAuth } from './auth'
 
 export class HttpServer {
   public static kName = 'http-server'
@@ -71,7 +71,8 @@ export class HttpServer {
       parseOptions: {}  // options for parsing cookies
     } as FastifyCookieOptions)
 
-    registerPassport(server, this.tokens, this.parent.config, this.log)
+    await registerOAuth(server, this.parent.config)
+    //registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
       server.addHook('preValidation', function (request, _, done) {

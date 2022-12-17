@@ -7,8 +7,10 @@ import { User as Model } from '../../models/user'
 // const SEPARATOR = '!'
 
 export class User extends StorageService<Model> {
+  // vkontakte:746268548
+  public static buildSocialId = (provider: string, userId: string) => `${provider}:${userId}`
   public static kName = 'user'
-  //static makeInnerId = (provider: string, id: string) => `${provider}${SEPARATOR}${id}`  // vkontakte!746268548 sky3ddd
+
 
   public readonly config: any
   public readonly log: any

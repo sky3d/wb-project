@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { auth as authConfig } from '../../configs/auth'
 import { RenkuAuthConfig } from '../../types'
-import { getUser } from '../user'
 
 export class TokenService {
   private config: RenkuAuthConfig
@@ -21,12 +20,13 @@ export class TokenService {
   }
 
   public async saveToken(userId: string, refreshToken: string) {
-    const userService = getUser()
-    const user = await userService.byId(userId)
+    //const userService = getUser()
 
-    if (user?.token) {
-      await userService.update(userId, { token: refreshToken })
-    }
+    // const user = await userService.byId(userId)
+
+    // if (user?.token) {
+    //   await userService.update(userId, { token: refreshToken })
+    // }
   }
 
   // verifyToken = async (token) => {

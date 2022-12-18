@@ -9,9 +9,10 @@ export class TokenService {
   constructor(config: RenkuAuthConfig) {
     this.config = config
   }
+  private byUserId = (userId: Model['userId']) => Model.findOne<Model>({ userId })
 
   public generateTokens = (payload: Record<string, any>) => {
-    const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '30min' })
+    const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '15min' })
     const refreshToken = jwt.sign(payload, this.config.jwtRefreshSecret, { expiresIn: '30d' })
 
     return {
@@ -29,14 +30,18 @@ export class TokenService {
     }
 
     const created = await Model.create({ id: shortid(), userId, refreshToken })
+
     return created.save()
   }
 
-  private byUserId = (userId: Model['userId']) => Model.findOne<Model>({ userId })
-  // verifyToken = async (token) => {
-  //   try {
-  //     //await req.jwtVerify()
-  //   } catch (err) {
-  //   }
-  // }
+
+  public verifyToken(accessToken: string) {
+    try {
+      const data = jwt.verify(accessToken, this.config.jwtSecret)
+      return data
+
+    } catch (err) {
+      return null
+    }
+  }
 }

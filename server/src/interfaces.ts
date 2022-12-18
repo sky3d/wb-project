@@ -86,5 +86,11 @@ export interface Variant extends VerseNumberedEntity {
   author: string,
 }
 
+export interface UserMeta {
+  id: string,
+  name: string,
+  avatar: string,
+}
+
 export type UserProfile = Record<string, any>;
 // TODO comment  varintLike

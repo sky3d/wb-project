@@ -5,14 +5,9 @@ import { StorageService } from '../storage'
 import { User as Model } from '../../models/user'
 import { TokenService } from './token'
 import { assert } from 'console'
-import { UserProfile } from '../../interfaces'
+import { UserMeta, UserProfile } from '../../interfaces'
 
-interface SocialUser {
-  id: string,
-  name: string,
-}
-
-class UserDto implements SocialUser {
+class UserDto implements UserMeta {
   id: string
   name: string
   avatar: string
@@ -88,11 +83,16 @@ export class User extends StorageService<Model> {
     return created
   }
 
+  public getMeta(accessToken: string) {
+    const res = this.tokens.verifyToken(accessToken)
+    return res
+  }
+
   public async authOrStore(profile: UserProfile) {
     if (isEmpty(profile)) {
       return new Error('Bad user profile')
     }
-    this.log.info({ profile }, '-----> PROFILE')
+    this.log.info({ profile }, 'PROFILE')
 
     const user = await this.ensureUserCreated(profile)
     assert(user)
@@ -103,8 +103,8 @@ export class User extends StorageService<Model> {
     await this.tokens.saveToken(user.id, tokens.refreshToken)
 
     return {
-      ...tokens,
       user: userDto,
+      ...tokens,
     }
   }
 

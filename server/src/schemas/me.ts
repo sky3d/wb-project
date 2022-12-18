@@ -1,15 +1,15 @@
+import { errorSchemas } from './errors'
+
 export const schema = {
-  type: 'object',
-  properties: {
-    token: { type: 'string' },
-  },
   response: {
     200: {
       type: 'object',
+      additionalProperties: true,
       properties: {
-        user: { type: 'object' },
-        token: { type: 'string' },
-      }
+        id: { type: 'string' },
+        name: { type: 'string' },
+        avatar: { type: 'string' },
+      },
     }
   }
 }

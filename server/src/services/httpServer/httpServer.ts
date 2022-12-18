@@ -8,7 +8,6 @@ import helmet from '@fastify/helmet'
 import cookie, { FastifyCookieOptions } from '@fastify/cookie'
 
 import { Renku } from '../../main'
-import { TokenService } from './token'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
 import { RenkuServerConfig } from '../../types'
@@ -30,8 +29,7 @@ export class HttpServer {
     this.log = parent.log
     this.parent = parent
 
-    const tokens = new TokenService(parent.config.auth)
-    this.auth = new AuthController(tokens, parent.config)
+    this.auth = new AuthController(parent.config)
 
     this.log.info('== httpServer service config: %j', this.config)
     this.log.info('== auth config: %j', this.parent.config.auth)

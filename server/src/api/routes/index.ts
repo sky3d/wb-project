@@ -25,7 +25,7 @@ export default async (fastify: FastifyInstance) => {
 
   fastify.get('/', async (req, res) => {
     // @ts-ignore
-    return `👋 Hello ${req?.user?.displayName || 'Странник'} 👋`
+    return `👋 Hello ${req?.user?.name || 'Странник'} 👋`
   })
 
   fastify.register(HealthRoute)

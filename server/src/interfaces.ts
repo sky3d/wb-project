@@ -86,4 +86,5 @@ export interface Variant extends VerseNumberedEntity {
   author: string,
 }
 
+export type UserProfile = Record<string, any>;
 // TODO comment  varintLike

@@ -1,6 +1,7 @@
+import shortid from 'shortid'
 import jwt from 'jsonwebtoken'
-import { auth as authConfig } from '../../configs/auth'
 import { RenkuAuthConfig } from '../../types'
+import { Token as Model } from '../../models/token'
 
 export class TokenService {
   private config: RenkuAuthConfig
@@ -9,7 +10,7 @@ export class TokenService {
     this.config = config
   }
 
-  public generateToken = (payload: Record<string, any>) => {
+  public generateTokens = (payload: Record<string, any>) => {
     const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '30min' })
     const refreshToken = jwt.sign(payload, this.config.jwtRefreshSecret, { expiresIn: '30d' })
 
@@ -20,15 +21,18 @@ export class TokenService {
   }
 
   public async saveToken(userId: string, refreshToken: string) {
-    //const userService = getUser()
+    const token = await this.byUserId(userId)
 
-    // const user = await userService.byId(userId)
+    if (token) {
+      token.refreshToken = refreshToken
+      return token.save()
+    }
 
-    // if (user?.token) {
-    //   await userService.update(userId, { token: refreshToken })
-    // }
+    const created = await Model.create({ id: shortid(), userId, refreshToken })
+    return created.save()
   }
 
+  private byUserId = (userId: Model['userId']) => Model.findOne<Model>({ userId })
   // verifyToken = async (token) => {
   //   try {
   //     //await req.jwtVerify()

@@ -4,8 +4,8 @@ import { AbstractBaseEntity } from './baseEntity'
 @Entity()
 export class Token extends AbstractBaseEntity {
     @Index()
-    @Column({ name: 'social_id' })
-    public socialId: string
+    @Column({ name: 'user_id' })
+    public userId: string
 
     @Column({ name: 'refresh_token' })
     public refreshToken: string

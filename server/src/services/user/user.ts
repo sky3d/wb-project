@@ -3,9 +3,26 @@ import { getManager, getRepository } from 'typeorm'
 import { Renku } from '../../main'
 import { StorageService } from '../storage'
 import { User as Model } from '../../models/user'
+import { TokenService } from './token'
+import { assert } from 'console'
+import { UserProfile } from '../../interfaces'
 
-// const SEPARATOR = '!'
+interface SocialUser {
+  id: string,
+  name: string,
+}
 
+class UserDto implements SocialUser {
+  id: string
+  name: string
+  avatar: string
+
+  constructor(user: Model) {
+    this.id = user.id
+    this.name = user.name
+    this.avatar = user.avatar
+  }
+}
 export class User extends StorageService<Model> {
   // vkontakte:746268548
   public static buildSocialId = (provider: string, userId: string) => `${provider}:${userId}`
@@ -14,6 +31,7 @@ export class User extends StorageService<Model> {
 
   public readonly config: any
   public readonly log: any
+  private tokens: TokenService
 
   constructor(parent: Renku) {
     super()
@@ -21,6 +39,9 @@ export class User extends StorageService<Model> {
     this.log = parent.log.child({ module: '@user' })
     //@ts-ignore
     this.config = parent.config
+
+    this.tokens = new TokenService(parent.config.auth)
+
     this.log.info('user service created')
   }
 
@@ -34,48 +55,56 @@ export class User extends StorageService<Model> {
 
   public byId = (id: Model['id']) => Model.findOne<Model>(id)
 
-  public byProviderId = (providerId: Model['providerId'], provider: Model['provider']) => {
+  public byProviderId = (providerId: Model['providerId']) => {
     const qb = getRepository(Model)
       .createQueryBuilder('u')
       .where('u.providerId = :providerId', { providerId })
-      .andWhere('u.provider = :provider', { provider })
 
     return qb.getOne()
   }
 
-  public async authOrStore(profile: any): Promise<[Error | undefined, Model | undefined]> {
-    this.log.info({ profile }, '-----> PASSPORT_USER')
+  private async ensureUserCreated(profile: any): Promise<Model> {
+    const { provider, id, name, picture } = profile || {}
 
-    if (isEmpty(profile)) {
-      this.log.warn('Bad user profile')
-      return [new Error('Bad profile'), undefined]
+    const providerId = User.buildSocialId(provider, id)
+
+    const user = await this.byProviderId(providerId)
+
+    if (user) {
+      this.log.info({ userId: user.id }, 'existing user found')
+      return user
     }
-    const { provider, id: providerId, displayName } = profile
 
-    try {
-      const candidate = await this.byProviderId(providerId, provider)
-      this.log.info({ provider, providerId }, 'user found')
+    this.log.info('registering new user %j', profile)
 
-      if (candidate) {
-        return [undefined, candidate]
-      }
+    const data: Partial<Model> = {
+      name,
+      avatar: picture,
+      providerId,
+      profile: omit(profile, ['_raw', '_json'])
+    }
 
-      this.log.info('registering new user %j', profile)
+    const created = await this.create(data)
+    return created
+  }
 
-      const data: Partial<Model> = {
-        providerId,
-        provider,
-        displayName,
-        profile: omit(profile, ['_raw', '_json'])
-      }
-      const user = await this.create(data)
+  public async authOrStore(profile: UserProfile) {
+    if (isEmpty(profile)) {
+      return new Error('Bad user profile')
+    }
+    this.log.info({ profile }, '-----> PROFILE')
 
-      this.log.info({ user }, 'user created %s', user.id)
+    const user = await this.ensureUserCreated(profile)
+    assert(user)
 
-      return [undefined, user]
+    const userDto = new UserDto(user)
+    const tokens = this.tokens.generateTokens({ ...userDto })
 
-    } catch (e) {
-      return [e as Error, undefined]
+    await this.tokens.saveToken(user.id, tokens.refreshToken)
+
+    return {
+      ...tokens,
+      user: userDto,
     }
   }
 

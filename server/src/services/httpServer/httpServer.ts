@@ -5,7 +5,8 @@ import formbody from '@fastify/formbody'
 import routesPlugin from '@fastify/routes'
 import sensible from '@fastify/sensible'
 import helmet from '@fastify/helmet'
-import cookie, { FastifyCookieOptions } from '@fastify/cookie'
+import type { FastifyCookieOptions } from '@fastify/cookie'
+import cookie from '@fastify/cookie'
 
 import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
@@ -64,10 +65,10 @@ export class HttpServer {
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)
+
     server.register(cookie, {
-      secret: "my-secret", // for cookies signature
-      //hook: 'onRequest', // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
-      parseOptions: {}  // options for parsing cookies
+      secret: "my-secret-for-cookie", // for cookies signature
+      parseOptions: {}     // options for parsing cookies
     } as FastifyCookieOptions)
 
     await this.auth.register(server)

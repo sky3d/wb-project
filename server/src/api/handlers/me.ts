@@ -21,6 +21,8 @@ export const handler = async (app: RenkuApp, req: FastifyRequest, reply: Fastify
 
   const user = app.user.getMeta(accessToken)
 
+
+
   reply
     // .type('application/json')
     .code(OK)

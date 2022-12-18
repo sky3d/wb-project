@@ -5,6 +5,7 @@ import { FastifyInstance } from 'fastify'
 import { RenkuAuthConfig, RenkuConfig } from '../../types'
 import { getUser } from '../user'
 import { UserProfile } from '../../interfaces'
+import { BAD_REQUEST } from '../../utils/http'
 
 export class AuthController {
   private authConfig: RenkuAuthConfig
@@ -45,12 +46,26 @@ export class AuthController {
         }
       }).json()
 
-      const userData = await getUser().authOrStore({
-        ...profile,
-        provider: 'google'
-      })
+      const userMeta = await getUser().authOrStore({ ...profile, provider: 'google' })
 
-      reply.send(userData)
+      if (!userMeta) {
+        reply
+          .code(BAD_REQUEST)
+          .send('Auth error')
+        return
+      }
+
+      console.log('---> SUCCESS LOGIN', userMeta)
+      reply
+        .setCookie('renga-jwt', JSON.stringify(userMeta), {
+          domain: 'localhost:3000',
+          path: '/',
+          // signed: true
+        })
+        .send({ ...userMeta })  // SERVER
+
+      // .code(302)
+      // .redirect(process.env.CLIENT_HOST || '__unknown__')
     })
   }
 }

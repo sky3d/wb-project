@@ -28,8 +28,13 @@ export type ConnectorContainer = {
 declare module "fastify" {
   interface FastifyInstance {
     app: RenkuApp,
+    googleOAuth2: FastifyOauth2,
   }
-  interface PassportUser {
-    displayName: string
+  // interface PassportUser {
+  //   id: string
+  // }
+
+  interface FastifyRequest {
+    user: any
   }
 }

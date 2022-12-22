@@ -4,6 +4,7 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import { UserProfile } from '../interfaces'
 
 @Entity()
 export class User extends BaseEntity {
@@ -11,21 +12,18 @@ export class User extends BaseEntity {
   public id: string
 
   @Column({ nullable: true })
-  public provider: string
+  public name: string
 
   @Column({ nullable: true })
-  public socialId: string
+  public avatar: string
 
-  @Column({
-    name: 'display_name',
-    nullable: true,
-  })
-  public displayName: string
+  @Column({ name: 'provider_id', nullable: true })
+  public providerId: string
 
   @Column({
     name: 'profile',
     nullable: true,
     type: 'jsonb',
   })
-  public profile: Record<string, any>
+  public profile: UserProfile
 }

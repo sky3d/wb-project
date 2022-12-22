@@ -3,6 +3,7 @@ import { merge } from 'lodash'
 import { BaseOptions, PluginConnector, RenkuApp } from './module'
 import { envConfig } from './configs/server'
 import { auth as authConfig } from './configs/auth'
+import { app as appConfig } from './configs/app'
 import { typeorm } from './utils/typeorm'
 import { logger } from './utils/logger'
 
@@ -19,7 +20,8 @@ export class Renku implements RenkuApp {
     server: {
       host: envConfig.HOST, port: envConfig.PORT
     },
-    auth: authConfig
+    auth: authConfig,
+    app: appConfig
   }
 
   public readonly log: any
@@ -31,6 +33,7 @@ export class Renku implements RenkuApp {
   public config: RenkuConfig
 
   constructor(options: Partial<BaseOptions> = {}) {
+    // @ts-ignore
     this.config = merge({}, Renku.defaultOpts, options)
     this.log = logger
 

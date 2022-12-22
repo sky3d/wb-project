@@ -9,8 +9,8 @@ import helmet from '@fastify/helmet'
 import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
-import { passportAuth } from './auth'
 import { RenkuServerConfig } from '../../types'
+import { AuthController } from './auth'
 
 export class HttpServer {
   public static kName = 'http-server'
@@ -19,6 +19,7 @@ export class HttpServer {
   private server: FastifyInstance
   private config: RenkuServerConfig
   private parent: Renku
+  private auth: AuthController
 
   constructor(parent: Renku) {
     //@ts-ignore
@@ -26,6 +27,9 @@ export class HttpServer {
 
     this.log = parent.log
     this.parent = parent
+
+    this.auth = new AuthController(parent.config)
+
     this.log.info('== httpServer service config: %j', this.config)
     this.log.info('== auth config: %j', this.parent.config.auth)
   }
@@ -47,6 +51,11 @@ export class HttpServer {
   }
 
   private async initialize(server: FastifyInstance) {
+    // server.register(require('@fastify/jwt'), {
+    //   secret: this.parent.config.auth.jwtSecret,
+    // })
+
+    //registerPassport(server, this.parent.config, this.log)
     // Inject app to have all services in handlers
     server.decorate(RENKU_APP_KEY, this.parent)
 
@@ -55,9 +64,8 @@ export class HttpServer {
     server.register(formbody)
     server.register(sensible)
 
-    const hostUrl = `http://${this.config.host}:${this.config.port}`
-
-    passportAuth(server, this.log, this.parent.config.auth, hostUrl)
+    await this.auth.register(server)
+    //registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
       server.addHook('preValidation', function (request, _, done) {

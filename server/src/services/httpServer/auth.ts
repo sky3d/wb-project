@@ -9,8 +9,6 @@ import { RenkuAuthConfig, RenkuConfig } from '../../types'
 import { getUser } from '../user'
 import { UserProfile } from '../../interfaces'
 import { BAD_REQUEST } from '../../utils/http'
-import { throws } from 'assert'
-import { runInThisContext } from 'vm'
 import { isEmpty } from 'lodash'
 
 export class AuthController {

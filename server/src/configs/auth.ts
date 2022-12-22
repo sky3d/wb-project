@@ -14,7 +14,7 @@ export const auth = {
       callbackURL: `/auth/${VKONTAKTE_PROVIDER}/callback`,
     }
   },
-  cookieKey: process.env.COOKIE_KEY,
-  jwtSecret: process.env.JWT_ACCESS_SECRET,
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
+  cookieKey: process.env.COOKIE_KEY || 'wb-renga-jwt',
+  jwtSecret: process.env.JWT_ACCESS_SECRET || 'my-very-long-strong-super-secret',
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'change-my-very-long-strong-super-secret',
 }

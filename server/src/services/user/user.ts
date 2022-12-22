@@ -7,17 +7,11 @@ import { TokenService } from './token'
 import { assert } from 'console'
 import { UserMeta, UserProfile } from '../../interfaces'
 
-class UserDto implements UserMeta {
-  id: string
-  name: string
-  avatar: string
-
-  constructor(user: Model) {
-    this.id = user.id
-    this.name = user.name
-    this.avatar = user.avatar
-  }
-}
+const mapUser = (user: Model) => ({
+  id: user.id,
+  name: user.name,
+  avatar: user.avatar,
+})
 export class User extends StorageService<Model> {
   // vkontakte:746268548
   public static buildSocialId = (provider: string, userId: string) => `${provider}:${userId}`
@@ -83,21 +77,18 @@ export class User extends StorageService<Model> {
     return created
   }
 
-  public getMeta(accessToken: string) {
+  public getMeta(accessToken: string): UserMeta {
     const res = this.tokens.verifyToken(accessToken)
-    return res
+    return res as UserMeta
   }
 
-  public async authOrStore(profile: UserProfile) {
-    if (isEmpty(profile)) {
-      return new Error('Bad user profile')
-    }
+  public async authOrStore(profile: UserProfile): Promise<UserMeta> {
     this.log.info({ profile }, 'PROFILE')
 
     const user = await this.ensureUserCreated(profile)
     assert(user)
 
-    const userDto = new UserDto(user)
+    const userDto = mapUser(user)
     const tokens = this.tokens.generateTokens({ ...userDto })
 
     await this.tokens.saveToken(user.id, tokens.refreshToken)

@@ -5,8 +5,6 @@ import formbody from '@fastify/formbody'
 import routesPlugin from '@fastify/routes'
 import sensible from '@fastify/sensible'
 import helmet from '@fastify/helmet'
-import type { FastifyCookieOptions } from '@fastify/cookie'
-import cookie from '@fastify/cookie'
 
 import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
@@ -65,11 +63,6 @@ export class HttpServer {
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)
-
-    server.register(cookie, {
-      secret: "my-secret-for-cookie", // for cookies signature
-      parseOptions: {}     // options for parsing cookies
-    } as FastifyCookieOptions)
 
     await this.auth.register(server)
     //registerPassport(server, this.tokens, this.parent.config, this.log)

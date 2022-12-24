@@ -14,11 +14,13 @@ export default async (fastify: FastifyInstance) => {
   })
 
   HealthRoute(fastify)
-  StatsRoute(fastify)
-  MeRoute(fastify)
+  // authorized toutes
+  const AUTH_REQUIRED = { onRequest: [fastify.authenticate] }
 
-  // TODO authenticate
-  registerApiRoutes(fastify)
+  StatsRoute(fastify, AUTH_REQUIRED)
+  MeRoute(fastify, AUTH_REQUIRED)
 
-  fastify.log.info('routes registered')
+  registerApiRoutes(fastify, AUTH_REQUIRED)
+
+  fastify.log.info({ routes: fastify.routes }, 'routes registered')
 }

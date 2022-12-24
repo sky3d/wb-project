@@ -13,11 +13,11 @@ import { VariantCreate } from './variant/create'
 
 const API_PREFIX = { prefix: '/api' }
 
-export default async (fastify: FastifyInstance) => {
+export default async (fastify: FastifyInstance, options: Record<string, any>) => {
 
   fastify.register(function (app, _, done) {
-    RengaCreate(app)
-    RengaUpdate(app)
+    RengaCreate(app, options)
+    RengaUpdate(app, options)
     RengaList(app)
     RengaVerses(app)
     VerseCreate(app)

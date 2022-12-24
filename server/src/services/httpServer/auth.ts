@@ -1,16 +1,12 @@
 import got from 'got'
 import { fastifyOauth2 } from '@fastify/oauth2'
 
-import { FastifyInstance } from 'fastify'
-import type { FastifyCookieOptions } from '@fastify/cookie'
-import cookie from '@fastify/cookie'
+import { FastifyInstance, FastifyReply } from 'fastify'
 
 import { RenkuAuthConfig, RenkuConfig } from '../../types'
 import { getUser } from '../user'
 import { UserProfile } from '../../interfaces'
 import { BAD_REQUEST } from '../../utils/http'
-import { throws } from 'assert'
-import { runInThisContext } from 'vm'
 import { isEmpty } from 'lodash'
 
 export class AuthController {
@@ -22,9 +18,37 @@ export class AuthController {
     this.domain = `http://${config.server.host}:${config.server.port}`
   }
 
+  private async setCookie(reply: FastifyReply, data: string, clear: boolean) {
+    const { hostname } = new URL(this.domain)
+
+    const now = new Date()
+    const dt = new Date(now)
+    const diff = clear ? -15 : 15
+    dt.setMinutes(now.getMinutes() + diff)
+
+    reply
+      .setCookie(
+        this.authConfig.cookieKey,
+        data || '', {
+        domain: hostname,
+        path: '/',
+        signed: true,
+        httpOnly: true,
+        expires: dt
+      })
+      .code(302)
+      .redirect(process.env.CLIENT_HOST || '/')
+  }
+
   public register(fastify: FastifyInstance) {
-    const { providers: { google }, cookieKey } = this.authConfig
-    const hostname = new URL(this.domain).hostname
+    const { providers: { google } } = this.authConfig
+    const self = this
+
+    fastify.get('/logout', function (_, reply) {
+      self.setCookie(reply, '', true)
+    })
+
+    // Google
 
     fastify.register(fastifyOauth2, {
       name: 'googleOAuth2',
@@ -40,13 +64,8 @@ export class AuthController {
       callbackUri: `${this.domain}${google.callbackURL}`
     })
 
-    fastify.register(cookie, {
-      secret: "my-secret-for-cookie", // for cookies signature
-      hook: 'onRequest',
-      parseOptions: {}     // options for parsing cookies
-    } as FastifyCookieOptions)
-
     fastify.get('/auth/google/callback', async function (request, reply) {
+      // @ts-ignore
       const { token } = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
 
       // TODO refactor!
@@ -69,16 +88,7 @@ export class AuthController {
         return
       }
 
-      reply
-        .setCookie(cookieKey, userMeta.accessToken, {
-          domain: hostname,
-          path: '/',
-          signed: true,
-          httpOnly: true
-        })
-        //.send(userMeta)
-        .code(302)
-        .redirect(process.env.CLIENT_HOST || '/')
+      await self.setCookie(reply, userMeta.accessToken, false)
     })
   }
 }

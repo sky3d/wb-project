@@ -12,8 +12,12 @@ export class TokenService {
   private byUserId = (userId: Model['userId']) => Model.findOne<Model>({ userId })
 
   public generateTokens = (payload: Record<string, any>) => {
-    const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '15min' })
+    const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '30min' })
     const refreshToken = jwt.sign(payload, this.config.jwtRefreshSecret, { expiresIn: '30d' })
+
+    const ver = jwt.verify(accessToken, this.config.jwtSecret)
+    // console.log('ACC_TOKEN', accessToken)
+    // console.log('VERIFIED', ver)
 
     return {
       accessToken,
@@ -41,6 +45,7 @@ export class TokenService {
       return data
 
     } catch (err) {
+      console.log('BAD_TOKEN', err)
       return null
     }
   }

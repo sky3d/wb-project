@@ -15,6 +15,7 @@ export const auth = {
     }
   },
   cookieKey: process.env.COOKIE_KEY || 'wb-renga-jwt',
+  cookieSecret: process.env.COOKIE_SECRET || 'my-secret-for-cookie',
   jwtSecret: process.env.JWT_ACCESS_SECRET || 'my-very-long-strong-super-secret',
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'change-my-very-long-strong-super-secret',
 }

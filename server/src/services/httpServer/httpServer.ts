@@ -1,16 +1,19 @@
-import Fastify, { FastifyInstance } from 'fastify'
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import cors from '@fastify/cors'
 import favicon from 'fastify-favicon'
 import formbody from '@fastify/formbody'
 import routesPlugin from '@fastify/routes'
 import sensible from '@fastify/sensible'
 import helmet from '@fastify/helmet'
+import type { FastifyCookieOptions } from '@fastify/cookie'
+import cookie from '@fastify/cookie'
 
 import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
 import { RenkuServerConfig } from '../../types'
 import { AuthController } from './auth'
+import { authorizeUser } from './authUser'
 
 export class HttpServer {
   public static kName = 'http-server'
@@ -63,6 +66,17 @@ export class HttpServer {
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)
+
+    // Authorization
+
+    server.decorateRequest('user', '')
+    server.decorate("authenticate", authorizeUser)
+
+    server.register(cookie, {
+      secret: this.parent.config.auth.cookieSecret,
+      hook: 'onRequest',
+      parseOptions: {}     // options for parsing cookies
+    } as FastifyCookieOptions)
 
     await this.auth.register(server)
     //registerPassport(server, this.tokens, this.parent.config, this.log)

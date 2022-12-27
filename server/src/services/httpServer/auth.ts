@@ -33,7 +33,7 @@ export class AuthController {
         domain: hostname,
         path: '/',
         signed: true,
-        httpOnly: true,
+        // httpOnly: true,  // allow to read from client
         expires: dt
       })
       .code(302)

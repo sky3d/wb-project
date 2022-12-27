@@ -13,10 +13,7 @@ export const generateUID = (): string => {
 }
 
 export function getCookie(name: string) {
-  // eslint-disable-next-line no-useless-escape
-  const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'))
-
-  return matches ? decodeURIComponent(matches[1]) : undefined
+  return document.cookie.match(name)
 }
 
 export const getDateObj = (dtStr: string): {} => {

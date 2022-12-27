@@ -47,7 +47,7 @@ export enum VerseTopic {
 }
 
 export enum VerseFormat {
-  //OneLine = 1,
+  // OneLine = 1,
   TwoLines = 2,
   ThreeLines = 3
 }

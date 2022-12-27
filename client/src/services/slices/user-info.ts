@@ -1,19 +1,28 @@
 /** @module userInfoReducer */
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
+import { getCookie } from '../../utils/funcs'
+import { authRequest, runRequest } from '../api'
 
 
 import { RootState } from '../store'
 import { setLoginVisible } from './app-info'
 
+
+
+
+// export const updateRenga = createAsyncThunk('rengaStore/updateRenga', async (objRenga: {}, thunkApi) => {
+//   await runRequest(`renga/${objRenga.id}`, 'POST', objRenga, 'updateRenga')
+// })
+
 export const loginUser = createAsyncThunk('userInfoReducer/getUserInfo', async (ruid, thunkApi) => {
   // let ruid = getCookie('ruid')
-  console.log(ruid)
-  thunkApi.dispatch(setLoginVisible(false))
+  await authRequest('/auth/google', 'GET', {}, '', '')
+  console.log('getCookie wb-renga-jwt)', getCookie('wb-renga-jwt'))
 
-  return true
+  return getCookie('wb-renga-jwt')
 })
 
-const initUerInfoState = { auth: true, ownerId: '4444' }
+const initUerInfoState = { auth: false, ownerId: null }
 
 export const userInfoReducer = createSlice({
   name: 'userInfo',
@@ -25,10 +34,11 @@ export const userInfoReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.auth = action.payload
-    })
-    builder.addCase(loginUser.rejected, (state, action) => {
-      console.log('Ошибка аторизации')
+      if (action.payload?.input) {
+        state.auth = true
+        localStorage.setItem('accesToken', action.payload.input.split('=')[1])
+        document.cookie = `wb-renga-jwt=${''}`
+      }
     })
   }
 })

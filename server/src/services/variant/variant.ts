@@ -8,13 +8,14 @@ export class Variant extends StorageService<Model> {
   public static kName = 'variant'
 
   public readonly config: any
+
   public readonly log: any
 
   constructor(parent: Renku) {
     super()
 
     this.log = parent.log.child({ module: '@variant' })
-    //@ts-ignore
+    // @ts-ignore
     this.config = parent.config
     this.log.info('variant service created')
   }
@@ -55,6 +56,5 @@ export class Variant extends StorageService<Model> {
       .orderBy('v.created_at')
 
     return qb.getMany()
-
   }
 }

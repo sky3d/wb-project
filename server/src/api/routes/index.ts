@@ -8,10 +8,7 @@ import registerApiRoutes from './apiRoutes'
 export default async (fastify: FastifyInstance) => {
   fastify.setErrorHandler(errorHandler)
 
-  fastify.get('/', async (req, res) => {
-    // @ts-ignore
-    return `👋 Hello ${req?.user?.name || 'Странник'} 👋`
-  })
+  fastify.get('/', async (req, res) => `👋 Hello ${req?.user?.name || 'Странник'} 👋`)
 
   HealthRoute(fastify)
   // authorized toutes

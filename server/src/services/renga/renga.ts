@@ -8,13 +8,14 @@ export class Renga extends StorageService<Model> {
   public static kName = 'renga'
 
   public readonly config: any
+
   public readonly log: any
 
   constructor(parent: Renku) {
     super()
 
     this.log = parent.log.child({ module: '@renga' })
-    //@ts-ignore
+    // @ts-ignore
     this.config = parent.config
     this.log.info('renga service created')
   }

@@ -81,7 +81,7 @@ export const VerseItem: FC<TVerseItem> = ({ item, topiksIdx, topiksCb, vnumber }
 
       {topiksIdx !== item.id && item.topics && <ul className="flex gap-1 align-baseline flex-wrap">{item.topics.map((x, tidx) => (
         <li className="flex border gap-1  h-6 pl-1 overflow-hidden" style={{
-          background: '#fff',
+          background: '#ffffff38',
           borderRadius: 5,
           boxShadow: '2px 2px 2px 0px #666'
         }} key={`tag${item.id}${tidx}`} >

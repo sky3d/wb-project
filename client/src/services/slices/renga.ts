@@ -10,87 +10,38 @@ import { selectOwnerId } from './user-info'
 export const createRenga = createAsyncThunk('rengaStore/createRenga', async (objRenga: {}, thunkApi) => {
   const state: RootState = thunkApi.getState()
   const owner = selectOwnerId(state)
-  // const response = await runRequest('renga', 'POST', { ...objRenga, owner, options: { index: 5, sabaki: 'greg.rabota@gmail.com' } })
-  const response = await runRequest('renga', 'POST', { ...objRenga, owner, status: 1, options: {} })
-  const data = await response.json()
 
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
+  const data = await runRequest('renga', 'POST', { ...objRenga, owner, status: 1, options: {} }, 'createRenga')
 
   thunkApi.dispatch(setCurrentPage(1))
 
   return data
 })
 
-export const updateRenga = createAsyncThunk('rengaStore/updateRenga', async (objRenga: {}, thunkApi) => {
-  const response = await runRequest(`renga/${objRenga.id}`, 'POST', objRenga)
-  const data = await response.json()
+export const updateRenga = createAsyncThunk('rengaStore/updateRenga', async (objRenga: {}, thunkApi) => { await runRequest(`renga/${objRenga.id}`, 'POST', objRenga, 'updateRenga') })
 
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
+export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async () => await runRequest('renga/list', 'GET'))
 
-  return data
-})
-
-export const getRengaList = createAsyncThunk('rengaStore/getRengaList', async () => {
-  const response = await runRequest('renga/list', 'GET')
-  const data = await response.json()
-
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
-
-  return data
-})
-
-export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (rengaId: string, _thunkApi) => {
-  const response = await runRequest(`renga/${rengaId}/verses`, 'GET')
-  const data = await response.json()
-
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
-  // console.log('data', data)
-  // const data: TVerse[] | [] = []
-
-  return data
-})
+export const getRengaVerses = createAsyncThunk('rengaStore/getRengaVerses', async (rengaId: string, _thunkApi) => await runRequest(`renga/${rengaId}/verses`, 'GET'))
 
 type TAddVerseInRengaOptions = {
   id: string
   verse: TVerse
 }
 export const addVerseInRenga = createAsyncThunk('rengaStore/addVerseInRenga', async (tmp: TAddVerseInRengaOptions, _thunkApi) => {
-  const response = await runRequest('verse', 'POST', { ...tmp.verse, rengaId: tmp.id })
-  const data = await response.json()
-
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
+  const data = await runRequest('verse', 'POST', { ...tmp.verse, rengaId: tmp.id }, 'addVerseInRenga')
 
   return { ...tmp.verse, id: data.id }
 })
 
 export const editVerse = createAsyncThunk('rengaStore/editVerse', async (tmp: TAddVerseInRengaOptions, _thunkApi) => {
-  const response = await runRequest(`verse/${tmp.id}`, 'POST', tmp.verse)
-  const data = await response.json()
-
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
+  await runRequest(`verse/${tmp.id}`, 'POST', tmp.verse)
 
   return tmp.verse
 })
 
 export const deletVerse = createAsyncThunk('rengaStore/deletVerse', async (verseId: string, _thunkApi) => {
-  const response = await runRequest(`verse/${verseId}`, 'DELETE')
-  const data = await response.json()
-
-  if (data.error) {
-    throw new Error(`${errorResponsString} ${data.error}`)
-  }
+  await runRequest(`verse/${verseId}`, 'DELETE')
 
   return verseId
 })
@@ -121,10 +72,6 @@ export type TInitRengaStore = {
 
 const initRengaDataState: TInitRengaStore = { rawData: undefined, currentRenga: null, verses: [] }
 
-export const rejectedAsyncThunk = (_state: any, action: any) => {
-  console.log(action.error.message)
-}
-
 export const rengaStore = createSlice({
   name: 'rengaStore',
   initialState: initRengaDataState,
@@ -134,34 +81,35 @@ export const rengaStore = createSlice({
     }
   },
   extraReducers: (builder) => {
+    const rejectedAsyncThunk = (asyncFunctionName: any, cb?: Function = (_state: any, action: any) => {
+      console.log(action.error.message)
+    }) => {
+      builder.addCase(asyncFunctionName.rejected, cb)
+    }
+
+    rejectedAsyncThunk(getRengaList)
+    rejectedAsyncThunk(createRenga)
+    rejectedAsyncThunk(getRengaVerses)
+    rejectedAsyncThunk(addVerseInRenga)
+    rejectedAsyncThunk(editVerse)
+    rejectedAsyncThunk(deletVerse)
+    rejectedAsyncThunk(updateRenga)
+
     builder.addCase(getRengaList.fulfilled, (state, action: PayloadAction<TReangaList>): void => {
       state.rawData = action.payload
     })
-    builder.addCase(getRengaList.rejected, rejectedAsyncThunk)
-
-    builder.addCase(createRenga.rejected, rejectedAsyncThunk)
-
     builder.addCase(getRengaVerses.fulfilled, (state, action: PayloadAction<TVerse[]>): void => {
       state.verses = action.payload
     })
-    builder.addCase(getRengaVerses.rejected, rejectedAsyncThunk)
-
     builder.addCase(addVerseInRenga.fulfilled, (state, action: PayloadAction<TVerse>): void => {
       state.verses.push(action.payload)
     })
-    builder.addCase(addVerseInRenga.rejected, rejectedAsyncThunk)
-
     builder.addCase(editVerse.fulfilled, (state, action: PayloadAction<TVerse>): void => {
       state.verses = state.verses.map((verse) => action.payload.id === verse.id ? action.payload : verse)
     })
-    builder.addCase(editVerse.rejected, rejectedAsyncThunk)
-
     builder.addCase(deletVerse.fulfilled, (state, action: PayloadAction<string>): void => {
       state.verses = state.verses.filter((x) => x.id !== action.payload)
     })
-    builder.addCase(deletVerse.rejected, rejectedAsyncThunk)
-
-    builder.addCase(updateRenga.rejected, rejectedAsyncThunk)
   }
 })
 

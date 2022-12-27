@@ -20,7 +20,6 @@ const bodySchema = {
   }
 }
 
-
 export const schema = {
   body: bodySchema,
 

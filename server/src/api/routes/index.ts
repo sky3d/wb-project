@@ -8,7 +8,7 @@ import registerApiRoutes from './apiRoutes'
 export default async (fastify: FastifyInstance) => {
   fastify.setErrorHandler(errorHandler)
 
-  fastify.get('/', async (req, res) => {
+  fastify.get('/', async (req, res) =>
     // @ts-ignore
     return `👋 Hello ${req?.user?.name || 'Странник'} 👋`
   })

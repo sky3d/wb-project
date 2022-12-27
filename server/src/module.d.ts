@@ -20,12 +20,11 @@ export interface PluginInterface {
 
 export type BaseOptions = Record<string, unknown>
 
-
 export type ConnectorContainer = {
   [K in ConnectorsTypes]: PluginConnector[]
 }
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyInstance {
     app: RenkuApp,
     log: any,

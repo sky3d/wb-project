@@ -19,6 +19,7 @@ export class User extends StorageService<Model> {
 
 
   public readonly config: any
+
   public readonly log: any
   private tokens: TokenService
 
@@ -26,7 +27,7 @@ export class User extends StorageService<Model> {
     super()
 
     this.log = parent.log.child({ module: '@user' })
-    //@ts-ignore
+    // @ts-ignore
     this.config = parent.config
 
     this.tokens = new TokenService(parent.config.auth)

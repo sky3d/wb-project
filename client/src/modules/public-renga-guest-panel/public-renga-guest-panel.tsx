@@ -19,9 +19,9 @@ export const PublicRengaGuestPanel: FC<TPage> = (props): JSX.Element => {
 
   useEffect(() => {
     const activeNumber = currentRengaInfo?.options?.active
-    const _activeVerse = currentRengaVerses.filter((x) => x.number === activeNumber)[0]
+    const verse = currentRengaVerses.filter((x) => x.number === activeNumber)[0]
 
-    setActiveVerse(_activeVerse)
+    setActiveVerse(verse)
   }, [currentRengaInfo, currentRengaVerses])
 
   useEffect(() => {

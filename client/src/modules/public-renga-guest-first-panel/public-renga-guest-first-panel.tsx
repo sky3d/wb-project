@@ -15,7 +15,6 @@ export const PublicRengaGuestFirstPanel: FC<TPage> = (props): JSX.Element => {
 
   const leftHeaderRef = useRef(undefined)
 
-
   const ownerId = useSelector(selectOwnerId)
   const currentRengaInfo = useSelector(slctCurrentRengaInfo)
   const verses = useSelector(slctCurrentRengaVerses)
@@ -58,7 +57,7 @@ export const PublicRengaGuestFirstPanel: FC<TPage> = (props): JSX.Element => {
     </div>
     <div ref={toolRef} className="flex justify-center">
       <ButtonV2 width={200} txtColor={'#fff'} bgColor={'orange'} color={'orange'} onClick={() => {
-        const options = currentRengaInfo.options
+        const { options } = currentRengaInfo
         dispatch(updateRenga({ ...currentRengaInfo, options: { ...options, guests: [...(options.guests ? options.guests : []), ownerId] } }))
         dispatch(setCurrentPage(4))
       }} >Присоединиться</ButtonV2>

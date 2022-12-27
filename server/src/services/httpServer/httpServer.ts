@@ -19,13 +19,16 @@ export class HttpServer {
   public static kName = 'http-server'
 
   public readonly log: Renku['log']
+
   private server: FastifyInstance
+
   private config: RenkuServerConfig
+
   private parent: Renku
   private auth: AuthController
 
   constructor(parent: Renku) {
-    //@ts-ignore
+    // @ts-ignore
     this.config = parent.config.server
 
     this.log = parent.log
@@ -46,7 +49,7 @@ export class HttpServer {
     const { port, host } = this.config
     const address = await this.server.listen({ port, host })
 
-    //this.log.debug('server is now listening on [%s]', address)
+    // this.log.debug('server is now listening on [%s]', address)
   }
 
   close = async () => {
@@ -82,7 +85,7 @@ export class HttpServer {
     //registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
-      server.addHook('preValidation', function (request, _, done) {
+      server.addHook('preValidation', (request, _, done) => {
         const { params, query, body } = request
         request.log.info({ params, query, body }, `!REQ ${request.method} ${request.url}`)
         done()
@@ -99,4 +102,3 @@ export class HttpServer {
     server.register(apiRoutes)
   }
 }
-

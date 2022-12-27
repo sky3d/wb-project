@@ -4,18 +4,18 @@ import { Renku } from '../../main'
 import { StorageService } from '../storage'
 import { Verse as Model } from '../../models/verse'
 
-
 export class Verse extends StorageService<Model> {
   public static kName = 'verse'
 
   public readonly config: any
+
   public readonly log: any
 
   constructor(parent: Renku) {
     super()
 
     this.log = parent.log.child({ module: '@verse' })
-    //@ts-ignore
+    // @ts-ignore
     this.config = parent.config
     this.log.info('verse service created')
   }
@@ -77,6 +77,5 @@ export class Verse extends StorageService<Model> {
       .orderBy('v.number')
 
     return qb.getMany()
-
   }
 }

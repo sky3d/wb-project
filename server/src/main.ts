@@ -1,5 +1,5 @@
 import { merge } from 'lodash'
-//import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 import { BaseOptions, PluginConnector, RenkuApp } from './module'
 import { envConfig } from './configs/server'
 import { auth as authConfig } from './configs/auth'
@@ -27,7 +27,9 @@ export class Renku implements RenkuApp {
   public readonly log: any
 
   private connectors: Map<string, PluginConnector> = new Map<string, PluginConnector>()
+
   private destructors: Map<string, PluginConnector> = new Map<string, PluginConnector>()
+
   private migrator: PluginConnector
 
   public config: RenkuConfig
@@ -56,6 +58,7 @@ export class Renku implements RenkuApp {
     this.log.debug(`add ${serviceName} connector`)
     this.connectors.set(serviceName, handler)
   }
+
   public addDestructor(serviceName: string, handler: PluginConnector) {
     this.log.debug(`add ${serviceName} destructor`)
     this.destructors.set(serviceName, handler)

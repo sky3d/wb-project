@@ -6,5 +6,5 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
   reply
     .type('application/json')
     .code(OK)
-    .send(request.user)
+    .send({ user: request.user, ...request.tokens })
 }

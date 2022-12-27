@@ -70,6 +70,7 @@ export class HttpServer {
     // Authorization
 
     server.decorateRequest('user', '')
+    server.decorateRequest('tokens', '')
     server.decorate("authenticate", authorizeUser)
 
     server.register(cookie, {

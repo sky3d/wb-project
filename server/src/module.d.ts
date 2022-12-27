@@ -34,5 +34,6 @@ declare module "fastify" {
 
   interface FastifyRequest {
     user: any
+    tokens: any
   }
 }

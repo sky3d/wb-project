@@ -32,6 +32,7 @@ export function authorizeUser(request: FastifyRequest, reply: FastifyReply, done
 
   log.debug({ user: meta.name }, 'auth success')
   request.user = meta
+  request.tokens = { accessToken: token }
 
   done()
 }

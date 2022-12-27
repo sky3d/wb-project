@@ -7,8 +7,8 @@ import { LoginForm } from '../modules/login-form/login-form'
 import { RengaCreateDialog } from '../modules/renga-create-dialog/renga-create-dialog'
 import { RengaEditPanel } from '../modules/renga-edit-panel/renga-edit-panel'
 import { setLoginVisible, sltAppInfoName, sltCurrentPage, sltLoginVisible } from '../services/slices/app-info'
-import { selectAuth } from '../services/slices/user-info'
-import { generateUID } from '../utils/funcs'
+import { loginUser, selectAuth, setAuth } from '../services/slices/user-info'
+import { generateUID, getCookie } from '../utils/funcs'
 import { useWindowSize } from '../utils/hooks'
 
 import { HomePage } from './home'
@@ -25,13 +25,19 @@ export const MainPage = (): JSX.Element => {
   const [pageHeight, setPageHeight] = useState(0)
 
   useEffect(() => {
+    if (localStorage.getItem('accesToken')) {
+      dispatch(setAuth(true))
+    }
+  }, [])
+
+  useEffect(() => {
     if (headerRef.current) {
       setPageHeight(h - headerRef.current.offsetHeight)
     }
   }, [h, headerRef])
 
   const login = () => {
-    dispatch(setLoginVisible(true))
+    dispatch(loginUser())
   }
 
   return (

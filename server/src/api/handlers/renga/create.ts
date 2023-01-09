@@ -6,6 +6,8 @@ import { Renga } from '../../../models/renga'
 
 import { convertToResponse } from '../../../utils/jsonResponse'
 import { CREATED } from '../../../utils/http'
+import { RengaRole } from '../../../interfaces'
+
 
 export const handler = async (app: RenkuApp, request: FastifyRequest, reply: FastifyReply) => {
   const payload = request.body as Renga
@@ -19,7 +21,11 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
 
   const result = await app.renga.create(renga)
 
-  request.log.info({ result }, 'renga created')
+  const userId = request.user && request.user.user.id
+  await app.user.setUserRole(userId, renga.id, RengaRole.Admin)
+
+
+  request.log.info({ userId, renga: result }, 'renga created')
 
   reply
     .code(CREATED)

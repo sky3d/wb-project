@@ -1,11 +1,12 @@
-import { head, isEmpty, omit } from 'lodash'
+import { head, omit } from 'lodash'
 import { getManager, getRepository } from 'typeorm'
 import { Renku } from '../../main'
 import { StorageService } from '../storage'
 import { User as Model } from '../../models/user'
+import { RengaUser } from '../../models/rengaUser'
 import { TokenService } from './token'
 import { assert } from 'console'
-import { UserMeta, UserProfile } from '../../interfaces'
+import { RengaRole, UserMeta, UserProfile } from '../../interfaces'
 
 const mapUser = (user: Model) => ({
   id: user.id,
@@ -123,5 +124,25 @@ export class User extends StorageService<Model> {
       .execute()
 
     return this.byId(userId)
+  }
+
+  private findUserRole = (rengaId: RengaUser['rengaId'], userId: RengaUser['userId']) => {
+    const qb = getRepository(RengaUser)
+      .createQueryBuilder('u')
+      .where('u.rengaId = :rengaId', { rengaId })
+      .andWhere('u.userId = :userId', { userId })
+
+    return qb.getOne()
+  }
+
+  public setUserRole = async (userId: string, rengaId: string, role: RengaRole = RengaRole.Member) => {
+    const user = await this.findUserRole(userId, rengaId)
+    if (!user) {
+      const created = RengaUser.create({ userId, rengaId, role })
+      return created.save()
+    }
+
+    user.role = role
+    return user.save()
   }
 }

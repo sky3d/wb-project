@@ -17,6 +17,12 @@ export enum RengaStatus {
   Closed
 }
 
+export enum RengaRole {
+  Member = 1,
+  Moderator = 2,
+  Admin = 3,
+}
+
 // Verse
 
 export interface VerseOptions {

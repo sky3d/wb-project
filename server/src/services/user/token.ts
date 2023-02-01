@@ -15,9 +15,9 @@ export class TokenService {
     const accessToken = jwt.sign(payload, this.config.jwtSecret, { expiresIn: '30min' })
     const refreshToken = jwt.sign(payload, this.config.jwtRefreshSecret, { expiresIn: '30d' })
 
-    const ver = jwt.verify(accessToken, this.config.jwtSecret)
-    // console.log('ACC_TOKEN', accessToken)
-    // console.log('VERIFIED', ver)
+    const verOk = jwt.verify(accessToken, this.config.jwtSecret)
+    console.log('!!GENERATE_TOKEN', accessToken)
+    console.log('!!VERIFIED', verOk)
 
     return {
       accessToken,
@@ -42,10 +42,12 @@ export class TokenService {
   public verifyToken(accessToken: string) {
     try {
       const data = jwt.verify(accessToken, this.config.jwtSecret)
+      console.log(`!!VERIFY_TOKEN  ${accessToken}`, data)
+
       return data
 
     } catch (err) {
-      console.log('BAD_TOKEN', err)
+      console.log(`BAD_TOKEN  ${accessToken}`, err)
       return null
     }
   }

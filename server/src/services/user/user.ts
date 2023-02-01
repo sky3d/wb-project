@@ -85,7 +85,7 @@ export class User extends StorageService<Model> {
   }
 
   public async authOrStore(profile: UserProfile): Promise<UserMeta> {
-    this.log.info({ profile }, 'PROFILE')
+    this.log.info({ profile }, 'USER_PROFILE')
 
     const user = await this.ensureUserCreated(profile)
     assert(user)
@@ -95,10 +95,14 @@ export class User extends StorageService<Model> {
 
     await this.tokens.saveToken(user.id, tokens.refreshToken)
 
-    return {
+    const res = {
       user: userDto,
       ...tokens,
     }
+
+    this.log.info({ res }, 'registration metadata')
+
+    return res
   }
 
   public create = async (data: Partial<Model>): Promise<Model> => {

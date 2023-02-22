@@ -7,7 +7,7 @@ import { LoginForm } from '../modules/login-form/login-form'
 import { RengaCreateDialog } from '../modules/renga-create-dialog/renga-create-dialog'
 import { RengaEditPanel } from '../modules/renga-edit-panel/renga-edit-panel'
 import { setLoginVisible, sltAppInfoName, sltCurrentPage, sltLoginVisible } from '../services/slices/app-info'
-import { loginUser, selectAuth, setAuth } from '../services/slices/user-info'
+import { getUserInfo, loginUser, selectAuth, selectUserName, setAuth } from '../services/slices/user-info'
 import { generateUID, getCookie } from '../utils/funcs'
 import { useWindowSize } from '../utils/hooks'
 
@@ -20,12 +20,19 @@ export const MainPage = (): JSX.Element => {
   const userAuth = useSelector(selectAuth)
   const loginVisible = useSelector(sltLoginVisible)
   const currentPage = useSelector(sltCurrentPage)
+  const userName = useSelector(selectUserName)
 
   const headerRef = useRef<HTMLHeadingElement>(null)
   const [pageHeight, setPageHeight] = useState(0)
 
   useEffect(() => {
-    if (localStorage.getItem('accesToken')) {
+    if (userAuth) {
+      dispatch(getUserInfo(localStorage.getItem('accessToken')))
+    }
+  }, [userAuth])
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) {
       dispatch(setAuth(true))
     }
   }, [])
@@ -55,7 +62,7 @@ export const MainPage = (): JSX.Element => {
                     Войти
                   </ButtonV1>
                 )}
-                {userAuth && <span>Гришка</span>}
+                {userAuth && <span>{userName}</span>}
               </span>
             ]}
           />

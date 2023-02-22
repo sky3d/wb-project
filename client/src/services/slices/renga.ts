@@ -2,7 +2,7 @@ import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@r
 import _ from 'lodash'
 
 import { errorResponsString } from '../../utils/vars'
-import { runRequest } from '../api'
+import { makeAuthHeader, runRequest } from '../api'
 import { RootState } from '../store'
 import { setCurrentPage } from './app-info'
 import { selectOwnerId } from './user-info'
@@ -11,7 +11,7 @@ export const createRenga = createAsyncThunk('rengaStore/createRenga', async (obj
   const state: RootState = thunkApi.getState()
   const owner = selectOwnerId(state)
 
-  const data = await runRequest('renga', 'POST', { ...objRenga, owner, status: 1, options: {} }, 'createRenga')
+  const data = await runRequest('renga', 'POST', { ...objRenga, owner, status: 1, options: {} }, 'createRenga', makeAuthHeader(localStorage.getItem('accessToken')))
 
   thunkApi.dispatch(setCurrentPage(1))
 

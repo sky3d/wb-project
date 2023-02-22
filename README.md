@@ -2,7 +2,6 @@
 
 ![Develop Build Status](https://github.com/sky3d/wb-project/actions/workflows/push-pr-develop.yml/badge.svg?branch=develop)
 
-
 [Server API](https://github.com/sky3d/wb-project/blob/develop/server/README.md)
 
 ## How to run
@@ -23,7 +22,15 @@ start `yarn start:server` or `yarn dev`
 
 ## Migrations
 
-Generate migration
+yarn env:up
+yarn compile
+yarn dev
+
+Make models changes
+
+yarn compile
+
+Then generate migration
 `yarn migration:generate -n <name>`
 
 Create migration

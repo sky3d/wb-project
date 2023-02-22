@@ -96,11 +96,14 @@ export type UserProfile = Record<string, any>
 // TODO comment  varintLike
 
 export interface UserMeta {
-  accessToken: string
-  refreshToken: string
-  user: {
-    id: string,
-    name: string,
-    avatar: string,
-  }
+  id: string,
+  name: string,
+  avatar: string,
+  // accessToken: string
+  // refreshToken: string
+  // user: {
+  //   id: string,
+  //   name: string,
+  //   avatar: string,
+  // }
 }

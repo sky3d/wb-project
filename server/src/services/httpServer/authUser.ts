@@ -12,7 +12,7 @@ function extractToken(request: FastifyRequest) {
       token = parts[1]
 
       if (!/^Bearer$/i.test(scheme)) {
-        throw new Error('Not auth')
+        throw new Error('Not authorized user')
       }
 
       return token
@@ -25,13 +25,14 @@ export function authorizeUser(request: FastifyRequest, reply: FastifyReply, done
   const token = extractToken(request)
   const { app, log } = request.server
 
-  const meta = app.user.getMeta(token)
-  if (!meta) {
+  const user = app.user.decodeUser(token)
+  if (!user) {
     return reply.forbidden()
   }
 
-  log.debug({ user: meta.name }, 'auth success')
-  request.user = meta
+  log.debug({ user }, 'auth success')
+  request.user = user
+  // TODO move to user or remove
   request.tokens = { accessToken: token }
 
   done()

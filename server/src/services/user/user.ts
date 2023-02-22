@@ -79,12 +79,12 @@ export class User extends StorageService<Model> {
     return created
   }
 
-  public getMeta(accessToken: string): UserMeta {
+  public decodeUser(accessToken: string): UserMeta {
     const res = this.tokens.verifyToken(accessToken)
     return res as UserMeta
   }
 
-  public async authOrStore(profile: UserProfile): Promise<UserMeta> {
+  public async authOrStore(profile: UserProfile): Promise<any> {
     this.log.info({ profile }, 'USER_PROFILE')
 
     const user = await this.ensureUserCreated(profile)

@@ -6,9 +6,13 @@ export const schema = {
       type: 'object',
       additionalProperties: true,
       properties: {
-        id: { type: 'string' },
-        name: { type: 'string' },
-        avatar: { type: 'string' },
+        user: {
+          id: { type: 'string' },
+          name: { type: 'string' },
+          avatar: { type: 'string' },
+        },
+        accessToken: { type: 'string' },
+        refreshToken: { type: 'string' },
       },
     }
   }

@@ -19,9 +19,9 @@ export const handler = async (app: RenkuApp, request: FastifyRequest, reply: Fas
     id: payload.id || shortid(),
   }
 
-  const result = await app.renga.create(renga)
+  const userId = request.user.id
 
-  const userId = request.user && request.user.user.id
+  const result = await app.renga.create(renga)
   await app.user.setUserRole(userId, renga.id, RengaRole.Admin)
 
 

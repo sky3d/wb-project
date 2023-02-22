@@ -23,7 +23,7 @@ export const getUserInfo = createAsyncThunk('userInfoReducer/getUserInfo', async
   return data
 })
 
-const initUerInfoState = { auth: false, ownerId: null }
+const initUerInfoState = { auth: false, ownerId: null, name: '', avatar: '' }
 
 export const userInfoReducer = createSlice({
   name: 'userInfo',
@@ -32,6 +32,7 @@ export const userInfoReducer = createSlice({
     setAuth: (state, action) => {
       state.auth = action.payload
     }
+
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
@@ -41,9 +42,7 @@ export const userInfoReducer = createSlice({
         state.auth = true
         const tokenStr = action.payload.input.split('=')[1]
         const token = tokenStr.split('.')
-        console.log('token', token)
         token.pop()
-        console.log('token', token)
 
         localStorage.setItem('accessToken', token.join('.'))
         // document.cookie = `wb-renga-jwt=${''}`
@@ -51,7 +50,10 @@ export const userInfoReducer = createSlice({
     })
 
     builder.addCase(getUserInfo.fulfilled, (state, action) => {
-      console.log(action.payload)
+      const {user} = action.payload
+      state.ownerId = user.id
+      state.name = user.name
+      state.avatar = user.avatar
     })
   }
 })
@@ -59,3 +61,4 @@ export const userInfoReducer = createSlice({
 export const { setAuth } = userInfoReducer.actions
 export const selectAuth = (state: RootState) => state.userInfo.auth
 export const selectOwnerId = (state: RootState) => state.userInfo.ownerId
+export const selectUserName = (state: RootState) => state.userInfo.name

@@ -1,25 +1,26 @@
 /** @module userInfoReducer */
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { getCookie } from '../../utils/funcs'
-import { authRequest, runRequest } from '../api'
-
+import { authRequest, makeAuthHeader, runRequest } from '../api'
 
 import { RootState } from '../store'
 import { setLoginVisible } from './app-info'
-
-
-
 
 // export const updateRenga = createAsyncThunk('rengaStore/updateRenga', async (objRenga: {}, thunkApi) => {
 //   await runRequest(`renga/${objRenga.id}`, 'POST', objRenga, 'updateRenga')
 // })
 
-export const loginUser = createAsyncThunk('userInfoReducer/getUserInfo', async (ruid, thunkApi) => {
+export const loginUser = createAsyncThunk('userInfoReducer/loginUser', async (ruid, thunkApi) => {
   // let ruid = getCookie('ruid')
   await authRequest('/auth/google', 'GET', {}, '', '')
-  console.log('getCookie wb-renga-jwt)', getCookie('wb-renga-jwt'))
 
   return getCookie('wb-renga-jwt')
+})
+
+export const getUserInfo = createAsyncThunk('userInfoReducer/getUserInfo', async (token: string, thunkApi) => {
+  const data = await runRequest('/me', 'GET', {}, '', makeAuthHeader(token), '')
+
+  return data
 })
 
 const initUerInfoState = { auth: false, ownerId: null }
@@ -34,11 +35,23 @@ export const userInfoReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      console.log('action.payload', action.payload)
+
       if (action.payload?.input) {
         state.auth = true
-        localStorage.setItem('accesToken', action.payload.input.split('=')[1])
-        document.cookie = `wb-renga-jwt=${''}`
+        const tokenStr = action.payload.input.split('=')[1]
+        const token = tokenStr.split('.')
+        console.log('token', token)
+        token.pop()
+        console.log('token', token)
+
+        localStorage.setItem('accessToken', token.join('.'))
+        // document.cookie = `wb-renga-jwt=${''}`
       }
+    })
+
+    builder.addCase(getUserInfo.fulfilled, (state, action) => {
+      console.log(action.payload)
     })
   }
 })

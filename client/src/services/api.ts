@@ -14,13 +14,33 @@ const postParams = (body = {}, headers = {}) => ({
   }
 })
 
-export const runRequest = async (url: string, method: RequestMethod, options?: {}, errorString: string = errorResponsString, prefix: string = API_PREFIX) => {
-  const params = method === 'POST' ? postParams(options, {}) : {}
+const getParams = (headers = {}) => ({
+  headers: {
+    'Content-type': 'application/json',
+    ...headers
+  }
+})
+
+export const makeAuthHeader = (token: string) => ({ Authorization: `Bearer ${token}` })
+
+export const runRequest = async (
+  url: string,
+  method: RequestMethod,
+  options?: {},
+  errorString: string = errorResponsString,
+  headers: {} = {},
+  prefix: string = API_PREFIX,
+
+) => {
+  const params = method === 'POST' ? postParams(options, headers) : getParams(headers)
 
   const init = {
     method,
     ...params
   }
+
+  console.log(init);
+
 
   const response = await fetch(API_HOST + prefix + url, init).then((res) => res.json())
 

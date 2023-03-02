@@ -34,7 +34,7 @@ export class HttpServer {
     this.log = parent.log
     this.parent = parent
 
-    this.auth = new AuthController(parent.config)
+    this.auth = new AuthController(parent.config, this.log)
 
     this.log.info('== httpServer service config: %j', this.config)
     this.log.info('== auth config: %j', this.parent.config.auth)

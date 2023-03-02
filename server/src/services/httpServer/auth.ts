@@ -8,34 +8,41 @@ import { getUser } from '../user'
 import { UserProfile } from '../../interfaces'
 import { BAD_REQUEST } from '../../utils/http'
 import { isEmpty } from 'lodash'
+import { Renku } from '../../main'
+
+const cookieExpireTime = (delta: number) => {
+  const dt = new Date()
+  const mins = dt.getMinutes()
+  dt.setMinutes(mins + delta)
+  return dt
+}
 
 export class AuthController {
   private authConfig: RenkuAuthConfig
   private domain: string
+  public readonly log: Renku['log']
 
-  constructor(config: RenkuConfig) {
+  constructor(config: RenkuConfig, log: any) {
     this.authConfig = config.auth
+    this.log = log
     this.domain = `http://${config.server.host}:${config.server.port}`
   }
 
-  private async setCookie(reply: FastifyReply, data: string, clear: boolean) {
+  private async setCookie(reply: FastifyReply, data: string = '') {
     const { hostname } = new URL(this.domain)
 
-    const now = new Date()
-    const dt = new Date(now)
-    const diff = clear ? -15 : 15
-    dt.setMinutes(now.getMinutes() + diff)
+    const cookieOptions = {
+      domain: hostname,
+      path: '/',
+      signed: true,
+      // httpOnly: true,  // allow to read from client
+      expires: cookieExpireTime(data.length ? 60 * 24 : -1)
+    }
+
+    this.log.debug({ ...cookieOptions, data }, 'set cookie %s', this.authConfig.cookieKey)
 
     reply
-      .setCookie(
-        this.authConfig.cookieKey,
-        data || '', {
-        domain: hostname,
-        path: '/',
-        signed: true,
-        // httpOnly: true,  // allow to read from client
-        expires: dt
-      })
+      .setCookie(this.authConfig.cookieKey, data, cookieOptions)
       .code(302)
       .redirect(process.env.CLIENT_HOST || '/')
   }
@@ -45,7 +52,7 @@ export class AuthController {
     const self = this
 
     fastify.get('/logout', function (_, reply) {
-      self.setCookie(reply, '', true)
+      self.setCookie(reply, undefined)
     })
 
     // Google
@@ -88,7 +95,7 @@ export class AuthController {
         return
       }
 
-      await self.setCookie(reply, userMeta.accessToken, false)
+      await self.setCookie(reply, userMeta.accessToken)
     })
   }
 }

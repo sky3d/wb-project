@@ -65,7 +65,9 @@ export class HttpServer {
     // Inject app to have all services in handlers
     server.decorate(RENKU_APP_KEY, this.parent)
 
-    server.register(cors)
+    server.register(cors, {
+      origin: '*', // disable
+    })
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)

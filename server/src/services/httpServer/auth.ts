@@ -59,7 +59,7 @@ export class AuthController {
 
     fastify.register(fastifyOauth2, {
       name: 'googleOAuth2',
-      scope: ['profile'],
+      scope: ['profile', 'email'],
       credentials: {
         client: {
           id: google.clientId,
@@ -73,7 +73,11 @@ export class AuthController {
 
     fastify.get('/auth/google/callback', async function (request, reply) {
       // @ts-ignore
-      const { token } = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
+      const data = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
+
+      this.log.debug({ data }, 'oauth2 response')
+
+      const { token } = data
 
       // TODO refactor!
       const profile: UserProfile = await got.get('https://www.googleapis.com/oauth2/v2/userinfo', {

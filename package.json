@@ -58,9 +58,10 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "pg": "^8.7.1",
-    "pino": "^7.6.1",
+    "pino": "^8.11.0",
     "reflect-metadata": "^0.1.13",
     "shortid": "^2.2.16",
+    "simple-get": "^4.0.1",
     "simple-oauth2": "^5.0.0",
     "typeorm": "^0.2.41"
   },
@@ -92,5 +93,9 @@
     "client/src/**/*.tsx": [
       "eslint"
     ]
+  },
+  "volta": {
+    "node": "16.20.0",
+    "yarn": "1.22.19"
   }
 }

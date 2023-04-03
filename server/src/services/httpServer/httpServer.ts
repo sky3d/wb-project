@@ -84,13 +84,12 @@ export class HttpServer {
       parseOptions: {}     // options for parsing cookies
     } as FastifyCookieOptions)
 
-    await this.auth.register(server)
     //registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
       server.addHook('preValidation', (request, _, done) => {
         const { params, query, body } = request
-        request.log.info({ params, query, body }, `!REQ ${request.method} ${request.url}`)
+        request.log.info({ params, query, body }, `REQ  ${request.method} ${request.url}`)
         done()
       })
       server.addHook('onError', (request, reply, error, done) => {
@@ -103,5 +102,7 @@ export class HttpServer {
     server.register(routesPlugin)
 
     server.register(apiRoutes)
+
+    this.auth.register(server)
   }
 }

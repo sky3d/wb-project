@@ -47,6 +47,8 @@ export class Renku implements RenkuApp {
     user(this)
 
     server(this)
+
+    this.log.info('Renku app initialized with LOG_LEVEL %s', logger.level)
   }
 
   /*

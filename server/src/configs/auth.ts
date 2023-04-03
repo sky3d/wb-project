@@ -4,13 +4,13 @@ export const VKONTAKTE_PROVIDER = 'vkontakte'
 export const auth = {
   providers: {
     [GOOGLE_PROVIDER]: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '0',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '0',
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       callbackURL: `/auth/${GOOGLE_PROVIDER}/callback`,
     },
     [VKONTAKTE_PROVIDER]: {
-      clientId: process.env.VK_APP_ID || '0',
-      clientSecret: process.env.VK_SECURE_KEY || '0',
+      clientId: process.env.VK_APP_ID as string,
+      clientSecret: process.env.VK_SECURE_KEY as string,
       callbackURL: `/auth/${VKONTAKTE_PROVIDER}/callback`,
     }
   },

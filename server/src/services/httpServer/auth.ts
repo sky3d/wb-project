@@ -1,6 +1,6 @@
-import got from 'got'
+import { CookieSerializeOptions } from '@fastify/cookie'
 import { fastifyOauth2 } from '@fastify/oauth2'
-
+import got from 'got'
 import { FastifyInstance, FastifyReply } from 'fastify'
 
 import { RenkuAuthConfig, RenkuConfig } from '../../types'
@@ -9,6 +9,8 @@ import { UserProfile } from '../../interfaces'
 import { BAD_REQUEST } from '../../utils/http'
 import { isEmpty } from 'lodash'
 import { Renku } from '../../main'
+import { registerGoogle } from './google'
+import { GOOGLE_PROVIDER } from '../../configs/auth'
 
 const cookieExpireTime = (delta: number) => {
   const dt = new Date()
@@ -18,8 +20,11 @@ const cookieExpireTime = (delta: number) => {
 }
 
 export class AuthController {
+  public static authPath = (provider: string) => `/auth/${provider}`
+
   private authConfig: RenkuAuthConfig
-  private domain: string
+
+  public readonly domain: string
   public readonly log: Renku['log']
 
   constructor(config: RenkuConfig, log: any) {
@@ -28,15 +33,18 @@ export class AuthController {
     this.domain = `http://${config.server.host}:${config.server.port}`
   }
 
-  private async setCookie(reply: FastifyReply, data: string = '') {
+  private setCookie = async (reply: FastifyReply, data: string = '') => {
     const { hostname } = new URL(this.domain)
 
-    const cookieOptions = {
+    const cookieOptions: CookieSerializeOptions = {
       domain: hostname,
       path: '/',
       signed: true,
       // httpOnly: true,  // allow to read from client
-      expires: cookieExpireTime(data.length ? 60 * 24 : -1)
+      expires: cookieExpireTime(data.length ? 60 * 24 : -1),
+      // allow cross-site-origin
+      sameSite: 'none',
+      secure: true
     }
 
     this.log.debug({ ...cookieOptions, data }, 'set cookie %s', this.authConfig.cookieKey)
@@ -48,59 +56,30 @@ export class AuthController {
   }
 
   public register(fastify: FastifyInstance) {
-    const { providers: { google } } = this.authConfig
+    const { providers } = this.authConfig
     const self = this
 
-    fastify.get('/logout', function (_, reply) {
-      self.setCookie(reply, undefined)
-    })
+    // register providers
+    registerGoogle(this, fastify, providers[GOOGLE_PROVIDER])
 
-    // Google
-
-    fastify.register(fastifyOauth2, {
-      name: 'googleOAuth2',
-      scope: ['profile', 'email'],
-      credentials: {
-        client: {
-          id: google.clientId,
-          secret: google.clientSecret
-        },
-        auth: fastifyOauth2.GOOGLE_CONFIGURATION
-      },
-      startRedirectPath: '/auth/google',
-      callbackUri: `${this.domain}${google.callbackURL}`
-    })
-
-    fastify.get('/auth/google/callback', async function (request, reply) {
-      // @ts-ignore
-      const data = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
-
-      this.log.debug({ data }, 'oauth2 response')
-
-      const { token } = data
-
-      // TODO refactor!
-      const profile: UserProfile = await got.get('https://www.googleapis.com/oauth2/v2/userinfo', {
-        headers: {
-          Authorization: 'Bearer ' + token.access_token
-        }
-      }).json()
-
-      if (isEmpty(profile)) {
-        return new Error('Bad user profile')
-      }
-
-      const userMeta = await getUser().authOrStore({ ...profile, provider: 'google' })
-
-      if (!userMeta) {
-        reply
-          .code(BAD_REQUEST)
-          .send('Auth error')
-        return
-      }
-
-      await self.setCookie(reply, userMeta.accessToken)
+    fastify.get('/logout', async function (_, reply) {
+      this.log.debug('--> Log out')
+      await self.setCookie(reply, undefined)
     })
   }
-}
 
+  public async authorize(reply: FastifyReply, profile: any) {
+    const userMeta = await getUser().authOrStore(profile)
+
+    if (!userMeta) {
+      reply
+        .code(BAD_REQUEST)
+        .send('Auth error')
+      return
+    }
+
+    this.log.debug('Setup cookie')
+
+    await this.setCookie(reply, userMeta.accessToken)
+  }
+}

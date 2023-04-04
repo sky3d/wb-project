@@ -1,6 +1,4 @@
 import { CookieSerializeOptions } from '@fastify/cookie'
-import { fastifyOauth2 } from '@fastify/oauth2'
-import got from 'got'
 import { FastifyInstance, FastifyReply } from 'fastify'
 
 import { RenkuAuthConfig, RenkuConfig } from '../../types'
@@ -40,7 +38,7 @@ export class AuthController {
       domain: hostname,
       path: '/',
       signed: true,
-      // httpOnly: true,  // allow to read from client
+      httpOnly: true,  // allow to read from client
       expires: cookieExpireTime(data.length ? 60 * 24 : -1),
       // allow cross-site-origin
       sameSite: 'none',

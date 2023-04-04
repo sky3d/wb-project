@@ -1,7 +1,6 @@
 import { fastifyOauth2 } from '@fastify/oauth2'
 import { FastifyInstance } from 'fastify'
 import { isEmpty } from 'lodash'
-// import got from 'got'
 
 const sget = require('simple-get')
 // import { UserProfile } from '../../interfaces'

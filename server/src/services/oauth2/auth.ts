@@ -3,12 +3,12 @@ import { FastifyInstance, FastifyReply } from 'fastify'
 
 import { RenkuAuthConfig, RenkuConfig } from '../../types'
 import { getUser } from '../user'
-import { UserProfile } from '../../interfaces'
 import { BAD_REQUEST } from '../../utils/http'
-import { isEmpty } from 'lodash'
 import { Renku } from '../../main'
+import { GITHUB_PROVIDER, GOOGLE_PROVIDER } from '../../configs/auth'
+
 import { registerGoogle } from './google'
-import { GOOGLE_PROVIDER } from '../../configs/auth'
+import { registerGithub } from './github'
 
 const cookieExpireTime = (delta: number) => {
   const dt = new Date()
@@ -37,12 +37,12 @@ export class AuthController {
     const cookieOptions: CookieSerializeOptions = {
       domain: hostname,
       path: '/',
-      signed: true,
+      // signed: true,
       httpOnly: true,  // allow to read from client
       expires: cookieExpireTime(data.length ? 60 * 24 : -1),
       // allow cross-site-origin
-      sameSite: 'none',
-      secure: true
+      // sameSite: 'none',
+      // secure: true
     }
 
     this.log.debug({ ...cookieOptions, data }, 'set cookie %s', this.authConfig.cookieKey)
@@ -59,6 +59,7 @@ export class AuthController {
 
     // register providers
     registerGoogle(this, fastify, providers[GOOGLE_PROVIDER])
+    registerGithub(this, fastify, providers[GITHUB_PROVIDER])
 
     fastify.get('/logout', async function (_, reply) {
       this.log.debug('--> Log out')
@@ -73,10 +74,10 @@ export class AuthController {
       reply
         .code(BAD_REQUEST)
         .send('Auth error')
-      return
+      return Promise.reject()
     }
 
-    this.log.debug('Setup cookie')
+    this.log.debug('Setup cookie: ', userMeta.accessToken)
 
     await this.setCookie(reply, userMeta.accessToken)
   }

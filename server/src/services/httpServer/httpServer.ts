@@ -12,8 +12,10 @@ import { Renku } from '../../main'
 import apiRoutes from '../../api/routes'
 import { RENKU_APP_KEY } from '../../constants'
 import { RenkuServerConfig } from '../../types'
-import { AuthController } from './auth'
+import { AuthController } from '../oauth2/auth'
 import { authorizeUser } from './authUser'
+
+const httpMethods = ['GET', 'OPTIONS']
 
 export class HttpServer {
   public static kName = 'http-server'
@@ -49,7 +51,7 @@ export class HttpServer {
     const { port, host } = this.config
     const address = await this.server.listen({ port, host })
 
-    // this.log.debug('server is now listening on [%s]', address)
+    this.log.debug('Server is now listening on [%s]', address)
   }
 
   close = async () => {
@@ -67,7 +69,10 @@ export class HttpServer {
 
     server.register(cors, {
       origin: '*', // disable
+      preflight: true,
+      strictPreflight: true,
     })
+
     server.register(favicon)
     server.register(formbody)
     server.register(sensible)
@@ -89,7 +94,7 @@ export class HttpServer {
     if (process.env.DEBUG) {
       server.addHook('preValidation', (request, _, done) => {
         const { params, query, body } = request
-        request.log.info({ params, query, body }, `REQ  ${request.method} ${request.url}`)
+        request.log.info({ params, query, body }, `---> ${request.method} ${request.url}`)
         done()
       })
       server.addHook('onError', (request, reply, error, done) => {

@@ -68,9 +68,7 @@ export class HttpServer {
     server.decorate(RENKU_APP_KEY, this.parent)
 
     server.register(cors, {
-      origin: '*', // disable
-      preflight: true,
-      strictPreflight: true,
+      origin: false, // disable
     })
 
     server.register(favicon)

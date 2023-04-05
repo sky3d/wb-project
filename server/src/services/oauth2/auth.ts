@@ -9,13 +9,7 @@ import { GITHUB_PROVIDER, GOOGLE_PROVIDER } from '../../configs/auth'
 
 import { registerGoogle } from './google'
 import { registerGithub } from './github'
-
-const cookieExpireTime = (delta: number) => {
-  const dt = new Date()
-  const mins = dt.getMinutes()
-  dt.setMinutes(mins + delta)
-  return dt
-}
+import { hostName, setReplyCookie } from '../../utils/cookie'
 
 export class AuthController {
   public static authPath = (provider: string) => `/auth/${provider}`
@@ -31,28 +25,6 @@ export class AuthController {
     this.domain = `http://${config.server.host}:${config.server.port}`
   }
 
-  private setCookie = async (reply: FastifyReply, data: string = '') => {
-    const { hostname } = new URL(this.domain)
-
-    const cookieOptions: CookieSerializeOptions = {
-      domain: hostname,
-      path: '/',
-      // signed: true,
-      httpOnly: true,  // allow to read from client
-      expires: cookieExpireTime(data.length ? 60 * 24 : -1),
-      // allow cross-site-origin
-      // sameSite: 'none',
-      // secure: true
-    }
-
-    this.log.debug({ ...cookieOptions, data }, 'set cookie %s', this.authConfig.cookieKey)
-
-    reply
-      .setCookie(this.authConfig.cookieKey, data, cookieOptions)
-      .code(302)
-      .redirect(process.env.CLIENT_HOST || '/')
-  }
-
   public register(fastify: FastifyInstance) {
     const { providers } = this.authConfig
     const self = this
@@ -63,7 +35,11 @@ export class AuthController {
 
     fastify.get('/logout', async function (_, reply) {
       this.log.debug('--> Log out')
-      await self.setCookie(reply, undefined)
+
+      const name = self.authConfig.cookieKey
+      const options = { domain: hostName(self.domain) }
+
+      await setReplyCookie(reply, name, '', options)
     })
   }
 
@@ -77,8 +53,11 @@ export class AuthController {
       return Promise.reject()
     }
 
-    this.log.debug('Setup cookie: ', userMeta.accessToken)
+    const data = userMeta.accessToken
+    const options = { domain: hostName(this.domain) }
 
-    await this.setCookie(reply, userMeta.accessToken)
+    this.log.debug({ name: this.authConfig.cookieKey, data }, 'set cookie')
+
+    await setReplyCookie(reply, this.authConfig.cookieKey, data, options, process.env.CLIENT_HOST)
   }
 }

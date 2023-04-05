@@ -3,71 +3,61 @@ import { FastifyInstance } from 'fastify'
 import { isEmpty } from 'lodash'
 
 const sget = require('simple-get')
-// import { UserProfile } from '../../interfaces'
 import { AuthController } from './auth'
 import { OAuthCredentials } from '../../types'
+import { GOOGLE_PROVIDER } from '../../configs/auth'
 
 
-export function registerGoogle(parent: AuthController, fastify: FastifyInstance, googleConfig: OAuthCredentials) {
+export function registerGoogle(parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) {
   const { log } = parent
 
-  const options = {
+  log.debug('-->Register google callback')
+
+  fastify.register(fastifyOauth2, {
     name: 'googleOAuth2',
     scope: ['profile'],
     credentials: {
       client: {
-        id: googleConfig.clientId,
-        secret: googleConfig.clientSecret
+        id: cred.clientId,
+        secret: cred.clientSecret
       },
       auth: fastifyOauth2.GOOGLE_CONFIGURATION
     },
     startRedirectPath: '/auth/google',
     callbackUri: `${parent.domain}/auth/google/callback`,
-  }
-
-  log.debug({ options }, '-->Register google callback')
-
-  fastify.register(fastifyOauth2, options)
+  })
 
   fastify.get('/auth/google/callback', async function (request, reply) {
     log.debug('-->Google callback...')
     // @ts-ignore
-    const data = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
+    const { token } = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
 
-    log.debug(data, '-->OAuth Google response')
-
-    console.log('DATA====', data)
-
-    const { access_token: token } = data?.token
-    console.log('DATA_TOKKK====', token)
-
-    log.debug({ token }, '--> User info fetching...')
+    log.debug(token, '-->OAuth Google response')
 
     sget.concat({
       url: 'https://www.googleapis.com/oauth2/v2/userinfo',
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + token
+        Authorization: 'Bearer ' + token.access_token
       },
       json: true
-    }, function (err: any, res: any, data: any) {
+    }, async function (err: any, res: any, data: any) {
 
-      const profile = data
-      log.debug({ profile }, '--> User profile received')
-
-      if (isEmpty(profile)) {
+      if (isEmpty(data)) {
         reply.send('Bad user profile')
       }
 
-      log.debug('--> Authorizing or store user')
-      const userData = { ...profile, provider: 'google' }
+      const profile = { ...data, avatar: data?.picture, provider: GOOGLE_PROVIDER }
+      log.debug({ profile }, '--> User profile received')
 
-      Promise.resolve(parent.authorize(reply, userData))
+      await parent.authorize(reply, profile)
+
+      log.debug('--> End of google callback')
     })
 
     // TODO refactor!
     // const profile: UserProfile = await got.get(
-    //   'https://www.googleapis.com/oauth2/v3/userinfo', {
+    //   'https://www.googleapis.com/oauth2/v2/userinfo', {
     //   headers: {
     //     Authorization: 'Bearer ' + token
     //   }

@@ -6,7 +6,7 @@ import { User as Model } from '../../models/user'
 import { RengaUser } from '../../models/rengaUser'
 import { TokenService } from './token'
 import { assert } from 'console'
-import { RengaRole, UserMeta, UserProfile } from '../../interfaces'
+import { RengaRole, UserMeta, UserProfile, UserProfileLike } from '../../interfaces'
 
 const mapUser = (user: Model) => ({
   id: user.id,
@@ -54,8 +54,8 @@ export class User extends StorageService<Model> {
     return qb.getOne()
   }
 
-  private async ensureUserCreated(profile: any): Promise<Model> {
-    const { provider, id, name, picture } = profile || {}
+  private async ensureUserCreated(profile: UserProfileLike): Promise<Model> {
+    const { provider, id, name, avatar } = profile || {}
 
     const providerId = User.buildSocialId(provider, id)
 
@@ -70,7 +70,7 @@ export class User extends StorageService<Model> {
 
     const data: Partial<Model> = {
       name,
-      avatar: picture,
+      avatar,
       providerId,
       profile: omit(profile, ['_raw', '_json'])
     }
@@ -84,7 +84,7 @@ export class User extends StorageService<Model> {
     return res as UserMeta
   }
 
-  public async authOrStore(profile: UserProfile): Promise<any> {
+  public async authOrStore(profile: UserProfileLike): Promise<any> {
     this.log.info({ profile }, 'USER_PROFILE')
 
     const user = await this.ensureUserCreated(profile)

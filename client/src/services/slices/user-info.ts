@@ -12,7 +12,9 @@ import { setLoginVisible } from './app-info'
 
 export const loginUser = createAsyncThunk('userInfoReducer/loginUser', async (ruid, thunkApi) => {
   // let ruid = getCookie('ruid')
-  await authRequest('/auth/google', 'GET', {}, '', '')
+  // await authRequest('/auth/google', 'GET', {}, '', '')
+  // TODO ---- by sky3d
+  await authRequest('/auth/github', 'GET', {}, '', '')
 
   return getCookie('wb-renga-jwt')
 })
@@ -41,16 +43,20 @@ export const userInfoReducer = createSlice({
       if (action.payload?.input) {
         state.auth = true
         const tokenStr = action.payload.input.split('=')[1]
-        const token = tokenStr.split('.')
-        token.pop()
+        console.log('JWT=', tokenStr)
 
-        localStorage.setItem('accessToken', token.join('.'))
+        localStorage.setItem('accessToken', tokenStr)
+
+        // remove sign
+        // const token = tokenStr.split('.')
+        // token.pop()
+
         // document.cookie = `wb-renga-jwt=${''}`
       }
     })
 
     builder.addCase(getUserInfo.fulfilled, (state, action) => {
-      const {user} = action.payload
+      const { user } = action.payload
       state.ownerId = user.id
       state.name = user.name
       state.avatar = user.avatar

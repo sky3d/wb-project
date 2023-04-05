@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash'
 const sget = require('simple-get')
 import { AuthController } from './auth'
 import { OAuthCredentials } from '../../types'
+import { GOOGLE_PROVIDER } from '../../configs/auth'
 
 
 export function registerGoogle(parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) {
@@ -40,19 +41,18 @@ export function registerGoogle(parent: AuthController, fastify: FastifyInstance,
         Authorization: 'Bearer ' + token.access_token
       },
       json: true
-    }, function (err: any, res: any, data: any) {
+    }, async function (err: any, res: any, data: any) {
 
-      const profile = data
-      log.debug({ profile }, '--> User profile received')
-
-      if (isEmpty(profile)) {
+      if (isEmpty(data)) {
         reply.send('Bad user profile')
       }
 
-      log.debug('--> Authorizing or store user')
-      const userData = { ...profile, provider: 'google' }
+      const profile = { ...data, avatar: data?.picture, provider: GOOGLE_PROVIDER }
+      log.debug({ profile }, '--> User profile received')
 
-      return parent.authorize(reply, userData)
+      await parent.authorize(reply, profile)
+
+      log.debug('--> End of google callback')
     })
 
     // TODO refactor!

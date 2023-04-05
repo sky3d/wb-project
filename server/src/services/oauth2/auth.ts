@@ -1,5 +1,4 @@
-import { CookieSerializeOptions } from '@fastify/cookie'
-import { FastifyInstance, FastifyReply } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { RenkuAuthConfig, RenkuConfig } from '../../types'
 import { getUser } from '../user'
@@ -10,6 +9,7 @@ import { GITHUB_PROVIDER, GOOGLE_PROVIDER } from '../../configs/auth'
 import { registerGoogle } from './google'
 import { registerGithub } from './github'
 import { hostName, setReplyCookie } from '../../utils/cookie'
+import { UserProfileLike } from '../../interfaces'
 
 export class AuthController {
   public static authPath = (provider: string) => `/auth/${provider}`
@@ -27,23 +27,19 @@ export class AuthController {
 
   public register(fastify: FastifyInstance) {
     const { providers } = this.authConfig
-    const self = this
 
     // register providers
     registerGoogle(this, fastify, providers[GOOGLE_PROVIDER])
     registerGithub(this, fastify, providers[GITHUB_PROVIDER])
 
-    fastify.get('/logout', async function (_, reply) {
-      this.log.debug('--> Log out')
-
-      const name = self.authConfig.cookieKey
-      const options = { domain: hostName(self.domain) }
-
-      await setReplyCookie(reply, name, '', options)
+    fastify.route({
+      method: 'GET',
+      url: '/logout',
+      handler: () => this.logoutUser,
     })
   }
 
-  public async authorize(reply: FastifyReply, profile: any) {
+  public async authorize(reply: FastifyReply, profile: UserProfileLike) {
     const userMeta = await getUser().authOrStore(profile)
 
     if (!userMeta) {
@@ -58,6 +54,15 @@ export class AuthController {
 
     this.log.debug({ name: this.authConfig.cookieKey, data }, 'set cookie')
 
-    await setReplyCookie(reply, this.authConfig.cookieKey, data, options, process.env.CLIENT_HOST)
+    return setReplyCookie(reply, this.authConfig.cookieKey, data, options, process.env.CLIENT_HOST)
+  }
+
+  private logoutUser(_: FastifyRequest, reply: FastifyReply) {
+    this.log.debug('--> Log out')
+
+    const name = this.authConfig.cookieKey
+    const options = { domain: hostName(this.domain) }
+
+    return setReplyCookie(reply, name, '', options, '/health')
   }
 }

@@ -17,7 +17,25 @@ const devServer = (isDev) =>
 
         // без этой настройки маршрутизация работает только через ссылки
         // и по f5 или прямому вводу орет что не может найти страницу
-        historyApiFallback: true
+        historyApiFallback: true,
+
+        // TODO --- -tests from sky3d
+        // https: true,
+        // proxy: {
+        //   '/auth': {
+        //     target: {
+        //       host: "127.0.0.1",
+        //       protocol: 'http:',
+        //       port: 3000
+        //     },
+        //     pathRewrite: {
+        //       '^/auth': ''
+        //     }
+        //   }
+        // },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
       }
     }
 

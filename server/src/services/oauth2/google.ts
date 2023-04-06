@@ -1,12 +1,14 @@
 import { fastifyOauth2 } from '@fastify/oauth2'
 import { FastifyInstance } from 'fastify'
-import { isEmpty } from 'lodash'
+import { Dispatcher } from 'undici'
+import { isEmpty, omit } from 'lodash'
 
-const sget = require('simple-get')
-import { AuthController } from './auth'
 import { OAuthCredentials } from '../../types'
 import { GOOGLE_PROVIDER } from '../../configs/auth'
+import { UserProfileLike, UserRawProfile } from '../../interfaces'
 
+import { AuthController } from './auth'
+import { fetchGoogleUser } from '../../utils/httpRequest'
 
 export function registerGoogle(parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) {
   const { log } = parent
@@ -32,47 +34,33 @@ export function registerGoogle(parent: AuthController, fastify: FastifyInstance,
     // @ts-ignore
     const { token } = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
 
-    log.debug(token, '-->OAuth Google response')
+    const accessToken = token.access_token
 
-    sget.concat({
-      url: 'https://www.googleapis.com/oauth2/v2/userinfo',
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + token.access_token
-      },
-      json: true
-    }, async function (err: any, res: any, data: any) {
+    log.debug('fetching user by token %s', token)
+    const response: Dispatcher.ResponseData = await fetchGoogleUser(accessToken)
 
-      if (isEmpty(data)) {
-        reply.send('Bad user profile')
-      }
+    if (response.statusCode >= 400) {
+      throw reply.unauthorized('Authenticate again')
+    }
 
-      const profile = { ...data, avatar: data?.picture, provider: GOOGLE_PROVIDER }
-      log.debug({ profile }, '--> User profile received')
+    const data: any = await response.body.json()
+    log.debug({ data }, '-----GOOGLE_USER_DATA ')
 
-      await parent.authorize(reply, profile)
+    if (isEmpty(data)) {
+      return reply.send('Bad user profile')
+    }
 
-      log.debug('--> End of google callback')
-    })
+    const profile: UserProfileLike = {
+      id: data.id,
+      name: data.name,
+      avatar: data.picture,
+      provider: GOOGLE_PROVIDER,
+    }
+    const raw: UserRawProfile = omit(data, ['_raw', '_json'])
 
-    // TODO refactor!
-    // const profile: UserProfile = await got.get(
-    //   'https://www.googleapis.com/oauth2/v2/userinfo', {
-    //   headers: {
-    //     Authorization: 'Bearer ' + token
-    //   }
-    // })
+    log.debug({ profile }, '--> User profile received')
 
-    // log.debug({ profile }, '--> User profile received')
-
-    // if (isEmpty(profile)) {
-    //   return new Error('Bad user profile')
-    // }
-
-    // log.debug('--> Authorizing or store user')
-    // const userData = { ...profile, provider: 'google' }
-
-    // await parent.authorize(reply, userData)
+    await parent.authorize(reply, { profile, raw })
 
     log.debug('--> End of google callback')
   })

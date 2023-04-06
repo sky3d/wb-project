@@ -4,7 +4,7 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { UserProfile } from '../interfaces'
+import { UserRawProfile } from '../interfaces'
 
 @Entity()
 export class User extends BaseEntity {
@@ -25,5 +25,5 @@ export class User extends BaseEntity {
     nullable: true,
     type: 'jsonb',
   })
-  public profile: UserProfile
+  public profile: UserRawProfile
 }

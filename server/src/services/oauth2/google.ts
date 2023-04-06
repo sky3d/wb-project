@@ -1,11 +1,12 @@
 import { fastifyOauth2 } from '@fastify/oauth2'
 import { FastifyInstance } from 'fastify'
-import { isEmpty } from 'lodash'
+import { isEmpty, omit } from 'lodash'
 
 const sget = require('simple-get')
 import { AuthController } from './auth'
 import { OAuthCredentials } from '../../types'
 import { GOOGLE_PROVIDER } from '../../configs/auth'
+import { UserProfile, UserProfileLike, UserRawProfile } from '../../interfaces'
 
 
 export function registerGoogle(parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) {
@@ -47,10 +48,17 @@ export function registerGoogle(parent: AuthController, fastify: FastifyInstance,
         reply.send('Bad user profile')
       }
 
-      const profile = { ...data, avatar: data?.picture, provider: GOOGLE_PROVIDER }
+      const profile: UserProfileLike = {
+        id: data.id,
+        name: data.name,
+        avatar: data.picture,
+        provider: GOOGLE_PROVIDER,
+      }
+      const raw: UserRawProfile = omit(data, ['_raw', '_json'])
+
       log.debug({ profile }, '--> User profile received')
 
-      await parent.authorize(reply, profile)
+      await parent.authorize(reply, { profile, raw })
 
       log.debug('--> End of google callback')
     })

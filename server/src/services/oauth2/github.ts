@@ -1,11 +1,11 @@
 import { fastifyOauth2 } from '@fastify/oauth2'
-import { FastifyInstance, FastifyRequest } from 'fastify'
+import { FastifyInstance } from 'fastify'
 const sget = require('simple-get')
 
 import { AuthController } from './auth'
 import { OAuthCredentials } from '../../types'
 import { GITHUB_PROVIDER } from '../../configs/auth'
-import { UserProfile, UserProfileLike } from '../../interfaces'
+import { UserProfileLike } from '../../interfaces'
 import { isEmpty } from 'lodash'
 
 // TODO re-write using got or undici
@@ -82,9 +82,11 @@ export function registerGithub(parent: AuthController, fastify: FastifyInstance,
       provider: GITHUB_PROVIDER,
     }
 
+    const raw = data.user
+
     log.debug({ profile }, '--> User profile received')
 
-    await parent.authorize(reply, profile)
+    await parent.authorize(reply, { profile, raw })
 
     log.debug('--> End of github callback')
     // @ts-ignore

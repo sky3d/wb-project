@@ -9,7 +9,7 @@ import { GITHUB_PROVIDER, GOOGLE_PROVIDER } from '../../configs/auth'
 import { registerGoogle } from './google'
 import { registerGithub } from './github'
 import { hostName, setReplyCookie } from '../../utils/cookie'
-import { UserProfileLike } from '../../interfaces'
+import { UserProfile } from '../../interfaces'
 
 export class AuthController {
   public static authPath = (provider: string) => `/auth/${provider}`
@@ -39,8 +39,8 @@ export class AuthController {
     })
   }
 
-  public async authorize(reply: FastifyReply, profile: UserProfileLike) {
-    const userMeta = await getUser().authOrStore(profile)
+  public async authorize(reply: FastifyReply, userProfile: UserProfile) {
+    const userMeta = await getUser().authOrStore(userProfile)
 
     if (!userMeta) {
       reply

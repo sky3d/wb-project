@@ -54,25 +54,25 @@ export class User extends StorageService<Model> {
     return qb.getOne()
   }
 
-  private async ensureUserCreated(profile: UserProfileLike): Promise<Model> {
-    const { provider, id, name, avatar } = profile || {}
+  private async ensureUserCreated(userProfile: UserProfile): Promise<Model> {
+    const { profile, raw } = userProfile
 
-    const providerId = User.buildSocialId(provider, id)
+    const providerId = User.buildSocialId(profile.provider, profile.id)
 
     const user = await this.byProviderId(providerId)
 
     if (user) {
-      this.log.info({ userId: user.id }, 'existing user found')
+      this.log.info({ userId: profile.id }, 'existing user found')
       return user
     }
 
     this.log.info('registering new user %j', profile)
 
     const data: Partial<Model> = {
-      name,
-      avatar,
+      name: profile?.name,
+      avatar: profile?.avatar,
       providerId,
-      profile: omit(profile, ['_raw', '_json'])
+      profile: raw
     }
 
     const created = await this.create(data)
@@ -84,10 +84,12 @@ export class User extends StorageService<Model> {
     return res as UserMeta
   }
 
-  public async authOrStore(profile: UserProfileLike): Promise<any> {
+  public async authOrStore(userProfile: UserProfile): Promise<any> {
+    const { profile } = userProfile
+
     this.log.info({ profile }, 'USER_PROFILE')
 
-    const user = await this.ensureUserCreated(profile)
+    const user = await this.ensureUserCreated(userProfile)
     assert(user)
 
     const userDto = mapUser(user)

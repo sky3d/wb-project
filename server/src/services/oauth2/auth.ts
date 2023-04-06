@@ -46,7 +46,7 @@ export class AuthController {
       reply
         .code(BAD_REQUEST)
         .send('Auth error')
-      return Promise.reject()
+      return false
     }
 
     const data = userMeta.accessToken

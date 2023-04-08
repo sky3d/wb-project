@@ -61,7 +61,8 @@ export function registerGoogle(parent: AuthController, fastify: FastifyInstance,
     log.debug({ profile }, '--> User profile received')
 
     await parent.authorize(reply, { profile, raw })
-
+    reply
+      .redirect('http://localhost:4000/')
     log.debug('--> End of google callback')
   })
 }

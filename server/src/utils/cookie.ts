@@ -19,12 +19,12 @@ export const setReplyCookie = (
 ) => {
   const cookieOptions: CookieSerializeOptions = {
     path: '/',
-    // signed: true,
-    httpOnly: true, // Allow reading from client
+    signed: true,
+    // httpOnly: true, // Allow reading from client
     expires: setExpiration(data.length ? 60 * 24 : -1),
     // allow cross-site-origin
-    sameSite: 'none',
-    // secure: true
+    // sameSite: 'none',
+    // secure: true,
     ...options,
   }
 
@@ -33,7 +33,7 @@ export const setReplyCookie = (
 
   if (redirectUrl) {
     reply
-      .code(302)
-      .redirect(redirectUrl)
+      .code(200)
+      // .redirect(redirectUrl)
   }
 }

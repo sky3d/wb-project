@@ -11,10 +11,16 @@ import { setLoginVisible } from './app-info'
 // })
 
 export const loginUser = createAsyncThunk('userInfoReducer/loginUser', async (ruid, thunkApi) => {
-  // let ruid = getCookie('ruid')
+  let jwt = getCookie('wb-renga-jwt')
   // await authRequest('/auth/google', 'GET', {}, '', '')
   // TODO ---- by sky3d
-  await authRequest('/auth/github', 'GET', {}, '', '')
+  // await authRequest('/auth/github', 'GET', {}, '', '')
+  if (!jwt) {
+    document.location.href = 'http://localhost:3000/auth/google'
+  } else {
+    await authRequest('/auth/google', 'GET', {}, '', '')
+  }
+
 
   return getCookie('wb-renga-jwt')
 })
@@ -42,16 +48,17 @@ export const userInfoReducer = createSlice({
 
       if (action.payload?.input) {
         state.auth = true
-        const tokenStr = action.payload.input.split('=')[1]
+        const tokenStr = action.payload.input.split('=')[1].split('.')
         console.log('JWT=', tokenStr)
+        const tmp = tokenStr.pop()
 
-        localStorage.setItem('accessToken', tokenStr)
+        localStorage.setItem('accessToken', tokenStr.join('.'))
 
         // remove sign
         // const token = tokenStr.split('.')
         // token.pop()
 
-        // document.cookie = `wb-renga-jwt=${''}`
+        document.cookie = `wb-renga-jwt=${''}`
       }
     })
 

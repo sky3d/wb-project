@@ -10,7 +10,7 @@ import { UserProfileLike, UserRawProfile } from '../../interfaces'
 import { AuthController } from './auth'
 import { fetchGoogleUser } from '../../utils/httpRequest'
 
-export function registerGoogle(parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) {
+export const register = (parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) => {
   const { log } = parent
 
   log.debug('-->Register google callback')
@@ -30,7 +30,7 @@ export function registerGoogle(parent: AuthController, fastify: FastifyInstance,
   })
 
   fastify.get('/auth/google/callback', async function (request, reply) {
-    log.debug('-->Google callback...')
+    log.debug('-->Google callback')
     // @ts-ignore
     const { token } = await this.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
 
@@ -60,7 +60,15 @@ export function registerGoogle(parent: AuthController, fastify: FastifyInstance,
 
     log.debug({ profile }, '--> User profile received')
 
-    await parent.authorize(reply, { profile, raw })
+    const success = await parent.authorize(reply, { profile, raw })
+
+    if (success && process.env.CLIENT_URL?.length) {
+      log.info('redirecting to %s', process.env.CLIENT_URL)
+
+      reply
+        .code(302)
+        .redirect(process.env.CLIENT_URL as string)
+    }
 
     log.debug('--> End of google callback')
   })

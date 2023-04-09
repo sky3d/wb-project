@@ -9,7 +9,7 @@ import { isEmpty } from 'lodash'
 import { fetchGithubUser } from '../../utils/httpRequest'
 import { AuthController } from './auth'
 
-export function registerGithub(parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) {
+export const register = (parent: AuthController, fastify: FastifyInstance, cred: OAuthCredentials) => {
   const log = parent.log
 
   log.debug('-->Register github callback')
@@ -59,7 +59,15 @@ export function registerGithub(parent: AuthController, fastify: FastifyInstance,
 
     log.debug({ profile }, '--> User profile received')
 
-    await parent.authorize(reply, { profile, raw })
+    const success = await parent.authorize(reply, { profile, raw })
+
+    if (success && process.env.CLIENT_URL?.length) {
+      log.info('redirecting to %s', process.env.CLIENT_URL)
+
+      reply
+        .code(302)
+        .redirect(process.env.CLIENT_URL as string)
+    }
 
     log.debug('--> End of github callback')
   })

@@ -1,26 +1,5 @@
-import envSchema from 'env-schema'
-
-interface ServerEnv {
-  HOST: string,
-  PORT: number,
+export const server = {
+  host: process.env.HOST || 'localhost',
+  port: process.env.PORT || 3000,
+  clientURL: process.env.CLIENT_URL || 'http://localhost:4000',
 }
-
-const schema = {
-  type: 'object',
-  required: ['PORT'],
-  properties: {
-    HOST: {
-      type: 'string',
-      default: '127.0.0.1',
-    },
-    PORT: {
-      type: 'number',
-      default: 3000,
-    }
-  },
-}
-
-export const envConfig = envSchema<ServerEnv>({
-  dotenv: true,
-  schema,
-})

@@ -10,6 +10,12 @@ import { setLoginVisible } from './app-info'
 //   await runRequest(`renga/${objRenga.id}`, 'POST', objRenga, 'updateRenga')
 // })
 
+const extractSignedToken = (input: string): string => {
+  const [, value] = input.split('=')
+
+  return value.split('.').slice(0, -1).join('.') // get rid of sign
+}
+
 export const loginUser = createAsyncThunk('userInfoReducer/loginUser', async (ruid, thunkApi) => {
   let jwt = getCookie('wb-renga-jwt')
   // await authRequest('/auth/google', 'GET', {}, '', '')
@@ -48,15 +54,11 @@ export const userInfoReducer = createSlice({
 
       if (action.payload?.input) {
         state.auth = true
-        const tokenStr = action.payload.input.split('=')[1].split('.')
-        console.log('JWT=', tokenStr)
-        const tmp = tokenStr.pop()
 
-        localStorage.setItem('accessToken', tokenStr.join('.'))
+        const token = extractSignedToken(action.payload.input)
+        console.log('JWT=', token)
 
-        // remove sign
-        // const token = tokenStr.split('.')
-        // token.pop()
+        localStorage.setItem('accessToken', token)
 
         document.cookie = `wb-renga-jwt=${''}`
       }

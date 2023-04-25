@@ -90,21 +90,20 @@ export class HttpServer {
     //registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
-      server.addHook('preValidation', (request, _, done) => {
+      server.addHook('preValidation', async (request, reply) => {
         const { params, query, body } = request
         request.log.info({ params, query, body }, `---> ${request.method} ${request.url}`)
-        done()
       })
-      server.addHook('onError', (request, reply, error, done) => {
-        request.log.info({ error }, `!ERROR on ${request.method} ${request.url}`)
-        done()
+      server.addHook('onError', async (request, reply, error) => {
+        request.log.info({ error }, `!ERROR on ${request.method} ${request.url} code=${reply.code}`)
       })
     }
 
     server.register(helmet, { contentSecurityPolicy: false })
 
     server.register(routesPlugin)
-    server.register(apiRoutes)
+
+    server.register(apiRoutes, this.auth)
 
     this.auth.init(server)
 

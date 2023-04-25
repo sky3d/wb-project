@@ -4,7 +4,7 @@ import { OAuthCredentials, RenkuConfig } from '../../types'
 import { getUser } from '../user'
 import { BAD_REQUEST, OK, REDIRECT_FOUND } from '../../utils/http'
 import { Renku } from '../../main'
-import { UserProfile } from '../../interfaces'
+import { UserProfile, UserProfileLike } from '../../interfaces'
 import { addMinutes } from '../../utils/datetime'
 
 export class AuthController {
@@ -40,18 +40,16 @@ export class AuthController {
         this.log.warn({ err }, `FAIL! register ${name} oauth2 provider`)
       }
     }
+  }
 
-    fastify.route({
-      method: 'POST',
-      url: '/logout',
-      handler: () => this.logoutUser,
-    })
+  private authUser(userProfile: UserProfile): Promise<any> {
+    return getUser().authOrStore(userProfile)
   }
 
   public async authorize(reply: FastifyReply, userProfile: UserProfile): Promise<boolean> {
     const { auth, server } = this.config
 
-    const userMeta = await getUser().authOrStore(userProfile)
+    const userMeta = await this.authUser(userProfile)
 
     if (!userMeta) {
       reply
@@ -77,7 +75,34 @@ export class AuthController {
     return true
   }
 
-  private logoutUser(_: FastifyRequest, reply: FastifyReply) {
+  public async authorizeLocal(request: FastifyRequest, reply: FastifyReply) {
+    this.log.debug({ params: request.params, body: request.body }, '--> Register via local provider')
+
+    const profile: UserProfileLike = {
+      id: process.env.LOCAL_ADMIN_ID as string,
+      name: 'Guest',
+      provider: 'local',
+    }
+
+    const userMeta = await this.authUser({ profile, raw: {} })
+
+    if (!userMeta) {
+      reply
+        .code(BAD_REQUEST)
+        .send('Auth error')
+      return false
+    }
+
+    const data = userMeta
+
+    this.log.debug({ data }, 'local user data')
+
+    reply
+      .code(OK)
+      .send({ data })
+  }
+
+  public logoutUser(_: FastifyRequest, reply: FastifyReply) {
     this.log.debug('--> Log out')
     const { auth } = this.config
 

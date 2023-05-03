@@ -5,6 +5,7 @@ import { StatsRoute } from './stats'
 import { MeRoute } from './me'
 import registerApiRoutes from './apiRoutes'
 import { AuthController } from '../../services/oauth2/auth'
+import { authorizeUser } from '../../services/httpServer/authUser'
 
 export default async (fastify: FastifyInstance, authControlller: AuthController) => {
   fastify.setErrorHandler(errorHandler)
@@ -14,15 +15,15 @@ export default async (fastify: FastifyInstance, authControlller: AuthController)
   HealthRoute(fastify)
 
   fastify.route({
-    method: 'GET',
+    method: 'POST',
     url: '/auth/local',
-    handler: () => authControlller.authorizeLocal,
+    handler: async (req, reply) => await authControlller.authorizeLocal(req, reply),
   })
 
   fastify.route({
     method: 'POST',
     url: '/logout',
-    handler: () => authControlller.logoutUser,
+    handler: async (req, reply) => await authControlller.logoutUser(req, reply),
   })
 
   StatsRoute(fastify)

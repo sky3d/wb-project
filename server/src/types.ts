@@ -1,7 +1,7 @@
 export type RenkuConfig = {
   server: RenkuServerConfig
   auth: RenkuAuthConfig
-  app: RenkuAppConfig
+  // app: RenkuAppConfig
   //typeorm: TypeormConfig
 }
 
@@ -12,7 +12,6 @@ export interface OAuthCredentials {
 }
 
 export type RenkuAppConfig = {
-  clientHost: string
 }
 
 export type RenkuAuthConfig = {
@@ -26,4 +25,5 @@ export type RenkuAuthConfig = {
 export type RenkuServerConfig = {
   host: string
   port: number
+  clientURL: string
 }

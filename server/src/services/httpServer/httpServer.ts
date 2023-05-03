@@ -38,8 +38,8 @@ export class HttpServer {
 
     this.auth = new AuthController(parent.config, this.log)
 
-    this.log.info('== httpServer service config: %j', this.config)
-    this.log.info('== auth config: %j', this.parent.config.auth)
+    this.log.info({ ...this.config }, '== httpServer service config')
+    /// this.log.info('== auth config: %j', this.parent.config.auth)
   }
 
   connect = async () => {
@@ -68,7 +68,7 @@ export class HttpServer {
     server.decorate(RENKU_APP_KEY, this.parent)
 
     server.register(cors, {
-      origin: false, // disable
+      origin: false,
     })
 
     server.register(favicon)
@@ -90,22 +90,23 @@ export class HttpServer {
     //registerPassport(server, this.tokens, this.parent.config, this.log)
 
     if (process.env.DEBUG) {
-      server.addHook('preValidation', (request, _, done) => {
+      server.addHook('preValidation', async (request, reply) => {
         const { params, query, body } = request
         request.log.info({ params, query, body }, `---> ${request.method} ${request.url}`)
-        done()
       })
-      server.addHook('onError', (request, reply, error, done) => {
-        request.log.info({ error }, `!ERROR on ${request.method} ${request.url}`)
-        done()
+      server.addHook('onError', async (request, reply, error) => {
+        request.log.info({ error }, `!ERROR on ${request.method} ${request.url} code=${reply.code}`)
       })
     }
 
     server.register(helmet, { contentSecurityPolicy: false })
+
     server.register(routesPlugin)
 
-    server.register(apiRoutes)
+    server.register(apiRoutes, this.auth)
 
-    this.auth.register(server)
+    this.auth.init(server)
+
+    this.log.info('initialization complete')
   }
 }

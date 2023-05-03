@@ -51,7 +51,6 @@
     "@types/got": "^9.6.12",
     "@types/pino": "^7.0.5",
     "dotenv": "^16.0.3",
-    "env-schema": "^3.5.1",
     "fastify": "^4.7.0",
     "fastify-favicon": "^4.2.0",
     "jsonwebtoken": "^8.5.1",

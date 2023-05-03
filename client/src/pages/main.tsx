@@ -32,12 +32,6 @@ export const MainPage = (): JSX.Element => {
   }, [userAuth])
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
-      dispatch(setAuth(true))
-    }
-  }, [])
-
-  useEffect(() => {
     if (headerRef.current) {
       setPageHeight(h - headerRef.current.offsetHeight)
     }
@@ -46,6 +40,14 @@ export const MainPage = (): JSX.Element => {
   const login = () => {
     dispatch(loginUser())
   }
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) {
+      dispatch(setAuth(true))
+    } else if (getCookie('wb-renga-jwt') && getCookie('wb-renga-jwt')?.length > 0) {
+      login()
+    }
+  }, [])
 
   return (
     <div style={{ minHeight: h }}>

@@ -14,11 +14,11 @@ export const auth = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       callbackURL: `/auth/${GITHUB_PROVIDER}/callback`,
     },
-    [VKONTAKTE_PROVIDER]: {
-      clientId: process.env.VK_APP_ID as string,
-      clientSecret: process.env.VK_SECURE_KEY as string,
-      callbackURL: `/auth/${VKONTAKTE_PROVIDER}/callback`,
-    }
+    // [VKONTAKTE_PROVIDER]: {
+    //   clientId: process.env.VK_APP_ID as string,
+    //   clientSecret: process.env.VK_SECURE_KEY as string,
+    //   callbackURL: `/auth/${VKONTAKTE_PROVIDER}/callback`,
+    // }
   },
   cookieKey: process.env.COOKIE_KEY || 'wb-renga-jwt',
   cookieSecret: process.env.COOKIE_SECRET || 'my-secret-for-cookie',

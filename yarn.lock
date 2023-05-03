@@ -2206,16 +2206,6 @@ dot-prop@^5.1.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv-expand@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-5.1.0.tgz#3fbaf020bfd794884072ea26b1e9791d45a629f0"
-  integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
-
-dotenv@^11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-11.0.0.tgz#ee37feddf8ada6d348a79e198312d4a8abfd1c1e"
-  integrity sha512-Fp/b504Y5W+e+FpCxTFMUZ7ZEQkQYF0rx+KZtmwixJxGQbLHrhCwo3FjZgNC8vIfrSi29PABNbMoCGD9YoiXbQ==
-
 dotenv@^16.0.3:
   version "16.0.3"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
@@ -2264,15 +2254,6 @@ enquirer@^2.3.5:
   integrity sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==
   dependencies:
     ansi-colors "^4.1.1"
-
-env-schema@^3.5.1:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/env-schema/-/env-schema-3.5.2.tgz#c7aec9bef4256d1fd621f4ad275c6bdc472003be"
-  integrity sha512-mSCYvxQLrJ3Z641CpCSvU2UIFPjDNqZ9yUfqWdx2FMXfccWtYrJEa+pR9mc3YyINvmnlXdbmD5fBx1NSlipMfw==
-  dependencies:
-    ajv "^8.0.0"
-    dotenv "^11.0.0"
-    dotenv-expand "^5.1.0"
 
 error-ex@^1.3.1:
   version "1.3.2"

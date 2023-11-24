@@ -1,6 +1,4 @@
-import dotenv from 'dotenv'
-dotenv.config()
-// console.log(process.env)
+require('dotenv').config()
 
 import { Renku } from './main'
 import { RenkuConfig } from './types'

@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
-import { OAuthCredentials, RenkuConfig } from '../../types'
+import { RenkuConfig } from '../../types'
 import { getUser } from '../user'
-import { BAD_REQUEST, OK, REDIRECT_FOUND } from '../../utils/http'
 import { Renku } from '../../main'
 import { UserProfile, UserProfileLike } from '../../interfaces'
+import { BAD_REQUEST, OK, REDIRECT_FOUND } from '../../utils/http'
 import { addMinutes } from '../../utils/datetime'
 
 export class AuthController {
@@ -46,7 +46,7 @@ export class AuthController {
     return getUser().authOrStore(userProfile)
   }
 
-  public async authorize(reply: FastifyReply, userProfile: UserProfile): Promise<boolean> {
+  public async authorize(reply: FastifyReply, userProfile: UserProfile): Promise<void> {
     const { auth, server } = this.config
 
     const userMeta = await this.authUser(userProfile)
@@ -55,24 +55,23 @@ export class AuthController {
       reply
         .code(BAD_REQUEST)
         .send('Auth error')
-      return false
+
+      return
     }
 
     const data = userMeta.accessToken
 
-    this.log.debug({ name: auth.cookieKey, data }, 'set cookie')
-
-    const mins = process.env.COOKIE_EXPIRES_MIN ? parseInt(process.env.COOKIE_EXPIRES_MIN, 10) : 5
+    this.log.debug({ name: auth.cookieKey, data }, 'set cookie & redirect')
 
     reply
       .setCookie(auth.cookieKey, data, {
         domain: server.host,
         signed: true,
         path: '/',
-        expires: addMinutes(mins)
+        expires: addMinutes(auth.cookieExpiresMin)
       })
-
-    return true
+      .code(REDIRECT_FOUND)
+      .redirect(server.clientURL)
   }
 
   public async authorizeLocal(request: FastifyRequest, reply: FastifyReply) {

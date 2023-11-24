@@ -30,7 +30,7 @@ export function authorizeUser(request: FastifyRequest, reply: FastifyReply, done
     return reply.forbidden()
   }
 
-  log.debug({ user }, 'auth success')
+  log.debug({ user }, '[x] auth success')
   request.user = user
   // TODO move to user or remove
   request.tokens = { accessToken: token }

@@ -18,6 +18,7 @@ export type RenkuAuthConfig = {
   providers: Record<string, OAuthCredentials>,
   cookieKey: string,
   cookieSecret: string,
+  cookieExpiresMin: number
   jwtSecret: string,
   jwtRefreshSecret: string
 }

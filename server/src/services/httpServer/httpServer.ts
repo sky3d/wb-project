@@ -24,22 +24,19 @@ export class HttpServer {
 
   private server: FastifyInstance
 
-  private config: RenkuServerConfig
+  private serverConfig: RenkuServerConfig
 
   private parent: Renku
   private auth: AuthController
 
   constructor(parent: Renku) {
     // @ts-ignore
-    this.config = parent.config.server
+    this.serverConfig = parent.config.server
 
     this.log = parent.log
     this.parent = parent
 
     this.auth = new AuthController(parent.config, this.log)
-
-    this.log.info({ ...this.config }, '== httpServer service config')
-    /// this.log.info('== auth config: %j', this.parent.config.auth)
   }
 
   connect = async () => {
@@ -48,7 +45,7 @@ export class HttpServer {
 
     this.initialize(this.server)
 
-    const { port, host } = this.config
+    const { port, host } = this.serverConfig
     const address = await this.server.listen({ port, host })
 
     this.log.debug('Server is now listening on [%s]', address)

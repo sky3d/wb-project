@@ -44,7 +44,6 @@ export const register = (parent: AuthController, fastify: FastifyInstance, cred:
     }
 
     const data: any = await response.body.json()
-    log.debug({ data }, '-----GOOGLE_USER_DATA ')
 
     if (isEmpty(data)) {
       return reply.send('Bad user profile')
@@ -58,17 +57,9 @@ export const register = (parent: AuthController, fastify: FastifyInstance, cred:
     }
     const raw: UserRawProfile = omit(data, ['_raw', '_json'])
 
-    log.debug({ profile }, '--> User profile received')
+    log.debug({ profile }, 'User: ~(O_O)/')
 
-    const success = await parent.authorize(reply, { profile, raw })
-
-    if (success && process.env.CLIENT_URL?.length) {
-      log.info('redirecting to %s', process.env.CLIENT_URL)
-
-      reply
-        .code(302)
-        .redirect(process.env.CLIENT_URL as string)
-    }
+    await parent.authorize(reply, { profile, raw })
 
     log.debug('--> End of google callback')
   })

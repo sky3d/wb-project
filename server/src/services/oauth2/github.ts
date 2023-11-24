@@ -59,15 +59,7 @@ export const register = (parent: AuthController, fastify: FastifyInstance, cred:
 
     log.debug({ profile }, '--> User profile received')
 
-    const success = await parent.authorize(reply, { profile, raw })
-
-    if (success && process.env.CLIENT_URL?.length) {
-      log.info('redirecting to %s', process.env.CLIENT_URL)
-
-      reply
-        .code(302)
-        .redirect(process.env.CLIENT_URL as string)
-    }
+    await parent.authorize(reply, { profile, raw })
 
     log.debug('--> End of github callback')
   })
